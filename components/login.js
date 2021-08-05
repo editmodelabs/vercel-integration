@@ -29,7 +29,7 @@ const Login = () => {
               placeholder=""
             />
           </div>
-          <button class="w-full mt-6 text-indigo-50 font-bold bg-indigo-600 py-3 rounded-md hover:bg-indigo-100 transition duration-300">
+          <button class="w-full mt-6 text-indigo-50 font-medium bg-indigo-500 py-3 rounded-md hover:bg-indigo-400 transition duration-300 button">
             Log In
           </button>
         </div>
