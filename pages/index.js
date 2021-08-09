@@ -13,6 +13,7 @@ export default function CallbackPage() {
     const fetchAccessToken = async (code) => {
       const res = await fetch(`/api/get-access-token?code=${code}`);
       const json = await res.json();
+      if (json) alert("!!!");
 
       setData({
         accessToken: json.access_token,
@@ -56,7 +57,7 @@ export default function CallbackPage() {
     setProject(edit_mode_project);
   };
 
-  useEffect(() => {
+  const addProject = () => {
     const writeENV = async (accessToken, editmode_project_id) => {
       const res = await fetch(
         `https://api.vercel.com/v8/projects/${vercelProject}/env?type=plain&key=NEXT_PUBLIC_PROJECT_ID&value=${editmode_project_id}&target=production`,
@@ -68,11 +69,29 @@ export default function CallbackPage() {
         }
       );
       const json = await res.json();
-      router.push(router.query.next);
+      if (json) router.push(router.query.next);
     };
-    const { accessToken } = data;
-    if (accessToken && project) writeENV();
-  }, [project]);
+    return writeENV(data.accessToken, project);
+    // const { accessToken } = data;
+  };
+
+  // useEffect(() => {
+  //   const writeENV = async (accessToken, editmode_project_id) => {
+  //     const res = await fetch(
+  //       `https://api.vercel.com/v8/projects/${vercelProject}/env?type=plain&key=NEXT_PUBLIC_PROJECT_ID&value=${editmode_project_id}&target=production`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     );
+  //     const json = await res.json();
+  //     router.push(router.query.next);
+  //   };
+  //   const { accessToken } = data;
+  //   if (accessToken && project) writeENV();
+  // }, [project]);
 
   return (
     <Layout>
@@ -93,6 +112,12 @@ export default function CallbackPage() {
             onClick={handleProjectGeneration}
           >
             Create Project
+          </button>
+          <button
+            className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
+            onClick={addProject}
+          >
+            Add
           </button>
         </section>
 
