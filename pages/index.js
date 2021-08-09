@@ -45,6 +45,7 @@ export default function CallbackPage() {
           });
           const data = await res.json();
           const id = data["id"];
+          if ("id") alert("IDDDDDD");
           return id;
         } catch (err) {
           console.log(err);
@@ -69,6 +70,7 @@ export default function CallbackPage() {
         }
       );
       const json = await res.json();
+      alert(JSON.stringify(json));
       if (json) router.push(router.query.next);
     };
     return writeENV(data.accessToken, project);
