@@ -11,9 +11,21 @@ export default function CallbackPage() {
 
   useEffect(() => {
     const fetchAccessToken = async (code) => {
-      const res = await fetch(`/api/get-access-token?code=${code}`);
+      // const res = await fetch(
+      //   `https://api.vercel.com/v2/oauth/access_token?code`,
+      //   {}
+      // );
+      const res = await fetch("https://api.vercel.com/v2/oauth/access_token", {
+        method: "POST",
+        body: new URLSearchParams({
+          client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
+          client_secret: "9d72agydqs5x5YHX3wTNP8Iv!",
+          code,
+          redirect_uri: router.query.next,
+        }),
+      });
       const json = await res.json();
-      if (json) alert("!!!");
+      if (json) alert(JSON.stringify(json));
 
       setData({
         accessToken: json.access_token,
