@@ -2,18 +2,13 @@
 import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import { defaultOption } from "../utilities";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Example({ projects, setProjectToInstall }) {
-  const defaultOption = {
-    name: "Generate a Starter Project     🚀",
-    identifier: "000defaultoption",
-    default: true,
-  };
-
   const projectOptions = [defaultOption, ...projects];
 
   const [selected, setSelected] = useState(projectOptions[0]);

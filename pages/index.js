@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Layout from "components/layout";
-import { useCookie, isBrowser } from "utilities";
+import { useCookie } from "utilities";
 import Selection from "components/select";
 import Nav from "components/navbar";
+import { defaultOption } from "utilities";
 
 export default function CallbackPage() {
   const router = useRouter();
   const [value] = useCookie("em_user_key");
   const [data, setData] = useState({});
-  const [project, setProject] = useState();
   const [vercelProject, setVercelProject] = useState();
   const [editmodeToken, setEditmodeToken] = useState();
   const [userEditmodeProjects, setUserEditmodeProjects] = useState([]);
+  const [projectToInstall, setProjectToInstall] = useState(defaultOption);
 
   useEffect(() => {
     if (!value) {
@@ -81,7 +82,7 @@ export default function CallbackPage() {
     fetchEditmodeProjects(value);
   }, []);
 
-  const handleProjectGeneration = async (e) => {
+  const handleInstall = async (e) => {
     e.preventDefault();
     const cloneProject = async (token) => {
       if (token) {
@@ -99,14 +100,16 @@ export default function CallbackPage() {
         }
       }
     };
-    let token;
+    let token, em_project_to_use;
     if (editmodeToken) token = editmodeToken;
-    const edit_mode_project = await cloneProject(token);
-    setProject(edit_mode_project);
-  };
 
-  useEffect(() => {
-    const writeENV = async (accessToken, editmode_project_id) => {
+    if (projectToInstall.default) {
+      em_project_to_use = await cloneProject(token);
+    } else {
+      em_project_to_use = projectToInstall.identifier;
+    }
+
+    const writeENV = async (accessToken, em_project_to_use) => {
       const res = await fetch(
         `https://api.vercel.com/v8/projects/${vercelProject}/env`,
         {
@@ -118,7 +121,7 @@ export default function CallbackPage() {
           body: JSON.stringify({
             type: "encrypted",
             key: "NEXT_PUBLIC_PROJECT_ID",
-            value: editmode_project_id,
+            value: em_project_to_use,
             target: ["production", "preview"],
           }),
         }
@@ -126,10 +129,10 @@ export default function CallbackPage() {
       const json = await res.json();
       if (json.value) router.push(router.query.next);
     };
-    if (data.accessToken && project) {
-      writeENV(data.accessToken, project);
+    if (data.accessToken && em_project_to_use) {
+      writeENV(data.accessToken, em_project_to_use);
     }
-  }, [project]);
+  };
 
   if (!value) return null;
 
@@ -137,13 +140,16 @@ export default function CallbackPage() {
     <Layout>
       <div className="w-full max-w-2xl divide-y">
         {userEditmodeProjects[0] && (
-          <Selection projects={userEditmodeProjects} setProject={setProject} />
+          <Selection
+            projects={userEditmodeProjects}
+            setProjectToInstall={setProjectToInstall}
+          />
         )}
         <section className="py-4">
           <button
             // className="bg-indigo hover:bg-gray-900 text-white px-6 py-1 rounded-md"
             className={`flex justify-center w-full mt-6 text-white font-medium py-3 leading-6 px-4 rounded-md hover:bg-indigo-400 transition duration-200 button bg-indigo-500`}
-            onClick={handleProjectGeneration}
+            onClick={handleInstall}
           >
             INSTALL
           </button>
