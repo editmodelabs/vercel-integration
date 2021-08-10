@@ -15,23 +15,36 @@ export default function CallbackPage() {
       //   `https://api.vercel.com/v2/oauth/access_token?code`,
       //   {}
       // );
+
+      const details = {
+        client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
+        client_secret: "9d72agydqs5x5YHX3wTNP8Iv",
+        code: code,
+        redirect_uri: "http://localhost:3000",
+      };
+      var formBody = [];
+      for (var property in details) {
+        var encodedKey = encodeURIComponent(property);
+        var encodedValue = encodeURIComponent(details[property]);
+        formBody.push(encodedKey + "=" + encodedValue);
+      }
+      formBody = formBody.join("&");
+
       const res = await fetch("https://api.vercel.com/v2/oauth/access_token", {
         method: "POST",
-        body: new URLSearchParams({
-          client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
-          client_secret: "9d72agydqs5x5YHX3wTNP8Iv!",
-          code,
-          redirect_uri: router.query.next,
-        }),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: formBody,
       });
       const json = await res.json();
-      if (json) alert(JSON.stringify(json));
 
       setData({
         accessToken: json.access_token,
         userId: json.user_id,
         teamId: json.team_id,
       });
+      // alert(JSON.stringify(json));
     };
 
     const { currentProjectId } = router.query;
@@ -57,7 +70,7 @@ export default function CallbackPage() {
           });
           const data = await res.json();
           const id = data["id"];
-          if ("id") alert("IDDDDDD");
+          if (id) alert("Editmode Project ID Generated!");
           return id;
         } catch (err) {
           console.log(err);
@@ -70,42 +83,62 @@ export default function CallbackPage() {
     setProject(edit_mode_project);
   };
 
-  const addProject = () => {
-    const writeENV = async (accessToken, editmode_project_id) => {
-      const res = await fetch(
-        `https://api.vercel.com/v8/projects/${vercelProject}/env?type=plain&key=NEXT_PUBLIC_PROJECT_ID&value=${editmode_project_id}&target=production`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      const json = await res.json();
-      alert(JSON.stringify(json));
-      if (json) router.push(router.query.next);
-    };
-    return writeENV(data.accessToken, project);
-    // const { accessToken } = data;
-  };
-
-  // useEffect(() => {
+  // const addProject = (e) => {
+  //   e.preventDefault();
   //   const writeENV = async (accessToken, editmode_project_id) => {
+  //     alert(editmode_project_id);
   //     const res = await fetch(
-  //       `https://api.vercel.com/v8/projects/${vercelProject}/env?type=plain&key=NEXT_PUBLIC_PROJECT_ID&value=${editmode_project_id}&target=production`,
+  //       `https://api.vercel.com/v8/projects/${vercelProject}/env`,
   //       {
   //         method: "POST",
   //         headers: {
   //           Authorization: `Bearer ${accessToken}`,
+  //           // "Content-Type": "application/json",
+  //         },
+  //         body: {
+  //           type: "encrypted",
+  //           key: "NEXT_PUBLIC_PROJECT_ID",
+  //           value: editmode_project_id,
+  //           target: ["production", "preview"],
   //         },
   //       }
   //     );
   //     const json = await res.json();
-  //     router.push(router.query.next);
+  //     if (json) alert(JSON.stringify(json));
+  //     // if (json) router.push(router.query.next);
   //   };
-  //   const { accessToken } = data;
-  //   if (accessToken && project) writeENV();
-  // }, [project]);
+  //   alert(data.accessToken);
+  //   return writeENV(data.accessToken, project);
+  //   // const { accessToken } = data;
+  // };
+
+  useEffect(() => {
+    const writeENV = async (accessToken, editmode_project_id) => {
+      alert(vercelProject);
+      const res = await fetch(
+        `https://api.vercel.com/v8/projects/${vercelProject}/env`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type: "encrypted",
+            key: "NEXT_PUBLIC_PROJECT_ID",
+            value: editmode_project_id,
+            target: ["production", "preview"],
+          }),
+        }
+      );
+      const json = await res.json();
+      if (json) alert(JSON.stringify(json));
+      if (json.value) router.push(router.query.next);
+    };
+    if (data.accessToken && project) {
+      writeENV(data.accessToken, project);
+    }
+  }, [project]);
 
   return (
     <Layout>
@@ -129,7 +162,7 @@ export default function CallbackPage() {
           </button>
           <button
             className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
-            onClick={addProject}
+            // onClick={addProject}
           >
             Add
           </button>
