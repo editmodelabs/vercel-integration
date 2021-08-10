@@ -1,9 +1,9 @@
-import Login from "../components/login";
+import UserCredentials from "../components/credentials";
 
 function Auth() {
   return (
     <>
-      <Login />
+      <UserCredentials />
     </>
   );
 }

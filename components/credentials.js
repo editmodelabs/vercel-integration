@@ -1,7 +1,6 @@
 import { useCookie } from "../utilities";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import Cookies, { set } from "js-cookie";
 
 const initialFormState = {
   email: "",
@@ -11,7 +10,7 @@ const initialFormState = {
   passwordConfirmation: "",
 };
 
-const Login = () => {
+const UserCredentials = () => {
   const [_, updateCookie] = useCookie("em_user_key");
   const [authType, setAuthType] = useState("login");
   const [credentials, setCredentials] = useState(initialFormState);
@@ -21,7 +20,7 @@ const Login = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const onLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (authType === "login") {
       const url = `https://api.editmode.com/login?email=${credentials.email}&password=${credentials.password}`;
@@ -83,7 +82,10 @@ const Login = () => {
             </p>
           </div>
           <div className="container mx-auto max-w-md shadow-md hover:shadow-lg transition duration-300">
-            <form className="py-12 p-10 bg-white rounded-xl" onSubmit={onLogin}>
+            <form
+              className="py-12 p-10 bg-white rounded-xl"
+              onSubmit={handleSubmit}
+            >
               <div className="mb-6">
                 <label
                   className="mr-4 text-gray-700 text-sm font-medium inline-block mb-2"
@@ -180,7 +182,10 @@ const Login = () => {
             </p>
           </div>
           <div className="container mx-auto max-w-md shadow-md hover:shadow-lg transition duration-300">
-            <form className="py-12 p-10 bg-white rounded-xl" onSubmit={onLogin}>
+            <form
+              className="py-12 p-10 bg-white rounded-xl"
+              onSubmit={handleSubmit}
+            >
               {" "}
               <div className="mb-6">
                 <label
@@ -301,4 +306,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default UserCredentials;

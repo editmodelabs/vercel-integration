@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Layout from "components/layout";
 import { useCookie, isBrowser } from "utilities";
+import Selection from "components/select";
+import Nav from "components/navbar";
 
 export default function CallbackPage() {
   const router = useRouter();
@@ -10,6 +12,7 @@ export default function CallbackPage() {
   const [project, setProject] = useState();
   const [vercelProject, setVercelProject] = useState();
   const [editmodeToken, setEditmodeToken] = useState();
+  const [userEditmodeProjects, setUserEditmodeProjects] = useState([]);
 
   useEffect(() => {
     if (!value) {
@@ -57,6 +60,26 @@ export default function CallbackPage() {
       fetchAccessToken(code);
     }
   }, [router]);
+
+  useEffect(() => {
+    const fetchEditmodeProjects = async (token) => {
+      if (token) {
+        const url = `https://api.editmode.com/projects?api_key=${token}`;
+        try {
+          const res = await fetch(url, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          });
+          const data = await res.json();
+          setUserEditmodeProjects(data);
+          return id;
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    };
+    fetchEditmodeProjects(value);
+  }, []);
 
   const handleProjectGeneration = async (e) => {
     e.preventDefault();
@@ -113,22 +136,16 @@ export default function CallbackPage() {
   return (
     <Layout>
       <div className="w-full max-w-2xl divide-y">
-        {/* <section className="py-4 flex items-center space-x-2 justify-center">
-          <h1 className="text-lg font-medium">Integration is installed on a</h1>
-
-          {data.accessToken && (
-            <div className="rounded-md bg-blue-500 text-white text-sm px-2.5 py-0.5">
-              {data.userId && data.teamId ? "team" : "personal account"}
-            </div>
-          )}
-        </section> */}
-
+        {userEditmodeProjects[0] && (
+          <Selection projects={userEditmodeProjects} />
+        )}
         <section className="py-4">
           <button
-            className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
+            // className="bg-indigo hover:bg-gray-900 text-white px-6 py-1 rounded-md"
+            className={`flex justify-center w-full mt-6 text-white font-medium py-3 leading-6 px-4 rounded-md hover:bg-indigo-400 transition duration-200 button bg-indigo-500`}
             onClick={handleProjectGeneration}
           >
-            Create Project
+            INSTALL
           </button>
         </section>
       </div>
