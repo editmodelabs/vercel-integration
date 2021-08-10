@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 
 export const useCookie = (cookieName) => {
   const [value, setValue] = useState(() => Cookies.get(cookieName) || null);
+
   const updateCookie = useCallback(
     (newValue, options) => {
       Cookies.set(cookieName, newValue, options);
@@ -14,5 +15,6 @@ export const useCookie = (cookieName) => {
     Cookies.remove(cookieName);
     setValue(null);
   }, [cookieName]);
+
   return [value, updateCookie, deleteCookie];
 };

@@ -5,17 +5,17 @@ import { useCookie, isBrowser } from "utilities";
 
 export default function CallbackPage() {
   const router = useRouter();
-  const [value] = useCookie("user_token");
+  const [value] = useCookie("em_user_key");
   const [data, setData] = useState({});
   const [project, setProject] = useState();
   const [vercelProject, setVercelProject] = useState();
+  const [editmodeToken, setEditmodeToken] = useState();
 
   useEffect(() => {
-    if (value) {
+    if (!value) {
       router.push("/authentication");
-      return null;
-    }
-  }, [value]);
+    } else setEditmodeToken(value);
+  }, [router]);
 
   useEffect(() => {
     const fetchAccessToken = async (code) => {
@@ -77,7 +77,7 @@ export default function CallbackPage() {
       }
     };
     let token;
-    if (isBrowser()) token = localStorage.getItem("user_token");
+    if (editmodeToken) token = editmodeToken;
     const edit_mode_project = await cloneProject(token);
     setProject(edit_mode_project);
   };
@@ -108,12 +108,12 @@ export default function CallbackPage() {
     }
   }, [project]);
 
-  if (value) return null;
+  if (!value) return null;
 
   return (
     <Layout>
       <div className="w-full max-w-2xl divide-y">
-        <section className="py-4 flex items-center space-x-2 justify-center">
+        {/* <section className="py-4 flex items-center space-x-2 justify-center">
           <h1 className="text-lg font-medium">Integration is installed on a</h1>
 
           {data.accessToken && (
@@ -121,7 +121,7 @@ export default function CallbackPage() {
               {data.userId && data.teamId ? "team" : "personal account"}
             </div>
           )}
-        </section>
+        </section> */}
 
         <section className="py-4">
           <button
@@ -129,12 +129,6 @@ export default function CallbackPage() {
             onClick={handleProjectGeneration}
           >
             Create Project
-          </button>
-          <button
-            className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
-            // onClick={addProject}
-          >
-            Add
           </button>
         </section>
       </div>

@@ -1,6 +1,7 @@
-import { api } from "../utilities";
+import { useCookie } from "../utilities";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Cookies, { set } from "js-cookie";
 
 const initialFormState = {
   email: "",
@@ -11,8 +12,10 @@ const initialFormState = {
 };
 
 const Login = () => {
+  const [_, updateCookie] = useCookie("em_user_key");
   const [authType, setAuthType] = useState("login");
   const [credentials, setCredentials] = useState(initialFormState);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -25,19 +28,19 @@ const Login = () => {
       const res = await fetch(url, { method: "POST" });
       const data = await res.json();
       const token = data.authentication_token;
-      localStorage.setItem("user_token", token);
+      updateCookie(token);
       router.push("/");
     } else {
       const url = `https://api.editmode.com/users/sign_up?email=${credentials.email}&password=${credentials.password}&first_name=${credentials.firstName}&last_name=${credentials.lastName}&password_confirmation=${credentials.passwordConfirmation}&api_key=z9JrfCcPz3KmjnSMxNKfggKT`;
-      console.log(url);
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
+      setIsLoading(true);
       const data = await res.json();
-      console.log(data);
       const token = data.authentication_token;
-      localStorage.setItem("user_token", token);
+      updateCookie(token);
+      setIsLoading(false);
       if (data.authentication_token) router.push("/");
     }
   };
@@ -51,7 +54,7 @@ const Login = () => {
     <div className=" min-h-screen bg-gray-100 flex items-center flex flex-col justify-center">
       {authType === "login" && (
         <>
-          <div class="sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <a href={""}>
               {" "}
               <img
@@ -59,16 +62,16 @@ const Login = () => {
                 src={
                   "https://app.editmode.com/assets/logo-v2-55f5bda132dae21e6d29b252dc327778343a5462953bfc702210b9bebaf687ef.png"
                 }
-                class="mx-auto w-auto"
+                className="mx-auto w-auto"
               />
             </a>
-            <h2 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 f-f-averta font-semibold">
+            <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 f-f-averta font-semibold">
               Sign in to your account
             </h2>
-            <p class="mt-2 text-center text-sm leading-5 m-8">
+            <p className="mt-2 text-center text-sm leading-5 m-8">
               or
               <span
-                class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+                className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
                 style={{ cursor: "pointer" }}
                 onClick={handleAuthTypeSwitch}
               >
@@ -123,7 +126,7 @@ const Login = () => {
       )}
       {authType === "signup" && (
         <>
-          <div class="sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="sm:mx-auto sm:w-full sm:max-w-md">
             <a href={""}>
               {" "}
               <img
@@ -131,16 +134,16 @@ const Login = () => {
                 src={
                   "https://app.editmode.com/assets/logo-v2-55f5bda132dae21e6d29b252dc327778343a5462953bfc702210b9bebaf687ef.png"
                 }
-                class="mx-auto w-auto"
+                className="mx-auto w-auto"
               />
             </a>
-            <h2 class="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 f-f-averta font-semibold">
+            <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 f-f-averta font-semibold">
               Get started with Editmode
             </h2>
-            <p class="mt-2 text-center text-sm leading-5 m-8">
+            <p className="mt-2 text-center text-sm leading-5 m-8">
               or
               <span
-                class="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+                className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
                 style={{ cursor: "pointer" }}
                 onClick={handleAuthTypeSwitch}
               >
@@ -233,9 +236,30 @@ const Login = () => {
                 />
               </div>
               <button
-                className="w-full mt-6 text-indigo-50 font-medium bg-indigo-500 py-3 rounded-md hover:bg-indigo-400 transition duration-300 button "
+                className="flex justify-center w-full mt-6 text-indigo-50 font-medium bg-indigo-500 py-2 leading-6 px-4 rounded-md hover:bg-indigo-400 transition duration-300 button"
                 type="submit"
               >
+                <svg
+                  class="animate-spin -ml-1 mr-3 h-5 w-5 text-white mt-0.5"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  style={{ display: "none" }}
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
                 Sign Up
               </button>
             </form>
