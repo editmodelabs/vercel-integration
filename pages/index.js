@@ -137,7 +137,7 @@ export default function CallbackPage() {
     <Layout>
       <div className="w-full max-w-2xl divide-y">
         {userEditmodeProjects[0] && (
-          <Selection projects={userEditmodeProjects} />
+          <Selection projects={userEditmodeProjects} setProject={setProject} />
         )}
         <section className="py-4">
           <button

@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 
@@ -7,7 +7,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example({ projects }) {
+export default function Example({ projects, setProjectToInstall }) {
   const defaultOption = {
     name: "Generate a Starter Project     🚀",
     identifier: "000defaultoption",
@@ -17,6 +17,10 @@ export default function Example({ projects }) {
   const projectOptions = [defaultOption, ...projects];
 
   const [selected, setSelected] = useState(projectOptions[0]);
+
+  useEffect(() => {
+    setProjectToInstall(selected);
+  }, [selected]);
 
   return (
     <Listbox value={selected} onChange={setSelected}>
