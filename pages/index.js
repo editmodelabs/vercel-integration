@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Layout from "components/layout";
-import Loader from "components/loader";
+// import Loader from "components/loader";
+import { getTimedCachedData } from "utilities";
 
 export default function CallbackPage() {
   const router = useRouter();
@@ -9,13 +10,14 @@ export default function CallbackPage() {
   const [project, setProject] = useState();
   const [vercelProject, setVercelProject] = useState();
 
+  const isBrowser = () => typeof window !== "undefined";
+  if (isBrowser() && !localStorage.getItem("user_token")) {
+    router.push("/authentication");
+    return null;
+  }
+
   useEffect(() => {
     const fetchAccessToken = async (code) => {
-      // const res = await fetch(
-      //   `https://api.vercel.com/v2/oauth/access_token?code`,
-      //   {}
-      // );
-
       const details = {
         client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
         client_secret: "9d72agydqs5x5YHX3wTNP8Iv",
@@ -44,7 +46,6 @@ export default function CallbackPage() {
         userId: json.user_id,
         teamId: json.team_id,
       });
-      // alert(JSON.stringify(json));
     };
 
     const { currentProjectId } = router.query;
@@ -55,8 +56,6 @@ export default function CallbackPage() {
       fetchAccessToken(code);
     }
   }, [router]);
-
-  const isBrowser = () => typeof window !== "undefined";
 
   const handleProjectGeneration = async (e) => {
     e.preventDefault();
@@ -70,7 +69,6 @@ export default function CallbackPage() {
           });
           const data = await res.json();
           const id = data["id"];
-          if (id) alert("Editmode Project ID Generated!");
           return id;
         } catch (err) {
           console.log(err);
@@ -83,38 +81,8 @@ export default function CallbackPage() {
     setProject(edit_mode_project);
   };
 
-  // const addProject = (e) => {
-  //   e.preventDefault();
-  //   const writeENV = async (accessToken, editmode_project_id) => {
-  //     alert(editmode_project_id);
-  //     const res = await fetch(
-  //       `https://api.vercel.com/v8/projects/${vercelProject}/env`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           Authorization: `Bearer ${accessToken}`,
-  //           // "Content-Type": "application/json",
-  //         },
-  //         body: {
-  //           type: "encrypted",
-  //           key: "NEXT_PUBLIC_PROJECT_ID",
-  //           value: editmode_project_id,
-  //           target: ["production", "preview"],
-  //         },
-  //       }
-  //     );
-  //     const json = await res.json();
-  //     if (json) alert(JSON.stringify(json));
-  //     // if (json) router.push(router.query.next);
-  //   };
-  //   alert(data.accessToken);
-  //   return writeENV(data.accessToken, project);
-  //   // const { accessToken } = data;
-  // };
-
   useEffect(() => {
     const writeENV = async (accessToken, editmode_project_id) => {
-      alert(vercelProject);
       const res = await fetch(
         `https://api.vercel.com/v8/projects/${vercelProject}/env`,
         {
@@ -132,7 +100,6 @@ export default function CallbackPage() {
         }
       );
       const json = await res.json();
-      if (json) alert(JSON.stringify(json));
       if (json.value) router.push(router.query.next);
     };
     if (data.accessToken && project) {
@@ -142,44 +109,48 @@ export default function CallbackPage() {
 
   return (
     <Layout>
-      <div className="w-full max-w-2xl divide-y">
-        <section className="py-4 flex items-center space-x-2 justify-center">
-          <h1 className="text-lg font-medium">Integration is installed on a</h1>
+      {isBrowser() && localStorage.getItem("user_token") && (
+        <div className="w-full max-w-2xl divide-y">
+          <section className="py-4 flex items-center space-x-2 justify-center">
+            <h1 className="text-lg font-medium">
+              Integration is installed on a
+            </h1>
 
-          {data.accessToken && (
-            <div className="rounded-md bg-blue-500 text-white text-sm px-2.5 py-0.5">
-              {data.userId && data.teamId ? "team" : "personal account"}
-            </div>
-          )}
-        </section>
+            {data.accessToken && (
+              <div className="rounded-md bg-blue-500 text-white text-sm px-2.5 py-0.5">
+                {data.userId && data.teamId ? "team" : "personal account"}
+              </div>
+            )}
+          </section>
 
-        <section className="py-4">
-          <button
-            className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
-            onClick={handleProjectGeneration}
-          >
-            Create Project
-          </button>
-          <button
-            className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
-            // onClick={addProject}
-          >
-            Add
-          </button>
-        </section>
+          <section className="py-4">
+            <button
+              className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
+              onClick={handleProjectGeneration}
+            >
+              Create Project
+            </button>
+            <button
+              className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
+              // onClick={addProject}
+            >
+              Add
+            </button>
+          </section>
 
-        <section className="py-4 flex justify-center">
-          {/* This redirect should happen programmatically if you're done with everything on your side */}
-          <button
-            className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
-            onClick={() => {
-              router.push(router.query.next);
-            }}
-          >
-            Redirect me back to Vercel
-          </button>
-        </section>
-      </div>
+          <section className="py-4 flex justify-center">
+            {/* This redirect should happen programmatically if you're done with everything on your side */}
+            <button
+              className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
+              onClick={() => {
+                router.push(router.query.next);
+              }}
+            >
+              Redirect me back to Vercel
+            </button>
+          </section>
+        </div>
+      )}
     </Layout>
   );
 }
