@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Layout from "components/layout";
-// import Loader from "components/loader";
-import { getTimedCachedData } from "utilities";
+import { useCookie, isBrowser } from "utilities";
 
 export default function CallbackPage() {
   const router = useRouter();
+  const [value] = useCookie("user_token");
   const [data, setData] = useState({});
   const [project, setProject] = useState();
   const [vercelProject, setVercelProject] = useState();
 
-  const isBrowser = () => typeof window !== "undefined";
-  if (isBrowser() && !localStorage.getItem("user_token")) {
-    router.push("/authentication");
-    return null;
-  }
+  useEffect(() => {
+    if (value) {
+      router.push("/authentication");
+      return null;
+    }
+  }, [value]);
 
   useEffect(() => {
     const fetchAccessToken = async (code) => {
@@ -107,50 +108,36 @@ export default function CallbackPage() {
     }
   }, [project]);
 
+  if (value) return null;
+
   return (
     <Layout>
-      {isBrowser() && localStorage.getItem("user_token") && (
-        <div className="w-full max-w-2xl divide-y">
-          <section className="py-4 flex items-center space-x-2 justify-center">
-            <h1 className="text-lg font-medium">
-              Integration is installed on a
-            </h1>
+      <div className="w-full max-w-2xl divide-y">
+        <section className="py-4 flex items-center space-x-2 justify-center">
+          <h1 className="text-lg font-medium">Integration is installed on a</h1>
 
-            {data.accessToken && (
-              <div className="rounded-md bg-blue-500 text-white text-sm px-2.5 py-0.5">
-                {data.userId && data.teamId ? "team" : "personal account"}
-              </div>
-            )}
-          </section>
+          {data.accessToken && (
+            <div className="rounded-md bg-blue-500 text-white text-sm px-2.5 py-0.5">
+              {data.userId && data.teamId ? "team" : "personal account"}
+            </div>
+          )}
+        </section>
 
-          <section className="py-4">
-            <button
-              className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
-              onClick={handleProjectGeneration}
-            >
-              Create Project
-            </button>
-            <button
-              className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
-              // onClick={addProject}
-            >
-              Add
-            </button>
-          </section>
-
-          <section className="py-4 flex justify-center">
-            {/* This redirect should happen programmatically if you're done with everything on your side */}
-            <button
-              className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
-              onClick={() => {
-                router.push(router.query.next);
-              }}
-            >
-              Redirect me back to Vercel
-            </button>
-          </section>
-        </div>
-      )}
+        <section className="py-4">
+          <button
+            className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
+            onClick={handleProjectGeneration}
+          >
+            Create Project
+          </button>
+          <button
+            className="bg-black hover:bg-gray-900 text-white px-6 py-1 rounded-md"
+            // onClick={addProject}
+          >
+            Add
+          </button>
+        </section>
+      </div>
     </Layout>
   );
 }
