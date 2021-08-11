@@ -1,6 +1,7 @@
 import { useCookie } from "../utilities";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
 const initialFormState = {
   email: "",
@@ -30,6 +31,7 @@ const UserCredentials = () => {
       const token = data.authentication_token;
       updateCookie(token);
       if (token) setIsLoading(false);
+      Cookies.set("em_user_email", credentials.email);
       router.push("/");
     } else {
       const url = `https://api.editmode.com/users/sign_up?email=${credentials.email}&password=${credentials.password}&first_name=${credentials.firstName}&last_name=${credentials.lastName}&password_confirmation=${credentials.passwordConfirmation}&api_key=z9JrfCcPz3KmjnSMxNKfggKT`;
@@ -42,6 +44,7 @@ const UserCredentials = () => {
       const token = data.authentication_token;
       updateCookie(token);
       if (token) setIsLoading(false);
+      Cookies.set("em_user_email", credentials.email);
       if (data.authentication_token) router.push("/");
     }
   };
