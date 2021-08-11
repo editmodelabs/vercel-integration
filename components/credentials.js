@@ -16,6 +16,7 @@ const UserCredentials = () => {
   const [authType, setAuthType] = useState("login");
   const [credentials, setCredentials] = useState(initialFormState);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoginValid, setIsLoginValid] = useState(true);
   const router = useRouter();
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -28,11 +29,18 @@ const UserCredentials = () => {
       setIsLoading(true);
       const res = await fetch(url, { method: "POST" });
       const data = await res.json();
+      if (data.errors && data.errors[0].includes("does not match")) {
+        setIsLoading(false);
+        setIsLoginValid(false);
+      }
       const token = data.authentication_token;
       updateCookie(token);
       if (token) setIsLoading(false);
-      Cookies.set("em_user_email", credentials.email);
-      router.push("/");
+      if (token) {
+        setIsLoginValid(true);
+        Cookies.set("em_user_email", credentials.email);
+        router.push("/");
+      }
     } else {
       const url = `https://api.editmode.com/users/sign_up?email=${credentials.email}&password=${credentials.password}&first_name=${credentials.firstName}&last_name=${credentials.lastName}&password_confirmation=${credentials.passwordConfirmation}&api_key=z9JrfCcPz3KmjnSMxNKfggKT`;
       setIsLoading(true);
@@ -89,6 +97,33 @@ const UserCredentials = () => {
               className="py-12 p-10 bg-white rounded-xl"
               onSubmit={handleSubmit}
             >
+              <div
+                class={`rounded-md bg-red-100 p-4 mb-6 ${
+                  isLoginValid ? "hidden" : ""
+                }`}
+              >
+                <div class="flex">
+                  <div class="flex-shrink-0">
+                    <svg
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      width="24"
+                      height="24"
+                      class="text-red-600"
+                    >
+                      <path
+                        clip-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                        fill-rule="evenodd"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="ml-3 text-sm leading-5 font-medium text-red-800">
+                    Invalid email or password.
+                  </div>
+                </div>
+              </div>
+
               <div className="mb-6">
                 <label
                   className="mr-4 text-gray-700 text-sm font-medium inline-block mb-2"
