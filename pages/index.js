@@ -107,7 +107,7 @@ export default function CallbackPage() {
       );
       const json = await res.json();
       setIsInstalling(false);
-      alert(JSON.stringify(json));
+      // alert(JSON.stringify(json));
       if (json.value) router.push(router.query.next);
     };
     if (data && data.accessToken && emId) {
@@ -137,7 +137,7 @@ export default function CallbackPage() {
     let em_project_to_use;
     if (projectToInstall.default && data.accessToken) {
       em_project_to_use = await cloneProject(token);
-      alert(em_project_to_use);
+      // alert(em_project_to_use);
       setEmId(em_project_to_use);
     } else {
       setEmId(projectToInstall.identifier);
