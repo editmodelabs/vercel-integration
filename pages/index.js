@@ -24,7 +24,7 @@ export default function CallbackPage() {
         client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
         client_secret: "9d72agydqs5x5YHX3wTNP8Iv",
         code: code,
-        redirect_uri: "http://https://vercel-integration-seven.vercel.app:3000",
+        redirect_uri: "https://https://vercel-integration-seven.vercel.app",
       };
       var formBody = [];
       for (var property in details) {
@@ -79,6 +79,7 @@ export default function CallbackPage() {
   }, [token]);
 
   const handleInstall = async (e) => {
+    alert(data.accessToken);
     e.preventDefault();
     setIsInstalling(true);
     const cloneProject = async (token) => {
