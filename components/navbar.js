@@ -4,7 +4,11 @@ import { isBrowser } from "utilities";
 export default function NavBar() {
   const handleSignOut = () => {
     if (isBrowser()) {
-      localStorage.removeItem("concessio_pref_per");
+      const user = localStorage.getItem("concessio_pref_per");
+      if (user) {
+        localStorage.removeItem("concessio_pref_per");
+        localStorage.removeItem("em_user_email");
+      }
       window.close();
     }
   };
