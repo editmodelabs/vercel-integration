@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Dashboard from "components/dashboard";
-import { useCookie } from "utilities";
 import { defaultOption } from "../utilities";
 import Auth from "components/credentials";
 import Blank from "components/blank";
+import Cookies from "js-cookie";
 
 export default function CallbackPage() {
+  const token = Cookies.get("em_user_key");
   const router = useRouter();
-  const [value] = useCookie("em_user_key");
   const [data, setData] = useState({});
-  const [vercelProject, setVercelProject] = useState();
-  const [editmodeToken, setEditmodeToken] = useState();
   const [userEditmodeProjects, setUserEditmodeProjects] = useState([
     defaultOption,
   ]);
@@ -19,17 +17,19 @@ export default function CallbackPage() {
   const [isInstalling, setIsInstalling] = useState(false);
   const [isFetchingEditmodeProjects, setIsFetchingEditmodeProjects] =
     useState(false);
-  const [authenticated, setAuthenticated] = useState(null);
-  const [fetchToken, setFetchToken] = useState(false);
+  const [view, setView] = useState(null);
+  const [userToken, setUserToken] = useState();
+  const [emId, setEmId] = useState();
 
   useEffect(() => {
-    if (value) {
-      setEditmodeToken(value);
-      setAuthenticated("dash");
+    if (token) {
+      setView("dash");
     }
   }, []);
 
   useEffect(() => {
+    const user_token = Cookies.get("em_user_key");
+    if (userToken) setUserToken(user_token);
     const fetchAccessToken = async (code) => {
       const details = {
         client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
@@ -61,9 +61,6 @@ export default function CallbackPage() {
       });
     };
 
-    const { currentProjectId } = router.query;
-    setVercelProject(currentProjectId);
-
     if (!data.accessToken && router.isReady) {
       const { code } = router.query;
       fetchAccessToken(code);
@@ -89,41 +86,12 @@ export default function CallbackPage() {
         }
       }
     };
-    fetchEditmodeProjects(value);
-  }, []);
+    if (userToken) fetchEditmodeProjects(userToken);
+  }, [userToken]);
 
-  const handleInstall = async (e) => {
-    e.preventDefault();
-    setFetchToken(true);
-    setIsInstalling(true);
-    const { currentProjectId } = router.query;
-    const cloneProject = async (token) => {
-      if (token) {
-        const url = `https://api.editmode.com/clone/prj_Y5HfCBS4rqZg?api_key=${token}`;
-        try {
-          const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-          });
-          const data = await res.json();
-          const id = data["id"];
-          return id;
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    };
-    let token, em_project_to_use;
-    if (editmodeToken) token = editmodeToken;
-
-    if (projectToInstall.default && data.accessToken) {
-      em_project_to_use = await cloneProject(token);
-      alert("AAAA");
-    } else {
-      em_project_to_use = projectToInstall.identifier;
-    }
-
+  useEffect(() => {
     const writeENV = async (accessToken, em_project_to_use) => {
+      const { currentProjectId } = router.query;
       const res = await fetch(
         `https://api.vercel.com/v8/projects/${currentProjectId}/env`,
         {
@@ -142,28 +110,55 @@ export default function CallbackPage() {
       );
       const json = await res.json();
       setIsInstalling(false);
+      alert(JSON.stringify(json));
       if (json.value) router.push(router.query.next);
     };
-    if (data && data.accessToken && em_project_to_use) {
-      await writeENV(data.accessToken, em_project_to_use);
-      alert("IN!");
+    if (data && data.accessToken && emId) {
+      writeENV(data.accessToken, emId);
+    }
+  }, [emId]);
+
+  const handleInstall = async (e) => {
+    e.preventDefault();
+    setIsInstalling(true);
+    const cloneProject = async (token) => {
+      if (token) {
+        const url = `https://api.editmode.com/clone/prj_Y5HfCBS4rqZg?api_key=${token}`;
+        try {
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          });
+          const data = await res.json();
+          const id = data["id"];
+          return id;
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    };
+    let em_project_to_use;
+    if (projectToInstall.default && data.accessToken) {
+      em_project_to_use = await cloneProject(token);
+      alert(em_project_to_use);
+      setEmId(em_project_to_use);
+    } else {
+      setEmId(projectToInstall.identifier);
     }
   };
 
   return (
     <>
-      {authenticated === null && (
-        <Blank setAuthenticated={setAuthenticated} value={value} />
-      )}
-      {authenticated === "auth" && <Auth setAuthenticated={setAuthenticated} />}
-      {authenticated === "dash" && (
+      {view === null && <Blank setView={setView} user={token} />}
+      {view === "auth" && <Auth setView={setView} />}
+      {view === "dash" && (
         <Dashboard
           userEditmodeProjects={userEditmodeProjects}
           handleInstall={handleInstall}
           isFetchingEditmodeProjects={isFetchingEditmodeProjects}
           isInstalling={isInstalling}
           setProjectToInstall={setProjectToInstall}
-          setAuthenticated={setAuthenticated}
+          setView={setView}
         />
       )}
     </>

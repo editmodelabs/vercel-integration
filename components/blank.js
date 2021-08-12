@@ -1,5 +1,5 @@
-export default function Blank({ value, setAuthenticated }) {
-  if (value) setAuthenticated("dash");
-  else setAuthenticated("auth");
+export default function Blank({ user, setView }) {
+  if (user) setView("dash");
+  else setView("auth");
   return <></>;
 }

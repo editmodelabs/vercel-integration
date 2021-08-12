@@ -12,7 +12,7 @@ const initialFormState = {
   passwordConfirmation: "",
 };
 
-const UserCredentials = ({ setAuthenticated }) => {
+const UserCredentials = ({ setView }) => {
   const [_, updateCookie] = useCookie("em_user_key");
   const [authType, setAuthType] = useState("login");
   const [credentials, setCredentials] = useState(initialFormState);
@@ -35,11 +35,12 @@ const UserCredentials = ({ setAuthenticated }) => {
     }
     const token = data.authentication_token;
     updateCookie(token);
+    Cookies.set("em_user_key", token);
     if (token) setIsLoading(false);
     if (token) {
       setIsLoginValid(true);
       Cookies.set("em_user_email", credentials.email);
-      setAuthenticated("dash");
+      setView("dash");
     }
   };
 
@@ -52,10 +53,10 @@ const UserCredentials = ({ setAuthenticated }) => {
     });
     const data = await res.json();
     const token = data.authentication_token;
-    updateCookie(token);
+    Cookies.set("em_user_key", token);
     if (token) setIsLoading(false);
     Cookies.set("em_user_email", values.email);
-    if (data.authentication_token) setAuthenticated("dash");
+    if (data.authentication_token) setView("dash");
   };
 
   const handleAuthTypeSwitch = (e) => {
