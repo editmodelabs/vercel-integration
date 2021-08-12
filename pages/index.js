@@ -18,7 +18,6 @@ export default function CallbackPage() {
   const [isFetchingEditmodeProjects, setIsFetchingEditmodeProjects] =
     useState(false);
   const [view, setView] = useState(null);
-  const [userToken, setUserToken] = useState();
   const [emId, setEmId] = useState();
 
   useEffect(() => {
@@ -28,8 +27,6 @@ export default function CallbackPage() {
   }, []);
 
   useEffect(() => {
-    const user_token = Cookies.get("em_user_key");
-    if (userToken) setUserToken(user_token);
     const fetchAccessToken = async (code) => {
       const details = {
         client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
@@ -86,8 +83,8 @@ export default function CallbackPage() {
         }
       }
     };
-    if (userToken) fetchEditmodeProjects(userToken);
-  }, [userToken]);
+    if (token) fetchEditmodeProjects(token);
+  }, []);
 
   useEffect(() => {
     const writeENV = async (accessToken, em_project_to_use) => {
