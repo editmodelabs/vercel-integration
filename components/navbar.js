@@ -1,13 +1,10 @@
 import { LogoutIcon } from "@heroicons/react/outline";
 import Cookies from "js-cookie";
-import { useRouter } from "next/router";
 import { isBrowser } from "utilities";
 
 export default function NavBar() {
-  const router = useRouter();
-
   const handleSignOut = () => {
-    Cookies.remove("em_user_key");
+    Cookies.remove("concessio_pref_per");
     if (isBrowser()) window.close();
   };
 

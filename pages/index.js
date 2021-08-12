@@ -7,7 +7,7 @@ import Blank from "components/blank";
 import Cookies from "js-cookie";
 
 export default function CallbackPage() {
-  const token = Cookies.get("em_user_key");
+  const token = Cookies.get("concessio_pref_per");
   const router = useRouter();
   const [data, setData] = useState({});
   const [userEditmodeProjects, setUserEditmodeProjects] = useState([
@@ -20,11 +20,11 @@ export default function CallbackPage() {
   const [view, setView] = useState(null);
   const [emId, setEmId] = useState();
 
-  useEffect(() => {
-    if (token) {
-      setView("dash");
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (token) {
+  //     setView("dash");
+  //   }
+  // }, []);
 
   useEffect(() => {
     const fetchAccessToken = async (code) => {

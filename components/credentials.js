@@ -13,7 +13,7 @@ const initialFormState = {
 };
 
 const UserCredentials = ({ setView }) => {
-  const [_, updateCookie] = useCookie("em_user_key");
+  const [_, updateCookie] = useCookie("concessio_pref_per");
   const [authType, setAuthType] = useState("login");
   const [credentials, setCredentials] = useState(initialFormState);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,7 +35,7 @@ const UserCredentials = ({ setView }) => {
     }
     const token = data.authentication_token;
     updateCookie(token);
-    Cookies.set("em_user_key", token);
+    Cookies.set("concessio_pref_per", token);
     if (token) setIsLoading(false);
     if (token) {
       setIsLoginValid(true);
@@ -53,7 +53,7 @@ const UserCredentials = ({ setView }) => {
     });
     const data = await res.json();
     const token = data.authentication_token;
-    Cookies.set("em_user_key", token);
+    Cookies.set("concessio_pref_per", token);
     if (token) setIsLoading(false);
     Cookies.set("em_user_email", values.email);
     if (data.authentication_token) setView("dash");
