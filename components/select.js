@@ -1,4 +1,3 @@
-/* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
@@ -8,9 +7,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example({ projects, setProjectToInstall }) {
-  const projectOptions = [defaultOption, ...projects];
-
+export default function SelectMenu({ projectOptions, setProjectToInstall }) {
   const [selected, setSelected] = useState(projectOptions[0]);
 
   useEffect(() => {
