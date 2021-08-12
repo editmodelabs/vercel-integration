@@ -59,9 +59,12 @@ const UserCredentials = ({ setView }) => {
     console.log(data);
     const token = data.authentication_token;
     Cookies.set("concessio_pref_per", token);
-    if (token) setIsLoading(false);
+    if (token) {
+      setIsLoading(false);
+      setErrorMessage("");
+    }
     Cookies.set("em_user_email", values.email);
-    if (data.authentication_token) setView("dash");
+    if (token) setView("dash");
   };
 
   const handleAuthTypeSwitch = (e) => {
