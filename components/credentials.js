@@ -12,7 +12,7 @@ const initialFormState = {
   passwordConfirmation: "",
 };
 
-const UserCredentials = () => {
+const UserCredentials = ({ setAuthenticated }) => {
   const [_, updateCookie] = useCookie("em_user_key");
   const [authType, setAuthType] = useState("login");
   const [credentials, setCredentials] = useState(initialFormState);
@@ -39,7 +39,7 @@ const UserCredentials = () => {
     if (token) {
       setIsLoginValid(true);
       Cookies.set("em_user_email", credentials.email);
-      router.push("/");
+      setAuthenticated("dash");
     }
   };
 
@@ -55,7 +55,7 @@ const UserCredentials = () => {
     updateCookie(token);
     if (token) setIsLoading(false);
     Cookies.set("em_user_email", values.email);
-    if (data.authentication_token) router.push("/");
+    if (data.authentication_token) setAuthenticated("dash");
   };
 
   const handleAuthTypeSwitch = (e) => {

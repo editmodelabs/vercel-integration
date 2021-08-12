@@ -21,10 +21,11 @@ export default function CallbackPage() {
   const [authenticated, setAuthenticated] = useState("auth");
 
   useEffect(() => {
-    if (!value) {
-      setAuthenticated("auth");
-    } else setEditmodeToken(value);
-  }, [router, value]);
+    if (value) {
+      setEditmodeToken(value);
+      setAuthenticated("dash");
+    }
+  }, []);
 
   useEffect(() => {
     const fetchAccessToken = async (code) => {
@@ -146,18 +147,17 @@ export default function CallbackPage() {
     }
   };
 
-  if (!value) return null;
-
   return (
     <>
-      {!value && <Auth />}
-      {value && (
+      {authenticated === "auth" && <Auth setAuthenticated={setAuthenticated} />}
+      {authenticated === "dash" && (
         <Dashboard
           userEditmodeProjects={userEditmodeProjects}
           handleInstall={handleInstall}
           isFetchingEditmodeProjects={isFetchingEditmodeProjects}
           isInstalling={isInstalling}
           setProjectToInstall={setProjectToInstall}
+          setAuthenticated={setAuthenticated}
         />
       )}
     </>
