@@ -1,11 +1,12 @@
 import { LogoutIcon } from "@heroicons/react/outline";
-import Cookies from "js-cookie";
 import { isBrowser } from "utilities";
 
 export default function NavBar() {
   const handleSignOut = () => {
-    Cookies.remove("concessio_pref_per");
-    if (isBrowser()) window.close();
+    if (isBrowser()) {
+      localStorage.removeItem("concessio_pref_per");
+      window.close();
+    }
   };
 
   return (
@@ -30,8 +31,8 @@ export default function NavBar() {
             <div className="flex items-center">
               <div className="hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center mr-5 text-sm text-gray-600">
                 <p>
-                  {Cookies.get("em_user_email")
-                    ? Cookies.get("em_user_email")
+                  {isBrowser() && localStorage.getItem("em_user_email")
+                    ? localStorage.getItem("em_user_email")
                     : ""}
                 </p>
               </div>

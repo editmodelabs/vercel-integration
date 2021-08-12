@@ -4,10 +4,9 @@ import Dashboard from "components/dashboard";
 import { defaultOption } from "../utilities";
 import Auth from "components/credentials";
 import Blank from "components/blank";
-import Cookies from "js-cookie";
+import { isBrowser } from "utilities/browserCheck";
 
 export default function CallbackPage() {
-  const token = Cookies.get("concessio_pref_per");
   const router = useRouter();
   const [data, setData] = useState({});
   const [userEditmodeProjects, setUserEditmodeProjects] = useState([
@@ -19,12 +18,14 @@ export default function CallbackPage() {
     useState(false);
   const [view, setView] = useState(null);
   const [emId, setEmId] = useState();
+  const [token, setToken] = useState();
 
-  // useEffect(() => {
-  //   if (token) {
-  //     setView("dash");
-  //   }
-  // }, []);
+  useEffect(() => {
+    const user = localStorage.getItem("concessio_pref_per");
+    if (token) {
+      setToken(user);
+    }
+  }, [router]);
 
   useEffect(() => {
     const fetchAccessToken = async (code) => {
@@ -84,7 +85,7 @@ export default function CallbackPage() {
       }
     };
     if (token) fetchEditmodeProjects(token);
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     const writeENV = async (accessToken, em_project_to_use) => {
@@ -108,6 +109,7 @@ export default function CallbackPage() {
       const json = await res.json();
       setIsInstalling(false);
       // alert(JSON.stringify(json));
+      localStorage.removeItem("concessio_pref_per");
       if (json.value) router.push(router.query.next);
     };
     if (data && data.accessToken && emId) {
@@ -147,7 +149,7 @@ export default function CallbackPage() {
   return (
     <>
       {view === null && <Blank setView={setView} user={token} />}
-      {view === "auth" && <Auth setView={setView} />}
+      {view === "auth" && <Auth setView={setView} setToken={setToken} />}
       {view === "dash" && (
         <Dashboard
           userEditmodeProjects={userEditmodeProjects}

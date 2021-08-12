@@ -1,7 +1,5 @@
-import { useCookie } from "../utilities";
+import { isBrowser, useCookie } from "../utilities";
 import { useState } from "react";
-import { useRouter } from "next/router";
-import Cookies from "js-cookie";
 import { Formik, Form, Field } from "formik";
 
 const initialFormState = {
@@ -12,7 +10,7 @@ const initialFormState = {
   passwordConfirmation: "",
 };
 
-const UserCredentials = ({ setView }) => {
+const UserCredentials = ({ setView, setToken }) => {
   const [_, updateCookie] = useCookie("concessio_pref_per");
   const [authType, setAuthType] = useState("login");
   const [credentials, setCredentials] = useState(initialFormState);
@@ -34,12 +32,14 @@ const UserCredentials = ({ setView }) => {
       setIsLoginValid(false);
     }
     const token = data.authentication_token;
-    updateCookie(token);
-    Cookies.set("concessio_pref_per", token);
-    if (token) setIsLoading(false);
+    if (isBrowser() && token) localStorage.setItem("concessio_pref_per", token);
     if (token) {
+      setIsLoading(false);
+      setToken(token);
+    }
+    if (token && isBrowser()) {
       setIsLoginValid(true);
-      Cookies.set("em_user_email", credentials.email);
+      localStorage.setItem("em_user_email", credentials.email);
       setView("dash");
     }
   };
@@ -56,14 +56,16 @@ const UserCredentials = ({ setView }) => {
       setIsLoading(false);
       setErrorMessage(data.errors[0]);
     }
-    console.log(data);
     const token = data.authentication_token;
-    Cookies.set("concessio_pref_per", token);
+    if (isBrowser()) localStorage.setItem("concessio_pref_per", token);
     if (token) {
       setIsLoading(false);
       setErrorMessage("");
+      setToken(token);
     }
-    Cookies.set("em_user_email", values.email);
+    if (isBrowser() && token) {
+      localStorage.setItem("em_user_email", values.email);
+    }
     if (token) setView("dash");
   };
 
