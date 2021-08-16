@@ -43,7 +43,7 @@ export default function SelectMenu({ projectOptions, setProjectToInstall }) {
                 static
                 className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
               >
-                {projectOptions.map((project) => (
+                {projectOptions.map((project, idx) => (
                   <Listbox.Option
                     key={project.identifier}
                     className={({ active }) =>
