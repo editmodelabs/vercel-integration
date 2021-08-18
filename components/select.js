@@ -48,17 +48,18 @@ export default function SelectMenu({ projectOptions, setProjectToInstall }) {
                     key={project.identifier}
                     className={({ active }) =>
                       classNames(
+                        project.default
+                          ? `font-bold text-${active ? "white" : "indigo"}-500`
+                          : "",
                         active ? "text-white bg-indigo-600" : "text-gray-900",
-                        "cursor-default select-none relative py-2 pl-3 pr-9",
-
-                        project.default ? "border border-indigo-400" : ""
+                        "cursor-default select-none relative py-2 pl-3 pr-9"
                       )
                     }
                     value={project}
                   >
                     {({ selected, active }) => (
                       <>
-                        <div className="flex">
+                        <div className={`flex `}>
                           <span
                             className={classNames(
                               `${
