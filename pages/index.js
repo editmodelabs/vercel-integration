@@ -21,8 +21,8 @@ export default function CallbackPage() {
   useEffect(() => {
     const fetchAccessToken = async (code) => {
       const details = {
-        client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
-        client_secret: "9d72agydqs5x5YHX3wTNP8Iv",
+        client_id: "oac_tgUyWFM6PEvxEkJZCLShaoWI",
+        client_secret: "7vuPPxcqZ1AGNNK89EigX7TG",
         code: code,
         redirect_uri: "https://vercel-integration-seven.vercel.app",
       };

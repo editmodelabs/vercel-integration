@@ -43,13 +43,15 @@ export default function SelectMenu({ projectOptions, setProjectToInstall }) {
                 static
                 className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
               >
-                {projectOptions.map((project, idx) => (
+                {projectOptions.map((project) => (
                   <Listbox.Option
                     key={project.identifier}
                     className={({ active }) =>
                       classNames(
                         active ? "text-white bg-indigo-600" : "text-gray-900",
-                        "cursor-default select-none relative py-2 pl-3 pr-9"
+                        "cursor-default select-none relative py-2 pl-3 pr-9",
+
+                        project.default ? "border border-indigo-400" : ""
                       )
                     }
                     value={project}
@@ -59,8 +61,10 @@ export default function SelectMenu({ projectOptions, setProjectToInstall }) {
                         <div className="flex">
                           <span
                             className={classNames(
-                              selected ? "font-semibold" : "font-normal",
-                              "block truncate"
+                              `${
+                                (selected ? "font-semibold" : "font-normal",
+                                "block truncate")
+                              }`
                             )}
                           >
                             {project.name}
