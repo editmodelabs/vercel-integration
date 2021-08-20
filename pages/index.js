@@ -4,6 +4,7 @@ import Dashboard from "components/dashboard";
 import { defaultOption, isBrowser } from "../utilities";
 import Auth from "components/credentials";
 import Blank from "components/blank";
+import Modal from "components/modal";
 
 export default function CallbackPage() {
   const router = useRouter();
@@ -17,6 +18,7 @@ export default function CallbackPage() {
     useState(false);
   const [view, setView] = useState();
   const [token, setToken] = useState();
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const fetchAccessToken = async (code) => {
@@ -107,7 +109,9 @@ export default function CallbackPage() {
     const writeENV = async (accessToken, em_project_to_use) => {
       const { currentProjectId } = router.query;
       const res = await fetch(
-        `https://api.vercel.com/v8/projects/${currentProjectId}/env`,
+        `https://api.vercel.com/v8/projects/${currentProjectId}/env${
+          data.teamId ? `?teamId=${data.teamId}` : ""
+        }`,
         {
           method: "POST",
           headers: {
@@ -124,7 +128,7 @@ export default function CallbackPage() {
       );
       const json = await res.json();
       setIsInstalling(false);
-      if (json.value) router.push(router.query.next);
+      if (json.value) setOpen(true);
       if (json.error) {
         setIsInstalling(false);
         if (json.error.message) alert(json.error.message);
@@ -133,6 +137,11 @@ export default function CallbackPage() {
     if (data.accessToken && em_project_to_use) {
       writeENV(data.accessToken, em_project_to_use);
     }
+  };
+
+  const reroute = () => {
+    setOpen(false);
+    router.push(router.query.next);
   };
 
   return (
@@ -149,6 +158,7 @@ export default function CallbackPage() {
           setView={setView}
         />
       )}
+      {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />}
     </>
   );
 }
