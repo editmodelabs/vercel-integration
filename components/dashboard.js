@@ -3,6 +3,7 @@ import Selection from "./select";
 import Loader from "react-loader-spinner";
 import Cards from "./cards";
 import { useState } from "react";
+import { ArrowDownIcon } from "@heroicons/react/outline";
 
 export default function Dashboard({
   userEditmodeProjects,
@@ -12,6 +13,7 @@ export default function Dashboard({
   handleInstall,
   vercelProjects,
   setVercelProjects,
+  dashboardView,
 }) {
   return (
     <Layout>
@@ -27,9 +29,12 @@ export default function Dashboard({
               <Selection
                 projectOptions={userEditmodeProjects}
                 setProjectToInstall={setProjectToInstall}
+                dashboardView={dashboardView}
               />
             </section>
-            <section>To: </section>
+            <div className="w-full flex items-center justify-center p-6">
+              <ArrowDownIcon className="w-10 h-12 text-gray-400" />
+            </div>
             <section>
               <Cards
                 projects={vercelProjects}

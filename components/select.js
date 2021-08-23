@@ -7,7 +7,11 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function SelectMenu({ projectOptions, setProjectToInstall }) {
+export default function SelectMenu({
+  projectOptions,
+  setProjectToInstall,
+  dashboardView,
+}) {
   const [selected, setSelected] = useState(projectOptions[0]);
 
   useEffect(() => {
@@ -18,8 +22,10 @@ export default function SelectMenu({ projectOptions, setProjectToInstall }) {
     <Listbox value={selected} onChange={setSelected}>
       {({ open }) => (
         <>
-          <Listbox.Label className="block text-md font-medium text-gray-700">
-            Generate an Editmode Starter or Select an Existing Editmode Project
+          <Listbox.Label className="block text-sm font-medium text-gray-700 flex justify-center">
+            {dashboardView === "deploy"
+              ? `Generate an Editmode Starter or Select an Existing Editmode Project`
+              : `Link an Editmode Starter or an Existing Editmode Project to Your Vercel Project(s): `}
           </Listbox.Label>
           <div className="mt-5 relative">
             <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm h-10">
