@@ -11,6 +11,7 @@ export default function Dashboard({
   isInstalling,
   handleInstall,
   vercelProjects,
+  setVercelProjects,
 }) {
   return (
     <Layout>
@@ -30,7 +31,10 @@ export default function Dashboard({
             </section>
             <section>To: </section>
             <section>
-              <Cards projects={vercelProjects} />
+              <Cards
+                projects={vercelProjects}
+                setProjects={setVercelProjects}
+              />
             </section>
             <section className="py-4">
               <button

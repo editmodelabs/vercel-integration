@@ -1,5 +1,4 @@
 import { TrashIcon } from "@heroicons/react/solid";
-import { useEffect, useState } from "react";
 const people = [
   {
     name: "Jane Cooper",
@@ -20,24 +19,19 @@ function parseTimeStamp(unixTimestamp) {
   return `Created ${duration} days ago`;
 }
 
-export default function Cards({ projects }) {
-  const [projectsToUse, setProjectsToUse] = useState(projects);
-  useEffect(() => {
-    setProjectsToUse(projects);
-  }, [projects]);
-
+export default function Cards({ projects, setProjects }) {
   const handleRemove = (e, id) => {
     e.preventDefault();
-    const list = projectsToUse.filter((project) => project.id !== id);
-    setProjectsToUse(list);
+    const list = projects.filter((project) => project.id !== id);
+    setProjects(list);
   };
   return (
     <ul
       role="list"
       className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 mb-4 mt-4"
     >
-      {projectsToUse &&
-        projectsToUse.map((person) => (
+      {projects &&
+        projects.map((person) => (
           <li
             key={person.email}
             className={`col-span-1 bg-white rounded-lg shadow-lg divide-y divide-gray-200`}

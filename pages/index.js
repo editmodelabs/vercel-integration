@@ -25,6 +25,7 @@ export default function CallbackPage() {
 
   useEffect(() => {
     if (router.query.currentProjectId) setDashboardView("deploy");
+    else setDashboardView("add");
     const fetchAccessToken = async (code) => {
       const details = {
         client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
@@ -187,6 +188,7 @@ export default function CallbackPage() {
           setView={setView}
           dashboardView={dashboardView}
           vercelProjects={vercelProjects}
+          setVercelProjects={setVercelProjects}
         />
       )}
       {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />}
