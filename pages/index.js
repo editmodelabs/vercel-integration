@@ -101,7 +101,7 @@ export default function CallbackPage() {
           const data = await res.json();
           if (data) setUserEditmodeProjects([...userEditmodeProjects, ...data]);
           setIsFetchingEditmodeProjects(false);
-          return id;
+          // return id;
         } catch (err) {
           console.log(err);
         }
