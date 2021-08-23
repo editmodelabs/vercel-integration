@@ -21,7 +21,6 @@ export default function CallbackPage() {
   const [token, setToken] = useState();
   const [open, setOpen] = useState(false);
   const [dashboardView, setDashboardView] = useState("");
-  const [vercelProjectsToUse, setVercelProjectsToUse] = useState([]);
 
   useEffect(() => {
     if (router.query.currentProjectId) setDashboardView("deploy");
@@ -77,9 +76,6 @@ export default function CallbackPage() {
           }
         );
         const json = await res.json();
-
-        // if (json) alert(JSON.stringify(json));
-
         setVercelProjects(json.projects);
       }
     };
@@ -136,8 +132,11 @@ export default function CallbackPage() {
       em_project_to_use = projectToInstall.identifier;
     }
 
-    const writeENV = async (accessToken, em_project_to_use) => {
-      const { currentProjectId } = router.query;
+    const vercelEnvReq = async (
+      accessToken,
+      em_project_to_use,
+      currentProjectId
+    ) => {
       const res = await fetch(
         `https://api.vercel.com/v8/projects/${currentProjectId}/env${
           data.teamId ? `?teamId=${data.teamId}` : ""
@@ -157,6 +156,16 @@ export default function CallbackPage() {
         }
       );
       const json = await res.json();
+      return json;
+    };
+
+    const writeSingleEnv = async (accessToken, em_project_to_use) => {
+      const { currentProjectId } = router.query;
+      const json = await vercelEnvReq(
+        accessToken,
+        em_project_to_use,
+        currentProjectId
+      );
       setIsInstalling(false);
       if (json.value) setOpen(true);
       if (json.error) {
@@ -164,8 +173,22 @@ export default function CallbackPage() {
         if (json.error.message) alert(json.error.message);
       }
     };
-    if (data.accessToken && em_project_to_use) {
-      writeENV(data.accessToken, em_project_to_use);
+
+    const writeMultiEnv = async (access_token, em_project_to_use) => {
+      const requests = vercelProjects.map((vercelProject) => {
+        const current_id = vercelProject.id;
+      });
+      const multi_res = await Promise.all();
+    };
+
+    if (data.accessToken && em_project_to_use && dashboardView === "deploy") {
+      writeSingleEnv(data.accessToken, em_project_to_use);
+    } else if (
+      data.accessToken &&
+      em_project_to_use &&
+      dashboardView !== "deploy"
+    ) {
+      writeMultiEnv(data.accessToken, em_project_to_use, vercelProjects);
     }
   };
 
@@ -191,7 +214,9 @@ export default function CallbackPage() {
           setVercelProjects={setVercelProjects}
         />
       )}
-      {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />}
+      {open && dashboardView === "deploy" && (
+        <Modal setOpen={setOpen} open={open} reroute={reroute} />
+      )}
     </>
   );
 }
