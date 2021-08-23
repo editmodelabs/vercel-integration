@@ -1,6 +1,8 @@
 import Layout from "./layout";
 import Selection from "./select";
 import Loader from "react-loader-spinner";
+import Cards from "./cards";
+import { useState } from "react";
 
 export default function Dashboard({
   userEditmodeProjects,
@@ -8,6 +10,7 @@ export default function Dashboard({
   setProjectToInstall,
   isInstalling,
   handleInstall,
+  vercelProjects,
 }) {
   return (
     <Layout>
@@ -24,6 +27,10 @@ export default function Dashboard({
                 projectOptions={userEditmodeProjects}
                 setProjectToInstall={setProjectToInstall}
               />
+            </section>
+            <section>To: </section>
+            <section>
+              <Cards projects={vercelProjects} />
             </section>
             <section className="py-4">
               <button

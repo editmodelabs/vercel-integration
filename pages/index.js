@@ -12,6 +12,7 @@ export default function CallbackPage() {
   const [userEditmodeProjects, setUserEditmodeProjects] = useState([
     defaultOption,
   ]);
+  const [vercelProjects, setVercelProjects] = useState();
   const [projectToInstall, setProjectToInstall] = useState({});
   const [isInstalling, setIsInstalling] = useState(false);
   const [isFetchingEditmodeProjects, setIsFetchingEditmodeProjects] =
@@ -19,14 +20,17 @@ export default function CallbackPage() {
   const [view, setView] = useState();
   const [token, setToken] = useState();
   const [open, setOpen] = useState(false);
+  const [dashboardView, setDashboardView] = useState("");
+  const [vercelProjectsToUse, setVercelProjectsToUse] = useState([]);
 
   useEffect(() => {
+    if (router.query.currentProjectId) setDashboardView("deploy");
     const fetchAccessToken = async (code) => {
       const details = {
-        client_id: "oac_tgUyWFM6PEvxEkJZCLShaoWI",
-        client_secret: "7vuPPxcqZ1AGNNK89EigX7TG",
+        client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
+        client_secret: "9d72agydqs5x5YHX3wTNP8Iv",
         code: code,
-        redirect_uri: "https://vercel-integration-seven.vercel.app",
+        redirect_uri: "http://localhost:4000",
       };
       var formBody = [];
       for (var property in details) {
@@ -57,6 +61,31 @@ export default function CallbackPage() {
       fetchAccessToken(code);
     }
   }, [router]);
+
+  useEffect(() => {
+    const fetchVercelProjects = async (accessToken, teamId) => {
+      if (accessToken) {
+        const res = await fetch(
+          `https://api.vercel.com/v8/projects${
+            teamId ? `?teamId=${teamId}` : ""
+          }`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          }
+        );
+        const json = await res.json();
+
+        // if (json) alert(JSON.stringify(json));
+
+        setVercelProjects(json.projects);
+      }
+    };
+
+    const { accessToken, teamId } = data;
+    if (data.accessToken) fetchVercelProjects(accessToken, teamId);
+  }, [data]);
 
   useEffect(() => {
     const fetchEditmodeProjects = async (token) => {
@@ -156,6 +185,8 @@ export default function CallbackPage() {
           isInstalling={isInstalling}
           setProjectToInstall={setProjectToInstall}
           setView={setView}
+          dashboardView={dashboardView}
+          vercelProjects={vercelProjects}
         />
       )}
       {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />}
