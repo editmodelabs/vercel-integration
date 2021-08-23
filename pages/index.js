@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Dashboard from "components/dashboard";
-import { defaultOption, isBrowser } from "../utilities";
+import { defaultOption, updateVercelEnv, checkVercelEnv } from "../utilities";
 import Auth from "components/credentials";
 import Blank from "components/blank";
 import Modal from "components/modal";
-import { ArrowDownIcon } from "@heroicons/react/solid";
 
 export default function CallbackPage() {
   const router = useRouter();
@@ -179,6 +178,7 @@ export default function CallbackPage() {
       let hasError = false;
       const requests = vercelProjects.map(async (vercelProject) => {
         const current_id = vercelProject.id;
+        const existing_env = checkVercelEnv();
         const lone_request = await vercelEnvReq(
           accessToken,
           em_project_to_use,
