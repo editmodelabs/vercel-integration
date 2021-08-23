@@ -49,7 +49,6 @@ export const updateVercelEnv = async (
       }),
     }
   );
-  if (json) alert("YESSSSSS");
   const json = await res.json();
   return json;
 };

@@ -149,7 +149,7 @@ export default function CallbackPage() {
           },
           body: JSON.stringify({
             type: "encrypted",
-            key: "NEXT_PUBLIC_PROJECT_ID",
+            key: "NEXT_PUBLIC_PROJECT_IDD",
             value: em_project_to_use,
             target: ["production", "preview"],
           }),
@@ -178,13 +178,29 @@ export default function CallbackPage() {
       let hasError = false;
       const requests = vercelProjects.map(async (vercelProject) => {
         const current_id = vercelProject.id;
-        const existing_env = checkVercelEnv();
-        const lone_request = await vercelEnvReq(
+        const existing_env = await checkVercelEnv(
           accessToken,
-          em_project_to_use,
-          current_id
+          current_id,
+          "NEXT_PUBLIC_PROJECT_IDD",
+          data.teamId
         );
-        return lone_request;
+        if (existing_env) {
+          const patch_res = await updateVercelEnv(
+            accessToken,
+            current_id,
+            existing_env,
+            em_project_to_use,
+            data.teamId
+          );
+          return patch_res;
+        } else {
+          const lone_request = await vercelEnvReq(
+            accessToken,
+            em_project_to_use,
+            current_id
+          );
+          return lone_request;
+        }
       });
       const multi_res = await Promise.all(requests);
       setIsInstalling(false);
