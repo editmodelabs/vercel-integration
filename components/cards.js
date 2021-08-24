@@ -40,7 +40,7 @@ export default function Cards({ projects, setProjects }) {
           <li
             key={person.email}
             className={`${
-              projects.length === 1 ? `col-span-1` : `col-span-2`
+              projects.length === 1 ? `col-span-2` : `col-span-1`
             } bg-white rounded-lg shadow-xl divide-y divide-gray-200`}
           >
             <div className="w-full flex items-center justify-between p-8 space-x-6">
