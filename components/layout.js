@@ -9,7 +9,7 @@ export default function Layout(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar />
-      <div className="flex-1 flex items-center justify-center mb-64">
+      <div className="flex-1 flex items-center justify-center mb-64 sm:p-8">
         {props.children}
       </div>
     </div>

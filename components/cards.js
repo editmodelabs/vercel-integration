@@ -74,17 +74,13 @@ export default function Cards({ projects, setProjects }) {
                         cursor: "pointer",
                         pointerEvents: projects.length === 1 ? `none` : `auto`,
                       }}
+                      onClick={(e) => handleRemove(e, person.id)}
                     >
                       <TrashIcon
                         className="w-5 h-5 text-gray-400"
                         aria-hidden="true"
                       />
-                      <span
-                        onClick={(e) => handleRemove(e, person.id)}
-                        className="ml-3"
-                      >
-                        Exclude
-                      </span>
+                      <span className="ml-3">Exclude</span>
                     </div>
                   </div>
                 </div>
