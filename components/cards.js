@@ -15,8 +15,11 @@ function parseTimeStamp(unixTimestamp) {
   const milliseconds = unixTimestamp;
   const dateObject = new Date(milliseconds);
   const today = new Date();
-  const duration = Math.ceil((today - dateObject) / (1000 * 60 * 60 * 24));
-  return `Created ${duration} days ago`;
+  const raw_duration = (today - dateObject) / (1000 * 60 * 60 * 24);
+  const duration = Math.ceil(raw_duration);
+  return raw_duration > 1
+    ? `Created ${duration} day${duration > 1 ? "s" : ""} ago`
+    : "Created under 24 hours ago.";
 }
 
 export default function Cards({ projects, setProjects }) {
@@ -28,15 +31,19 @@ export default function Cards({ projects, setProjects }) {
   return (
     <ul
       role="list"
-      className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 mb-4 mt-4"
+      className={`grid grid-cols-1 gap-6 sm:grid-cols-${
+        projects.length == 1 ? "1" : "2"
+      } lg:grid-cols-${projects.length == 1 ? "1" : "2"} mb-4 mt-4 ${
+        projects.length == 1 ? "justify-items-center" : ""
+      }`}
     >
       {projects &&
         projects.map((person) => (
           <li
             key={person.email}
-            className={`col-span-1 bg-white rounded-lg shadow-lg divide-y divide-gray-200`}
+            className={`col-span-1 bg-white rounded-lg shadow-xl divide-y divide-gray-200 `}
           >
-            <div className="w-full flex items-center justify-between p-6 space-x-6">
+            <div className="w-full flex items-center justify-between p-8 space-x-6">
               <div className="flex-1 truncate">
                 <div className="flex items-center space-x-3">
                   <h3 className="text-gray-900 text-sm font-medium truncate">
@@ -58,25 +65,30 @@ export default function Cards({ projects, setProjects }) {
               </svg>
             </div>
             <div>
-              <div className="-mt-px flex divide-x divide-gray-200">
-                <div className="w-0 flex-1 flex">
-                  <div
-                    className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
-                    style={{ cursor: "pointer" }}
-                  >
-                    <TrashIcon
-                      className="w-5 h-5 text-gray-400"
-                      aria-hidden="true"
-                    />
-                    <span
-                      onClick={(e) => handleRemove(e, person.id)}
-                      className="ml-3"
+              {projects.length > 1 && (
+                <div className="-mt-px flex divide-x divide-gray-200">
+                  <div className="w-0 flex-1 flex">
+                    <div
+                      className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
+                      style={{
+                        cursor: "pointer",
+                        pointerEvents: projects.length === 1 ? `none` : `auto`,
+                      }}
                     >
-                      Exclude
-                    </span>
+                      <TrashIcon
+                        className="w-5 h-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                      <span
+                        onClick={(e) => handleRemove(e, person.id)}
+                        className="ml-3"
+                      >
+                        Exclude
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </li>
         ))}

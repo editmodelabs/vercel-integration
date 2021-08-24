@@ -12,7 +12,7 @@ export default function CallbackPage() {
   const [userEditmodeProjects, setUserEditmodeProjects] = useState([
     defaultOption,
   ]);
-  const [vercelProjects, setVercelProjects] = useState();
+  const [vercelProjects, setVercelProjects] = useState(undefined);
   const [projectToInstall, setProjectToInstall] = useState({});
   const [isInstalling, setIsInstalling] = useState(false);
   const [isFetchingEditmodeProjects, setIsFetchingEditmodeProjects] =
@@ -76,7 +76,11 @@ export default function CallbackPage() {
           }
         );
         const json = await res.json();
-        setVercelProjects(json.projects);
+        if (!json.error && json && !json.projects) setVercelProjects([]);
+        else if (json && json.projects) setVercelProjects(json.projects);
+        else if (json.error) {
+          if (json.error.message) alert(json.error.message);
+        }
       }
     };
 
@@ -149,7 +153,7 @@ export default function CallbackPage() {
           },
           body: JSON.stringify({
             type: "encrypted",
-            key: "NEXT_PUBLIC_PROJECT_IDD",
+            key: "NEXT_PUBLIC_PROJECT_ID",
             value: em_project_to_use,
             target: ["production", "preview"],
           }),
@@ -181,7 +185,7 @@ export default function CallbackPage() {
         const existing_env = await checkVercelEnv(
           accessToken,
           current_id,
-          "NEXT_PUBLIC_PROJECT_IDD",
+          "NEXT_PUBLIC_PROJECT_ID",
           data.teamId
         );
         if (existing_env) {
