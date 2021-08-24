@@ -31,17 +31,15 @@ export default function Cards({ projects, setProjects }) {
   return (
     <ul
       role="list"
-      className={`grid grid-cols-1 gap-6 sm:grid-cols-${
-        projects.length == 1 ? "1" : "2"
-      } lg:grid-cols-${projects.length == 1 ? "1" : "2"} mb-4 mt-4 ${
-        projects.length == 1 ? "justify-items-center" : ""
-      }`}
+      className={`mb-4 mt-4 grid ${
+        projects.length === 1 ? "grid-cols-1" : "grid-cols-2"
+      } gap-6 sm:grid-cols-2 lg:grid-cols-2`}
     >
       {projects &&
         projects.map((person) => (
           <li
             key={person.email}
-            className={`col-span-1 bg-white rounded-lg shadow-xl divide-y divide-gray-200 `}
+            className={`col-span-1 bg-white rounded-lg shadow-xl divide-y divide-gray-200`}
           >
             <div className="w-full flex items-center justify-between p-8 space-x-6">
               <div className="flex-1 truncate">
