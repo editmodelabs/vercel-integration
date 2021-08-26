@@ -85,7 +85,10 @@ export default function CallbackPage() {
     };
 
     const { accessToken, teamId } = data;
-    if (data.accessToken) fetchVercelProjects(accessToken, teamId);
+    if (dashboardView === "deploy") setVercelProjects([]);
+    if (data.accessToken && dashboardView !== "deploy") {
+      fetchVercelProjects(accessToken, teamId);
+    }
   }, [data]);
 
   useEffect(() => {
@@ -101,7 +104,6 @@ export default function CallbackPage() {
           const data = await res.json();
           if (data) setUserEditmodeProjects([...userEditmodeProjects, ...data]);
           setIsFetchingEditmodeProjects(false);
-          // return id;
         } catch (err) {
           console.log(err);
         }
