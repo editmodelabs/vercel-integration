@@ -175,6 +175,7 @@ const UserCredentials = ({ setView, setToken }) => {
                     : `bg-indigo-500`
                 }`}
                 type="submit"
+                disabled={isLoading ? true : false}
               >
                 <svg
                   class="animate-spin -ml-1 mr-3 h-5 w-5 text-white mt-0.5"
@@ -430,6 +431,7 @@ const UserCredentials = ({ setView, setToken }) => {
                         : `bg-indigo-500`
                     }`}
                     type="submit"
+                    disabled={isLoading ? true : false}
                   >
                     <svg
                       class="animate-spin -ml-1 mr-3 h-5 w-5 text-white mt-0.5"

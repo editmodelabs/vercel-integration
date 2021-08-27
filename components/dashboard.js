@@ -33,7 +33,13 @@ export default function Dashboard({
                   setProjectToInstall={setProjectToInstall}
                   dashboardView={dashboardView}
                 />
+                <div className="text-xs text-gray-500 mt-2 mb-2">
+                  {dashboardView !== "deploy"
+                    ? "The Editmode project ID will be stored in the NEXT_PUBLIC_PROJECT_ID environment variable."
+                    : "Generating a starter will create a new Editmode project and store its ID in the NEXT_PUBLIC_PROJECT_ID environment variable of your new template."}
+                </div>
               </section>
+
               {dashboardView !== "deploy" && (
                 <>
                   <div className="w-full flex items-center justify-center p-6">
@@ -57,11 +63,18 @@ export default function Dashboard({
               <section className="py-4">
                 <button
                   className={`flex justify-center w-full mt-6 text-white font-medium py-3 leading-6 px-4 rounded-md hover:bg-indigo-400 transition duration-200 button ${
-                    isInstalling
+                    isInstalling ||
+                    (dashboardView !== "deploy" && !vercelProjects.length)
                       ? `cursor-not-allowed bg-indigo-300`
                       : `bg-indigo-500`
-                  }`}
+                  } `}
                   onClick={handleInstall}
+                  disabled={
+                    (dashboardView !== "deploy" && !vercelProjects.length) ||
+                    isInstalling
+                      ? true
+                      : false
+                  }
                 >
                   <svg
                     class="animate-spin -ml-1 mr-3 h-5 w-5 text-white mt-0.5"
