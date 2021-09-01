@@ -83,9 +83,7 @@ const UserCredentials = ({ setView, setToken }) => {
               {" "}
               <img
                 style={{ height: "40px" }}
-                src={
-                  "https://app.editmode.com/assets/logo-v2-55f5bda132dae21e6d29b252dc327778343a5462953bfc702210b9bebaf687ef.png"
-                }
+                src={"/editmode.png"}
                 className="mx-auto w-auto"
               />
             </a>
@@ -211,9 +209,7 @@ const UserCredentials = ({ setView, setToken }) => {
               {" "}
               <img
                 style={{ height: "40px" }}
-                src={
-                  "https://app.editmode.com/assets/logo-v2-55f5bda132dae21e6d29b252dc327778343a5462953bfc702210b9bebaf687ef.png"
-                }
+                src={"/editmode.png"}
                 className="mx-auto w-auto"
               />
             </a>

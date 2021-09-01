@@ -1,5 +1,6 @@
 import { LogoutIcon } from "@heroicons/react/outline";
 import { isBrowser } from "utilities";
+// import logo from "../public/editmode.png";
 
 export default function NavBar() {
   const handleSignOut = () => {
@@ -22,13 +23,13 @@ export default function NavBar() {
               <div className="flex-shrink-0 flex items-center">
                 <img
                   className="block lg:hidden h-8 w-auto"
-                  src="https://app.editmode.com/favicon.ico"
-                  alt="Workflow"
+                  src="/logo.png"
+                  alt="editmode-logo"
                 />
                 <img
                   className="hidden lg:block h-8 w-auto"
-                  src="https://app.editmode.com/assets/logo-v2-55f5bda132dae21e6d29b252dc327778343a5462953bfc702210b9bebaf687ef.png"
-                  alt="Workflow"
+                  src="/editmode.png"
+                  alt="editmode"
                 />
               </div>
             </div>
