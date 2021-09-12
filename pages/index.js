@@ -29,7 +29,7 @@ export default function CallbackPage() {
   const [hasCloned, setHasCloned] = useState(false);
 
   const handleInstall = async () => {
-    const isDeployFlow = router.query.currentProjectId;
+    const isDeployFlow = dashboardView === "deploy";
     !isDeployFlow && setIsInstalling(true);
     const cloneProject = async (token) => {
       if (token) {
@@ -115,7 +115,7 @@ export default function CallbackPage() {
       }
     };
 
-    if (data.accessToken && em_project_to_use && true) {
+    if (data.accessToken && em_project_to_use && isDeployFlow) {
       alert(data.accessToken);
       writeSingleEnv(data, em_project_to_use);
     } else if (data.accessToken && em_project_to_use && !isDeployFlow) {
@@ -213,7 +213,7 @@ export default function CallbackPage() {
 
     const processAction = async () => {
       if (token) {
-        if (false) fetchEditmodeProjects(token);
+        if (dashboardView !== "deploy") fetchEditmodeProjects(token);
         else await handleInstall();
       }
       return;
@@ -256,6 +256,7 @@ export default function CallbackPage() {
           dashboardView={dashboardView}
           vercelProjects={vercelProjects}
           setVercelProjects={setVercelProjects}
+          hasCloned={hasCloned}
         />
       )}
       {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />}
