@@ -5,11 +5,18 @@ export default function SelectGroup({
   editmode_options,
   vercel_options,
   fieldIndex,
+  connections,
+  setConnections,
 }) {
   return (
     <div className="flex justify-center w-full space-x-4">
       <div className="vercel w-full">
-        <VercelSelect options={vercel_options} fieldIndex={fieldIndex} />
+        <VercelSelect
+          options={vercel_options}
+          fieldIndex={fieldIndex}
+          connections={connections}
+          setConnections={setConnections}
+        />
       </div>
 
       <div className="flex flex-col justify-center">
@@ -18,7 +25,12 @@ export default function SelectGroup({
       </div>
 
       <div className="editmode w-full">
-        <EditmodeSelect options={editmode_options} />
+        <EditmodeSelect
+          options={editmode_options}
+          connections={connections}
+          setConnections={setConnections}
+          fieldIndex={fieldIndex}
+        />
       </div>
     </div>
   );

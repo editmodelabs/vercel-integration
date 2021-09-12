@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 
@@ -6,10 +6,27 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Select({ options, fieldIndex, isEditmode }) {
+export default function Select({
+  options,
+  fieldIndex,
+  isEditmode,
+  setConnections,
+  connections,
+}) {
   const [selected, setSelected] = useState(
     isEditmode ? options[0] : options[fieldIndex]
   );
+
+  useEffect(() => {
+    const type = isEditmode
+      ? `editmode-connection-${fieldIndex}`
+      : `vercel-connection-${fieldIndex}`;
+
+    setConnections((prev) => ({
+      ...prev,
+      [type]: selected,
+    }));
+  }, [selected]);
 
   return (
     <Listbox value={selected} onChange={setSelected}>

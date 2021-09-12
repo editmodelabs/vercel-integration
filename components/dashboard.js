@@ -30,13 +30,36 @@ export default function Dashboard({
   dashboardView,
   hasCloned,
 }) {
-  const [unselected, setUnselected] = useState(vercel_options);
-
+  const [eligibleVercelOptions, setEligibleVercelOptions] =
+    useState(vercel_options);
   const [selectGroupCount, setSelectGroupCount] = useState(1);
+  const [lastActiveIndex, setLastActiveIndex] = useState(0);
+  const [connections, setConnections] = useState({});
+  const [selected, setSelected] = useState(
+    vercel_options ? vercel_options[0].id : ""
+  );
+  const [x, setX] = useState();
   const hanleAddNewField = () => {
     const count = selectGroupCount;
+    const index = lastActiveIndex;
     setSelectGroupCount(count + 1);
+    setLastActiveIndex(index + 1);
+    // setX(
+    //   eligibleVercelOptions.filter((item) => {
+    //     for (const key in connections) {
+    //       return connections[key]["vercel"]["id"] !== item["id"];
+    //     }
+    //   })
+    // );
   };
+
+  console.log(connections);
+
+  // useEffect(() => {
+  //   setConnections({
+  //     0: { editmode: editmode_options[0], vercel: eligibleVercelOptions[0] },
+  //   });
+  // }, []);
 
   return (
     <Layout>
@@ -61,9 +84,11 @@ export default function Dashboard({
               <SelectGroup
                 editmode_options={editmode_options}
                 key={idx}
-                vercel_options={unselected}
+                vercel_options={eligibleVercelOptions}
                 fieldIndex={idx}
-                setUnselected={setUnselected}
+                setEligibleVercelOptions={setEligibleVercelOptions}
+                setConnections={setConnections}
+                connections={connections}
               />
             );
           })}

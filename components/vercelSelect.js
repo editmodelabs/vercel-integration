@@ -1,7 +1,12 @@
 import { useState } from "react";
 import Select from "./select";
 
-export default function VercelSelect({ options, fieldIndex }) {
+export default function VercelSelect({
+  options,
+  fieldIndex,
+  connections,
+  setConnections,
+}) {
   const [selected, setSelected] = useState(options[fieldIndex]);
 
   return (
@@ -11,6 +16,8 @@ export default function VercelSelect({ options, fieldIndex }) {
         setSelected={setSelected}
         fieldIndex={fieldIndex}
         options={options}
+        setConnections={setConnections}
+        connections={connections}
       />
     </>
   );
