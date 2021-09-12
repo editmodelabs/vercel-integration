@@ -29,6 +29,7 @@ export default function CallbackPage() {
   const [hasCloned, setHasCloned] = useState(false);
 
   const handleInstall = async () => {
+    alert(token);
     const isDeployFlow = dashboardView === "deploy";
     !isDeployFlow && setIsInstalling(true);
     const cloneProject = async (token) => {
@@ -127,10 +128,10 @@ export default function CallbackPage() {
     else setDashboardView("add");
     const fetchAccessToken = async (code) => {
       const details = {
-        client_id: "oac_tgUyWFM6PEvxEkJZCLShaoWI",
-        client_secret: "7vuPPxcqZ1AGNNK89EigX7TG",
+        client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
+        client_secret: "9d72agydqs5x5YHX3wTNP8Iv",
         code: code,
-        redirect_uri: "https://vercel-integration-seven.vercel.app",
+        redirect_uri: "http://localhost:8000",
       };
       var formBody = [];
       for (var property in details) {
@@ -212,8 +213,8 @@ export default function CallbackPage() {
 
     const processAction = async () => {
       if (token) {
-        if (dashboardView !== "deploy") fetchEditmodeProjects(token);
-        else return handleInstall();
+        if (false) fetchEditmodeProjects(token);
+        else await handleInstall();
       }
       return;
     };
@@ -235,7 +236,7 @@ export default function CallbackPage() {
 
   return (
     <>
-      {!view && <Blank setView={setView} user={token} setToken={setToken} />}
+      {!view && <Blank setView={setView} user={token} setToken={setToken} token={token} />}
       {view === "auth" && <Auth setView={setView} setToken={setToken} />}
       {view === "dash" && (
         <Dashboard

@@ -18,7 +18,7 @@ export default function Dashboard({
   return (
     <Layout>
       <div className="w-full max-w-2xl divide-y">
-        {(isFetchingEditmodeProjects || vercelProjects == undefined) && (
+        {dashboardView === "deploy" && (
           <div className="py-4 flex flex-col items-center justify-center align-center">
             <div className="text-lg text-gray-700">
               Generating a new Editmode Project for your theme...
@@ -32,7 +32,7 @@ export default function Dashboard({
             />
           </div>
         )}
-        {userEditmodeProjects[0] &&
+        {/* {userEditmodeProjects[0] &&
           !isFetchingEditmodeProjects &&
           vercelProjects !== undefined && (
             <>
@@ -114,7 +114,7 @@ export default function Dashboard({
                 </button>
               </section>
             </>
-          )}
+          )} */}
       </div>
     </Layout>
   );
