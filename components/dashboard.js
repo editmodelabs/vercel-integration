@@ -5,18 +5,18 @@ import Cards from "./cards";
 import { useEffect, useState } from "react";
 import { ArrowDownIcon, PlusCircleIcon } from "@heroicons/react/solid";
 
-const aliens = [
-  { id: 1, name: "Alien 1" },
-  { id: 2, name: "Alien 2" },
-  { id: 3, name: "Alien 3" },
-  { id: 4, name: "Alien 4" },
+const editmode_options = [
+  { id: 1, name: "EM 1" },
+  { id: 2, name: "EM 2" },
+  { id: 3, name: "EM 3" },
+  { id: 4, name: "EM 4" },
 ];
 
-const people = [
-  { id: 1, name: "Person 1" },
-  { id: 2, name: "Person 2" },
-  { id: 3, name: "Person 3" },
-  { id: 4, name: "Person 4" },
+const vercel_options = [
+  { id: 1, name: "Vercel 1" },
+  { id: 2, name: "Vercel 2" },
+  { id: 3, name: "Vercel 3" },
+  { id: 4, name: "Vercel 4" },
 ];
 
 export default function Dashboard({
@@ -30,7 +30,7 @@ export default function Dashboard({
   dashboardView,
   hasCloned,
 }) {
-  const [eligiblePeople, setEligiblePeople] = useState(people);
+  const [unselected, setUnselected] = useState(vercel_options);
 
   const [selectGroupCount, setSelectGroupCount] = useState(1);
   const hanleAddNewField = () => {
@@ -59,11 +59,11 @@ export default function Dashboard({
           {[...Array(selectGroupCount)].map((r, idx) => {
             return (
               <SelectGroup
-                aliens={aliens}
+                editmode_options={editmode_options}
                 key={idx}
-                people={eligiblePeople}
+                vercel_options={unselected}
                 fieldIndex={idx}
-                setEligiblePeople={setEligiblePeople}
+                setUnselected={setUnselected}
               />
             );
           })}

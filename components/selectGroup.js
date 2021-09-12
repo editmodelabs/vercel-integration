@@ -2,15 +2,14 @@ import { ArrowRightIcon } from "@heroicons/react/solid";
 import EditmodeSelect from "./emSelect";
 import VercelSelect from "./vercelSelect";
 export default function SelectGroup({
-  aliens,
-  people,
+  editmode_options,
+  vercel_options,
   fieldIndex,
-  setEligiblePeople,
 }) {
   return (
     <div className="flex justify-center w-full space-x-4">
       <div className="vercel w-full">
-        <VercelSelect options={people} fieldIndex={fieldIndex} />
+        <VercelSelect options={vercel_options} fieldIndex={fieldIndex} />
       </div>
 
       <div className="flex flex-col justify-center">
@@ -19,7 +18,7 @@ export default function SelectGroup({
       </div>
 
       <div className="editmode w-full">
-        <EditmodeSelect options={aliens} />
+        <EditmodeSelect options={editmode_options} />
       </div>
     </div>
   );
