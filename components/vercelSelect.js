@@ -3,27 +3,21 @@ import Select from "./select";
 
 export default function VercelSelect({
   options,
-  fieldIndex,
-  connections,
-  setConnections,
-  setPointer,
   project,
   fieldId,
+  fields,
+  setFields,
+  field,
 }) {
-  const [selected, setSelected] = useState(options[fieldIndex]);
-
   return (
     <>
       <Select
-        selected={selected}
-        setSelected={setSelected}
-        fieldIndex={fieldIndex}
         options={options}
-        setConnections={setConnections}
-        connections={connections}
-        setPointer={setPointer}
         project={project}
         fieldId={fieldId}
+        fields={fields}
+        setFields={setFields}
+        field={field}
       />
     </>
   );

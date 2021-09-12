@@ -1,6 +1,7 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useRef } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
+import { Field } from "formik";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -11,11 +12,21 @@ export default function Select({
   isEditmode,
   connections,
   project,
-  fieldId,
+  fields,
+  field,
+  setFields,
 }) {
-  const [selected, setSelected] = useState(project);
+  const x = project;
+  const [selected, setSelected] = useState(x, "j");
 
-  console.log(project);
+  const useDidMountEffect = (func, deps) => {
+    const didMount = useRef(false);
+
+    useEffect(() => {
+      if (didMount.current) func();
+      else didMount.current = true;
+    }, deps);
+  };
 
   const computeDisableSelectedOptions = (option) => {
     for (const key in connections) {
@@ -24,8 +35,15 @@ export default function Select({
       }
     }
   };
+  console.log("inside project", project);
 
-  useEffect(() => {}, [selected]);
+  useDidMountEffect(() => {
+    const type = isEditmode ? "editmode" : "vercel";
+    const updated_field = { ...field, [type]: selected };
+    const filtered_fields = fields.filter((item) => item.id !== field.id);
+    const new_fields = [...filtered_fields, updated_field];
+    setFields(new_fields);
+  }, [selected]);
 
   return (
     <Listbox value={selected} onChange={setSelected}>

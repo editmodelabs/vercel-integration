@@ -4,22 +4,22 @@ import VercelSelect from "./vercelSelect";
 export default function SelectGroup({
   editmode_options,
   vercel_options,
-  fieldIndex,
-  connections,
-  setConnections,
-  remove,
+  removeField,
   field,
+  fields,
+  setFields,
 }) {
   return (
     <div className="flex justify-center w-full space-x-4">
       <div className="vercel w-full">
         <VercelSelect
           options={vercel_options}
-          fieldIndex={fieldIndex}
-          connections={connections}
-          setConnections={setConnections}
-          fieldId = {field.id}
-          project={{ ...field.vercel, parent: field.id }}
+          removeField={removeField}
+          fieldId={field.id}
+          project={field.vercel}
+          fields={fields}
+          setFields={setFields}
+          field={field}
         />
       </div>
 
@@ -31,15 +31,16 @@ export default function SelectGroup({
       <div className="editmode w-full">
         <EditmodeSelect
           options={editmode_options}
-          connections={connections}
-          setConnections={setConnections}
-          fieldIndex={fieldIndex}
-          fieldId = {field.id}
-          project={{ ...field.editmode, parent: field.id }}
+          removeField={removeField}
+          fieldId={field.id}
+          project={field.editmode}
+          fields={fields}
+          setFields={setFields}
+          field={field}
         />
       </div>
       <div className="flex flex-col justify-center text-gray-500">
-        <TrashIcon onClick={remove} className="w-5 h-5" />
+        <TrashIcon onClick={() => removeField(field.id)} className="w-5 h-5" />
       </div>
     </div>
   );

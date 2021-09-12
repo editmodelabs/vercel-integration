@@ -3,27 +3,22 @@ import { useState } from "react";
 
 export default function EditmodeSelect({
   options,
-  fieldIndex,
-  setConnections,
-  connections,
-  setPointer,
   project,
   fieldId,
+  fields,
+  setFields,
+  field,
 }) {
-  const [selected, setSelected] = useState(options[0]);
-
   return (
     <>
       <Select
-        selected={selected}
-        setSelected={setSelected}
-        fieldIndex={fieldIndex}
         options={options}
         isEditmode={true}
-        setConnections={setConnections}
-        connections={connections}
         project={project}
         fieldId={fieldId}
+        fields={fields}
+        setFields={setFields}
+        field={field}
       />
     </>
   );
