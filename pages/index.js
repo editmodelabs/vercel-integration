@@ -21,6 +21,7 @@ export default function CallbackPage() {
   const [token, setToken] = useState();
   const [open, setOpen] = useState(false);
   const [dashboardView, setDashboardView] = useState("");
+  const [hasCloned, setHasCloned] = useState(false);
 
   useEffect(() => {
     if (router.query.currentProjectId) setDashboardView("deploy");
@@ -109,8 +110,44 @@ export default function CallbackPage() {
         }
       }
     };
-    if (token) fetchEditmodeProjects(token);
+
+    const cloneProject = async (token) => {
+      if (token) {
+        const url = `https://api.editmode.com/clone/prj_Y5HfCBS4rqZg?api_key=${token}`;
+        try {
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          });
+          const data = await res.json();
+          const id = data["id"];
+          return id;
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      return;
+    };
+
+    if (token && dashboardView !== "deploy") {
+      if (dashboardView !== "deploy") fetchEditmodeProjects(token);
+      else {
+        const clone_id = cloneProject(token);
+        if (clone_id) {
+          setOpen(true);
+          setHasCloned(true);
+        }
+      }
+    }
   }, [token]);
+
+  useEffect(() => {
+    let interval;
+    if (hasCloned) {
+      interval = setTimeout(() => reroute(), 5000);
+    }
+    return () => clearInterval(interval);
+  }, [hasCloned]);
 
   const handleInstall = async (e) => {
     e.preventDefault();
