@@ -1,4 +1,5 @@
 import { ArrowRightIcon, TrashIcon } from "@heroicons/react/solid";
+import { useEffect } from "react";
 import EditmodeSelect from "./emSelect";
 import VercelSelect from "./vercelSelect";
 export default function SelectGroup({
@@ -9,6 +10,9 @@ export default function SelectGroup({
   fields,
   setFields,
 }) {
+  useEffect(() => {
+    console.log("j");
+  }, [fields]);
   return (
     <div className="flex justify-center w-full space-x-4">
       <div className="vercel w-full">

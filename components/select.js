@@ -16,8 +16,7 @@ export default function Select({
   field,
   setFields,
 }) {
-  const x = project;
-  const [selected, setSelected] = useState(x, "j");
+  const [selected, setSelected] = useState(project);
 
   const useDidMountEffect = (func, deps) => {
     const didMount = useRef(false);
@@ -37,7 +36,7 @@ export default function Select({
   };
   console.log("inside project", project);
 
-  useDidMountEffect(() => {
+  useEffect(() => {
     const type = isEditmode ? "editmode" : "vercel";
     const updated_field = { ...field, [type]: selected };
     const filtered_fields = fields.filter((item) => item.id !== field.id);
