@@ -28,6 +28,100 @@ export default function CallbackPage() {
   const [dashboardView, setDashboardView] = useState("");
   const [hasCloned, setHasCloned] = useState(false);
 
+  const handleInstall = async () => {
+    const isDeployFlow = dashboardView === "deploy";
+    !isDeployFlow && setIsInstalling(true);
+    const cloneProject = async (token) => {
+      if (token) {
+        const url = `https://api.editmode.com/clone/prj_Y5HfCBS4rqZg?api_key=${token}`;
+        try {
+          const res = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          });
+          const data = await res.json();
+          const id = data["id"];
+          return id;
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    };
+
+    let em_project_to_use;
+    if (isDeployFlow) {
+      em_project_to_use = await cloneProject(token);
+    }
+
+    const writeSingleEnv = async (accessToken, em_project_to_use) => {
+      const { currentProjectId } = router.query;
+      const json = await vercelEnvReq(
+        accessToken,
+        em_project_to_use,
+        currentProjectId
+      );
+      if (json.value) {
+        setHasCloned(true);
+        setOpen(true);
+      }
+      if (json.error) {
+        if (json.error.message) alert(json.error.message);
+      }
+    };
+
+    const writeMultiEnv = async (accessToken, em_project_to_use) => {
+      let hasError = false;
+      const requests = vercelProjects.map(async (vercelProject) => {
+        const current_id = vercelProject.id;
+        const existing_env = await checkVercelEnv(
+          accessToken,
+          current_id,
+          "NEXT_PUBLIC_PROJECT_ID",
+          data.teamId
+        );
+        if (existing_env) {
+          const patch_res = await updateVercelEnv(
+            accessToken,
+            current_id,
+            existing_env,
+            em_project_to_use,
+            data.teamId
+          );
+          return patch_res;
+        } else {
+          const lone_request = await vercelEnvReq(
+            accessToken,
+            em_project_to_use,
+            current_id
+          );
+          return lone_request;
+        }
+      });
+      const multi_res = await Promise.all(requests);
+      setIsInstalling(false);
+      if (multi_res) {
+        multi_res.forEach((json, idx) => {
+          if (json.error && json.error.message) {
+            alert(json.error.message);
+            hasError = true;
+          } else if (
+            json.value &&
+            idx === vercelProjects.length - 1 &&
+            !hasError
+          ) {
+            router.push(router.query.next);
+          }
+        });
+      }
+    };
+
+    if (data.accessToken && em_project_to_use && isDeployFlow) {
+      writeSingleEnv(data.accessToken, em_project_to_use);
+    } else if (data.accessToken && em_project_to_use && !isDeployFlow) {
+      writeMultiEnv(data.accessToken, em_project_to_use, vercelProjects);
+    }
+  };
+
   useEffect(() => {
     if (router.query.currentProjectId) setDashboardView("deploy");
     else setDashboardView("add");
@@ -116,24 +210,6 @@ export default function CallbackPage() {
       }
     };
 
-    const cloneProject = async (token) => {
-      if (token) {
-        const url = `https://api.editmode.com/clone/prj_Y5HfCBS4rqZg?api_key=${token}`;
-        try {
-          const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-          });
-          const data = await res.json();
-          const id = data["id"];
-          return id;
-        } catch (err) {
-          console.log(err);
-        }
-      }
-      return;
-    };
-
     const processAction = async () => {
       if (token) {
         if (dashboardView !== "deploy") fetchEditmodeProjects(token);
@@ -151,100 +227,6 @@ export default function CallbackPage() {
     }
     return () => clearInterval(interval);
   }, [hasCloned]);
-
-  const handleInstall = async () => {
-    const isDeployFlow = dashboardView === "deploy";
-    isDeployFlow && setIsInstalling(true);
-    const cloneProject = async (token) => {
-      if (token) {
-        const url = `https://api.editmode.com/clone/prj_Y5HfCBS4rqZg?api_key=${token}`;
-        try {
-          const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-          });
-          const data = await res.json();
-          const id = data["id"];
-          return id;
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    };
-
-    let em_project_to_use;
-    if (dashboardView === "deploy") {
-      em_project_to_use = await cloneProject(token);
-    }
-
-    const writeSingleEnv = async (accessToken, em_project_to_use) => {
-      const { currentProjectId } = router.query;
-      const json = await vercelEnvReq(
-        accessToken,
-        em_project_to_use,
-        currentProjectId
-      );
-      if (json.value) {
-        setHasCloned(true);
-        setOpen(true);
-      }
-      if (json.error) {
-        if (json.error.message) alert(json.error.message);
-      }
-    };
-
-    const writeMultiEnv = async (accessToken, em_project_to_use) => {
-      let hasError = false;
-      const requests = vercelProjects.map(async (vercelProject) => {
-        const current_id = vercelProject.id;
-        const existing_env = await checkVercelEnv(
-          accessToken,
-          current_id,
-          "NEXT_PUBLIC_PROJECT_ID",
-          data.teamId
-        );
-        if (existing_env) {
-          const patch_res = await updateVercelEnv(
-            accessToken,
-            current_id,
-            existing_env,
-            em_project_to_use,
-            data.teamId
-          );
-          return patch_res;
-        } else {
-          const lone_request = await vercelEnvReq(
-            accessToken,
-            em_project_to_use,
-            current_id
-          );
-          return lone_request;
-        }
-      });
-      const multi_res = await Promise.all(requests);
-      setIsInstalling(false);
-      if (multi_res) {
-        multi_res.forEach((json, idx) => {
-          if (json.error && json.error.message) {
-            alert(json.error.message);
-            hasError = true;
-          } else if (
-            json.value &&
-            idx === vercelProjects.length - 1 &&
-            !hasError
-          ) {
-            router.push(router.query.next);
-          }
-        });
-      }
-    };
-
-    if (data.accessToken && em_project_to_use && isDeployFlow) {
-      writeSingleEnv(data.accessToken, em_project_to_use);
-    } else if (data.accessToken && em_project_to_use && !isDeployFlow) {
-      writeMultiEnv(data.accessToken, em_project_to_use, vercelProjects);
-    }
-  };
 
   const reroute = () => {
     setOpen(false);
