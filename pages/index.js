@@ -29,8 +29,7 @@ export default function CallbackPage() {
   const [hasCloned, setHasCloned] = useState(false);
 
   const handleInstall = async () => {
-    alert(token);
-    const isDeployFlow = dashboardView === "deploy";
+    const isDeployFlow = router.query.currentProjectId;
     !isDeployFlow && setIsInstalling(true);
     const cloneProject = async (token) => {
       if (token) {
@@ -50,7 +49,7 @@ export default function CallbackPage() {
     };
 
     let em_project_to_use;
-    if (isDeployFlow) {
+    if (true) {
       em_project_to_use = await cloneProject(token);
     }
 
@@ -116,8 +115,9 @@ export default function CallbackPage() {
       }
     };
 
-    if (data.accessToken && em_project_to_use && isDeployFlow) {
-      writeSingleEnv(data.accessToken, em_project_to_use);
+    if (data.accessToken && em_project_to_use && true) {
+      alert(data.accessToken);
+      writeSingleEnv(data, em_project_to_use);
     } else if (data.accessToken && em_project_to_use && !isDeployFlow) {
       writeMultiEnv(data.accessToken, em_project_to_use, vercelProjects);
     }
@@ -219,7 +219,7 @@ export default function CallbackPage() {
       return;
     };
     processAction();
-  }, [token]);
+  }, [token, data]);
 
   useEffect(() => {
     let interval;
@@ -236,7 +236,14 @@ export default function CallbackPage() {
 
   return (
     <>
-      {!view && <Blank setView={setView} user={token} setToken={setToken} token={token} />}
+      {!view && (
+        <Blank
+          setView={setView}
+          user={token}
+          setToken={setToken}
+          token={token}
+        />
+      )}
       {view === "auth" && <Auth setView={setView} setToken={setToken} />}
       {view === "dash" && (
         <Dashboard
