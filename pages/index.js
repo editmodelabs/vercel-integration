@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Dashboard from "components/dashboard";
-import { defaultOption, updateVercelEnv, checkVercelEnv } from "../utilities";
+import {
+  defaultOption,
+  updateVercelEnv,
+  checkVercelEnv,
+  vercelEnvReq,
+} from "../utilities";
 import Auth from "components/credentials";
 import Blank from "components/blank";
 import Modal from "components/modal";
@@ -129,29 +134,27 @@ export default function CallbackPage() {
       return;
     };
 
-    if (token && dashboardView !== "deploy") {
-      if (dashboardView !== "deploy") fetchEditmodeProjects(token);
-      else {
-        const clone_id = cloneProject(token);
-        if (clone_id) {
-          setOpen(true);
-          setHasCloned(true);
-        }
+    const processAction = async () => {
+      if (token) {
+        if (dashboardView !== "deploy") fetchEditmodeProjects(token);
+        else return handleInstall();
       }
-    }
+      return;
+    };
+    processAction();
   }, [token]);
 
   useEffect(() => {
     let interval;
     if (hasCloned) {
-      interval = setTimeout(() => reroute(), 5000);
+      interval = setTimeout(() => reroute(), 10000);
     }
     return () => clearInterval(interval);
   }, [hasCloned]);
 
-  const handleInstall = async (e) => {
-    e.preventDefault();
-    setIsInstalling(true);
+  const handleInstall = async () => {
+    const isDeployFlow = dashboardView === "deploy";
+    isDeployFlow && setIsInstalling(true);
     const cloneProject = async (token) => {
       if (token) {
         const url = `https://api.editmode.com/clone/prj_Y5HfCBS4rqZg?api_key=${token}`;
@@ -168,39 +171,11 @@ export default function CallbackPage() {
         }
       }
     };
-    let em_project_to_use;
-    if (projectToInstall.default && data.accessToken) {
-      em_project_to_use = await cloneProject(token);
-    } else {
-      em_project_to_use = projectToInstall.identifier;
-    }
 
-    const vercelEnvReq = async (
-      accessToken,
-      em_project_to_use,
-      currentProjectId
-    ) => {
-      const res = await fetch(
-        `https://api.vercel.com/v8/projects/${currentProjectId}/env${
-          data.teamId ? `?teamId=${data.teamId}` : ""
-        }`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            type: "encrypted",
-            key: "NEXT_PUBLIC_PROJECT_ID",
-            value: em_project_to_use,
-            target: ["production", "preview"],
-          }),
-        }
-      );
-      const json = await res.json();
-      return json;
-    };
+    let em_project_to_use;
+    if (dashboardView === "deploy") {
+      em_project_to_use = await cloneProject(token);
+    }
 
     const writeSingleEnv = async (accessToken, em_project_to_use) => {
       const { currentProjectId } = router.query;
@@ -209,10 +184,11 @@ export default function CallbackPage() {
         em_project_to_use,
         currentProjectId
       );
-      setIsInstalling(false);
-      if (json.value) setOpen(true);
+      if (json.value) {
+        setHasCloned(true);
+        setOpen(true);
+      }
       if (json.error) {
-        setIsInstalling(false);
         if (json.error.message) alert(json.error.message);
       }
     };
@@ -263,13 +239,9 @@ export default function CallbackPage() {
       }
     };
 
-    if (data.accessToken && em_project_to_use && dashboardView === "deploy") {
+    if (data.accessToken && em_project_to_use && isDeployFlow) {
       writeSingleEnv(data.accessToken, em_project_to_use);
-    } else if (
-      data.accessToken &&
-      em_project_to_use &&
-      dashboardView !== "deploy"
-    ) {
+    } else if (data.accessToken && em_project_to_use && !isDeployFlow) {
       writeMultiEnv(data.accessToken, em_project_to_use, vercelProjects);
     }
   };
@@ -296,9 +268,7 @@ export default function CallbackPage() {
           setVercelProjects={setVercelProjects}
         />
       )}
-      {open && dashboardView === "deploy" && (
-        <Modal setOpen={setOpen} open={open} reroute={reroute} />
-      )}
+      {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />}
     </>
   );
 }
