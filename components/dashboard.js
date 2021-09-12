@@ -34,6 +34,7 @@ export default function Dashboard({
   const [eligibleVercelOptions, setEligibleVercelOptions] =
     useState(vercel_options);
   const [fields, setFields] = useState([]);
+  const [x, setX] = useState(0);
   const hanleAddNewField = () => {
     constructField();
   };
@@ -44,6 +45,7 @@ export default function Dashboard({
 
   const removeField = (id) => {
     const new_fields = fields.filter((field) => field.id !== id);
+    setX(x + 1);
     console.log("OOP", new_fields);
     console.log(id);
     setFields(new_fields);

@@ -13,13 +13,13 @@ export default function SelectGroup({
   useEffect(() => {
     console.log("j");
   }, [fields]);
+  console.log(field);
   return (
     <div className="flex justify-center w-full space-x-4">
       <div className="vercel w-full">
         <VercelSelect
           options={vercel_options}
           removeField={removeField}
-          fieldId={field.id}
           project={field.vercel}
           fields={fields}
           setFields={setFields}
@@ -36,7 +36,6 @@ export default function SelectGroup({
         <EditmodeSelect
           options={editmode_options}
           removeField={removeField}
-          fieldId={field.id}
           project={field.editmode}
           fields={fields}
           setFields={setFields}
