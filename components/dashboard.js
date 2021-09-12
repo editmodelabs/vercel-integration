@@ -3,7 +3,7 @@ import SelectGroup from "./selectGroup";
 import Loader from "react-loader-spinner";
 import Cards from "./cards";
 import { useState } from "react";
-import { ArrowDownIcon } from "@heroicons/react/outline";
+import { ArrowDownIcon, PlusCircleIcon } from "@heroicons/react/solid";
 
 export default function Dashboard({
   userEditmodeProjects,
@@ -16,6 +16,12 @@ export default function Dashboard({
   dashboardView,
   hasCloned,
 }) {
+  const [selectGroupCount, setSelectGroupCount] = useState(1);
+  const hanleAddNewField = () => {
+    const count = selectGroupCount;
+    setSelectGroupCount(count + 1);
+  };
+
   return (
     <Layout>
       <div className="w-full max-w-2xl divide-y">
@@ -33,7 +39,22 @@ export default function Dashboard({
             />
           </div>
         )}
-        <SelectGroup />
+        <div>
+          {Array(selectGroupCount)
+            .fill()
+            .map((_, idx) => (
+              <SelectGroup />
+            ))}
+          <div
+            className="flex flex-row mt-5 justify-center cursor-pointer"
+            onClick={hanleAddNewField}
+          >
+            <PlusCircleIcon className="text-indigo-400 w-6 h-6" />
+            <p className="text-sm text-indigo-400 ml-2 mt-0.5">
+              Link another Vercel project
+            </p>
+          </div>
+        </div>
       </div>
     </Layout>
   );
