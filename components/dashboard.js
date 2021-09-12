@@ -19,8 +19,17 @@ export default function Dashboard({
     <Layout>
       <div className="w-full max-w-2xl divide-y">
         {(isFetchingEditmodeProjects || vercelProjects == undefined) && (
-          <div className="py-4 flex justify-center align-center">
-            <Loader type="TailSpin" color="#616AE9" height={100} width={100} />
+          <div className="py-4 flex flex-col items-center justify-center align-center">
+            <div className="text-lg text-gray-700">
+              Generating a new Editmode Project for your theme...
+            </div>
+            <Loader
+              type={dashboardView !== "deploy" ? "Oval" : "TailSpin"}
+              color="#616AE9"
+              height={100}
+              width={100}
+              className="mt-6"
+            />
           </div>
         )}
         {userEditmodeProjects[0] &&
