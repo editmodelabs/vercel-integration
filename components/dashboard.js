@@ -1,6 +1,7 @@
 import Layout from "./layout";
 import SelectGroup from "./selectGroup";
 import Loader from "react-loader-spinner";
+import uuid from "react-uuid";
 import Cards from "./cards";
 import { useEffect, useState } from "react";
 import { ArrowDownIcon, PlusCircleIcon } from "@heroicons/react/solid";
@@ -35,6 +36,10 @@ export default function Dashboard({
   const [selectGroupCount, setSelectGroupCount] = useState(1);
   const [lastActiveIndex, setLastActiveIndex] = useState(0);
   const [connections, setConnections] = useState({});
+  const [fields, setFields] = useState([]);
+  const [hasExhaustedVercelOptions, setHasExhasutedVercelOptions] =
+    useState(false);
+  const [pointer, setPointer] = useState(0);
   const [selected, setSelected] = useState(
     vercel_options ? vercel_options[0].id : ""
   );
@@ -52,14 +57,46 @@ export default function Dashboard({
     //   })
     // );
   };
+  console.log(fields);
+  useEffect(() => {
+    constructField();
+  }, []);
 
-  console.log(connections);
+  const removeField = () => {
+    setSelectGroupCount(selectGroupCount - 1);
+  };
 
-  // useEffect(() => {
-  //   setConnections({
-  //     0: { editmode: editmode_options[0], vercel: eligibleVercelOptions[0] },
-  //   });
-  // }, []);
+  const constructField = () => {
+    const findUnusedOption = () => {
+      const obj = vercel_options.find((option) =>
+        fields.every((field) => field.vercel.id !== option.id)
+      );
+      return obj;
+    };
+
+    let obj;
+
+    if (!fields) {
+      obj = {
+        id: vercel_options[0].id,
+        name: vercel_options[0].name,
+      };
+    }
+    obj = findUnusedOption();
+
+    const field = {
+      id: uuid(),
+      editmode: {
+        id: editmode_options[0].id,
+        name: editmode_options[0].name,
+      },
+      vercel: {
+        id: obj.id,
+        name: obj.name,
+      },
+    };
+    setFields([...fields, field]);
+  };
 
   return (
     <Layout>
@@ -79,7 +116,7 @@ export default function Dashboard({
           </div>
         )}
         <div>
-          {[...Array(selectGroupCount)].map((r, idx) => {
+          {fields.map((field, idx) => {
             return (
               <SelectGroup
                 editmode_options={editmode_options}
@@ -89,6 +126,10 @@ export default function Dashboard({
                 setEligibleVercelOptions={setEligibleVercelOptions}
                 setConnections={setConnections}
                 connections={connections}
+                setPointer={setPointer}
+                pointer={pointer}
+                remove={removeField}
+                field={field}
               />
             );
           })}

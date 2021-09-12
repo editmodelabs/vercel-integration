@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "@heroicons/react/solid";
+import { ArrowRightIcon, TrashIcon } from "@heroicons/react/solid";
 import EditmodeSelect from "./emSelect";
 import VercelSelect from "./vercelSelect";
 export default function SelectGroup({
@@ -7,6 +7,8 @@ export default function SelectGroup({
   fieldIndex,
   connections,
   setConnections,
+  remove,
+  field,
 }) {
   return (
     <div className="flex justify-center w-full space-x-4">
@@ -16,6 +18,8 @@ export default function SelectGroup({
           fieldIndex={fieldIndex}
           connections={connections}
           setConnections={setConnections}
+          fieldId = {field.id}
+          project={{ ...field.vercel, parent: field.id }}
         />
       </div>
 
@@ -30,7 +34,12 @@ export default function SelectGroup({
           connections={connections}
           setConnections={setConnections}
           fieldIndex={fieldIndex}
+          fieldId = {field.id}
+          project={{ ...field.editmode, parent: field.id }}
         />
+      </div>
+      <div className="flex flex-col justify-center text-gray-500">
+        <TrashIcon onClick={remove} className="w-5 h-5" />
       </div>
     </div>
   );

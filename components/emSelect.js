@@ -6,6 +6,9 @@ export default function EditmodeSelect({
   fieldIndex,
   setConnections,
   connections,
+  setPointer,
+  project,
+  fieldId,
 }) {
   const [selected, setSelected] = useState(options[0]);
 
@@ -19,6 +22,8 @@ export default function EditmodeSelect({
         isEditmode={true}
         setConnections={setConnections}
         connections={connections}
+        project={project}
+        fieldId={fieldId}
       />
     </>
   );

@@ -6,6 +6,9 @@ export default function VercelSelect({
   fieldIndex,
   connections,
   setConnections,
+  setPointer,
+  project,
+  fieldId,
 }) {
   const [selected, setSelected] = useState(options[fieldIndex]);
 
@@ -18,6 +21,9 @@ export default function VercelSelect({
         options={options}
         setConnections={setConnections}
         connections={connections}
+        setPointer={setPointer}
+        project={project}
+        fieldId={fieldId}
       />
     </>
   );

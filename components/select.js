@@ -8,25 +8,24 @@ function classNames(...classes) {
 
 export default function Select({
   options,
-  fieldIndex,
   isEditmode,
-  setConnections,
   connections,
+  project,
+  fieldId,
 }) {
-  const [selected, setSelected] = useState(
-    isEditmode ? options[0] : options[fieldIndex]
-  );
+  const [selected, setSelected] = useState(project);
 
-  useEffect(() => {
-    const type = isEditmode
-      ? `editmode-connection-${fieldIndex}`
-      : `vercel-connection-${fieldIndex}`;
+  console.log(project);
 
-    setConnections((prev) => ({
-      ...prev,
-      [type]: selected,
-    }));
-  }, [selected]);
+  const computeDisableSelectedOptions = (option) => {
+    for (const key in connections) {
+      if (!isEditmode) {
+        return connections[key]["id"] === option.id;
+      }
+    }
+  };
+
+  useEffect(() => {}, [selected]);
 
   return (
     <Listbox value={selected} onChange={setSelected}>
@@ -54,26 +53,30 @@ export default function Select({
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-sm py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                {options.map((person) => (
+                {options.map((option) => (
                   <Listbox.Option
-                    key={person.id}
+                    key={option.id}
+                    disabled={computeDisableSelectedOptions(option)}
                     className={({ active }) =>
                       classNames(
                         active ? "text-white bg-indigo-600" : "text-gray-900",
                         "cursor-default select-none relative py-2 pl-3 pr-9"
                       )
                     }
-                    value={person}
+                    value={option}
                   >
                     {({ selected, active }) => (
                       <>
                         <span
                           className={classNames(
                             selected ? "font-semibold" : "font-normal",
-                            "block truncate"
+                            "block truncate",
+                            !selected & computeDisableSelectedOptions(option)
+                              ? "text-gray-400"
+                              : ""
                           )}
                         >
-                          {person.name}
+                          {option.name}
                         </span>
 
                         {selected ? (
