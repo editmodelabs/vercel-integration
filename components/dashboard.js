@@ -26,8 +26,8 @@ export default function Dashboard({
             <Loader
               type={dashboardView !== "deploy" ? "Oval" : "TailSpin"}
               color="#616AE9"
-              height={100}
-              width={100}
+              height={70}
+              width={70}
               className="mt-6"
             />
           </div>
