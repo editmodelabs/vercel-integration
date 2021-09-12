@@ -2,19 +2,14 @@ import { Fragment, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, SelectorIcon } from "@heroicons/react/solid";
 
-const people = [
-  { id: 1, name: "Person 1" },
-  { id: 2, name: "Person 2" },
-  { id: 3, name: "Person 3" },
-  { id: 4, name: "Person 4" },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Select() {
-  const [selected, setSelected] = useState(people[3]);
+export default function Select({ options, fieldIndex, isEditmode }) {
+  const [selected, setSelected] = useState(
+    isEditmode ? options[0] : options[fieldIndex]
+  );
 
   return (
     <Listbox value={selected} onChange={setSelected}>
@@ -42,7 +37,7 @@ export default function Select() {
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-sm py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-                {people.map((person) => (
+                {options.map((person) => (
                   <Listbox.Option
                     key={person.id}
                     className={({ active }) =>

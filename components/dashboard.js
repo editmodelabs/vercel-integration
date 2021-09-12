@@ -2,8 +2,22 @@ import Layout from "./layout";
 import SelectGroup from "./selectGroup";
 import Loader from "react-loader-spinner";
 import Cards from "./cards";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowDownIcon, PlusCircleIcon } from "@heroicons/react/solid";
+
+const aliens = [
+  { id: 1, name: "Alien 1" },
+  { id: 2, name: "Alien 2" },
+  { id: 3, name: "Alien 3" },
+  { id: 4, name: "Alien 4" },
+];
+
+const people = [
+  { id: 1, name: "Person 1" },
+  { id: 2, name: "Person 2" },
+  { id: 3, name: "Person 3" },
+  { id: 4, name: "Person 4" },
+];
 
 export default function Dashboard({
   userEditmodeProjects,
@@ -16,6 +30,8 @@ export default function Dashboard({
   dashboardView,
   hasCloned,
 }) {
+  const [eligiblePeople, setEligiblePeople] = useState(people);
+
   const [selectGroupCount, setSelectGroupCount] = useState(1);
   const hanleAddNewField = () => {
     const count = selectGroupCount;
@@ -40,11 +56,17 @@ export default function Dashboard({
           </div>
         )}
         <div>
-          {Array(selectGroupCount)
-            .fill()
-            .map((_, idx) => (
-              <SelectGroup />
-            ))}
+          {[...Array(selectGroupCount)].map((r, idx) => {
+            return (
+              <SelectGroup
+                aliens={aliens}
+                key={idx}
+                people={eligiblePeople}
+                fieldIndex={idx}
+                setEligiblePeople={setEligiblePeople}
+              />
+            );
+          })}
           <div
             className="flex flex-row mt-5 justify-center cursor-pointer"
             onClick={hanleAddNewField}
