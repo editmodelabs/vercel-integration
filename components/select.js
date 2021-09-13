@@ -11,13 +11,12 @@ export default function Select({
   options,
   isEditmode,
   connections,
-  project,
   fields,
   field,
   setFields,
 }) {
-  const [selected, setSelected] = useState(project);
-  const [t, setT] = useState(field);
+  const type = isEditmode ? "editmode" : "vercel";
+  const [selected, setSelected] = useState(field[type]);
 
   const useDidMountEffect = (func, deps) => {
     const didMount = useRef(false);
@@ -35,7 +34,10 @@ export default function Select({
       }
     }
   };
-  console.log("inside project", project);
+
+  const handleSelect = (item) => {
+    setSelected(item);
+  };
 
   useDidMountEffect(() => {
     const type = isEditmode ? "editmode" : "vercel";
@@ -46,7 +48,7 @@ export default function Select({
   }, [selected]);
 
   return (
-    <Listbox value={selected} onChange={setSelected}>
+    <Listbox value={selected} onChange={(item) => handleSelect(item)}>
       {({ open }) => (
         <>
           {/* <Listbox.Label className="block text-sm font-medium text-gray-700">

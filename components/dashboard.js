@@ -69,7 +69,7 @@ export default function Dashboard({
       };
     }
     if (fields) obj = findUnusedOption();
-    console.log("inside_construct", obj);
+    if (fields) console.log("inside_construct", obj);
 
     const field = {
       id: uuid(),
@@ -103,11 +103,11 @@ export default function Dashboard({
           </div>
         )}
         <div>
-          {fields.map((field, idx) => {
+          {fields.map((field) => {
             return (
               <SelectGroup
                 editmode_options={editmode_options}
-                key={idx}
+                key={field.id}
                 vercel_options={eligibleVercelOptions}
                 removeField={removeField}
                 field={field}
