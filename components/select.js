@@ -42,8 +42,12 @@ export default function Select({
   useDidMountEffect(() => {
     const type = isEditmode ? "editmode" : "vercel";
     const updated_field = { ...field, [type]: selected };
-    const filtered_fields = fields.filter((item) => item.id !== field.id);
-    const new_fields = [...filtered_fields, updated_field];
+    const index = fields.findIndex((item) => item.id === field.id);
+    const new_fields = [
+      ...fields.slice(0, index),
+      updated_field,
+      ...fields.slice(index + 1),
+    ];
     setFields(new_fields);
   }, [selected]);
 
