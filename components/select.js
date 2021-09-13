@@ -79,7 +79,7 @@ export default function Select({
               <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-sm py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
                 {options.map((option) => (
                   <Listbox.Option
-                    key={option.id}
+                    key={option[isEditmode ? "identifier" : "id"]}
                     disabled={computeDisableSelectedOptions(option)}
                     className={({ active }) =>
                       classNames(

@@ -14,9 +14,7 @@ import Modal from "components/modal";
 export default function CallbackPage() {
   const router = useRouter();
   const [data, setData] = useState({});
-  const [userEditmodeProjects, setUserEditmodeProjects] = useState([
-    defaultOption,
-  ]);
+  const [userEditmodeProjects, setUserEditmodeProjects] = useState();
   const [vercelProjects, setVercelProjects] = useState(undefined);
   const [projectToInstall, setProjectToInstall] = useState({});
   const [isInstalling, setIsInstalling] = useState(false);
@@ -27,6 +25,7 @@ export default function CallbackPage() {
   const [open, setOpen] = useState(false);
   const [dashboardView, setDashboardView] = useState("");
   const [hasCloned, setHasCloned] = useState(false);
+  const [connections, setConnections] = useState();
 
   const handleInstall = async () => {
     const isDeployFlow = dashboardView === "deploy";
@@ -203,7 +202,7 @@ export default function CallbackPage() {
             headers: { "Content-Type": "application/json" },
           });
           const data = await res.json();
-          if (data) setUserEditmodeProjects([...userEditmodeProjects, ...data]);
+          if (data) setUserEditmodeProjects(data);
           setIsFetchingEditmodeProjects(false);
         } catch (err) {
           console.log(err);
@@ -257,6 +256,7 @@ export default function CallbackPage() {
           vercelProjects={vercelProjects}
           setVercelProjects={setVercelProjects}
           hasCloned={hasCloned}
+          setConnections={setConnections}
         />
       )}
       {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />}
