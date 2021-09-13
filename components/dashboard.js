@@ -36,6 +36,7 @@ export default function Dashboard({
   const [fields, setFields] = useState([]);
   const [x, setX] = useState(0);
   const hanleAddNewField = () => {
+    setX(x + 1);
     constructField();
   };
 
@@ -45,9 +46,6 @@ export default function Dashboard({
 
   const removeField = (id) => {
     const new_fields = fields.filter((field) => field.id !== id);
-    setX(x + 1);
-    console.log("OOP", new_fields);
-    console.log(id);
     setFields(new_fields);
   };
 
@@ -69,21 +67,28 @@ export default function Dashboard({
       };
     }
     if (fields) obj = findUnusedOption();
-    if (fields) console.log("inside_construct", obj);
 
     const field = {
       id: uuid(),
+      pos: x + 1,
       editmode: {
         id: editmode_options[0].id,
         name: editmode_options[0].name,
+        pos: x + 1,
       },
       vercel: {
         id: obj.id,
         name: obj.name,
+        pos: x + 1,
       },
     };
     setFields([...fields, field]);
+    setX(x + 1);
   };
+
+  function comparePositions(a, b) {
+    return a.pos - b.pos;
+  }
 
   return (
     <Layout>
@@ -103,7 +108,7 @@ export default function Dashboard({
           </div>
         )}
         <div>
-          {fields.map((field) => {
+          {fields.sort(comparePositions).map((field) => {
             return (
               <SelectGroup
                 editmode_options={editmode_options}
