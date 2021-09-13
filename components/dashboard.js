@@ -15,6 +15,7 @@ export default function Dashboard({
   vercelProjects,
   dashboardView,
   hasCloned,
+  handleLinking,
 }) {
   const [fields, setFields] = useState([]);
   const hanleAddNewField = () => {
@@ -110,8 +111,13 @@ export default function Dashboard({
 
   return (
     <Layout>
-      <div className="w-full max-w-2xl divide-y">
+      <div className="w-full max-w-2xl">
         {loaderTyper}
+        <div className="">
+          <h2 className="mb-4 text-md text-gray-700 flex justify-center">
+            Link your Vercel projects to your Editmode projects:
+          </h2>
+        </div>
         {vercelProjects?.length && userEditmodeProjects?.length && (
           <div>
             {fields.map((field) => {
@@ -157,7 +163,7 @@ export default function Dashboard({
                   ? `cursor-not-allowed bg-indigo-300`
                   : `bg-indigo-500`
               } `}
-              onClick={handleInstall}
+              onClick={() => handleLinking(fields)}
               disabled={
                 (dashboardView !== "deploy" && !vercelProjects.length) ||
                 isInstalling

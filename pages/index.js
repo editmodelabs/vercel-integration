@@ -48,14 +48,14 @@ export default function CallbackPage() {
     };
 
     let em_project_to_use;
-    if (true) {
+    if (token) {
       em_project_to_use = await cloneProject(token);
     }
 
-    const writeSingleEnv = async (accessToken, em_project_to_use) => {
+    const storeEnvironmentVariable = async (data, em_project_to_use) => {
       const { currentProjectId } = router.query;
       const json = await vercelEnvReq(
-        accessToken,
+        data,
         em_project_to_use,
         currentProjectId
       );
@@ -68,57 +68,54 @@ export default function CallbackPage() {
       }
     };
 
-    const writeMultiEnv = async (accessToken, em_project_to_use) => {
-      let hasError = false;
-      const requests = vercelProjects.map(async (vercelProject) => {
-        const current_id = vercelProject.id;
-        const existing_env = await checkVercelEnv(
+    if (data.accessToken && em_project_to_use && isDeployFlow) {
+      storeEnvironmentVariable(data, em_project_to_use);
+    }
+  };
+
+  const handleLinking = async (connections) => {
+    setIsInstalling(true);
+    let hasError = false;
+    const accessToken = data.accessToken;
+    const requests = connections.map(async (connection) => {
+      const vercel_project_id = connection.vercel.id;
+      const editmode_project_id = connection.editmode.id;
+      alert(vercel_project_id);
+      const existing_env = await checkVercelEnv(
+        accessToken,
+        vercel_project_id,
+        "NEXT_PUBLIC_PROJECT_ID",
+        data.teamId
+      );
+      if (existing_env) {
+        const patch_res = await updateVercelEnv(
           accessToken,
-          current_id,
-          "NEXT_PUBLIC_PROJECT_ID",
+          vercel_project_id,
+          existing_env,
+          editmode_project_id,
           data.teamId
         );
-        if (existing_env) {
-          const patch_res = await updateVercelEnv(
-            accessToken,
-            current_id,
-            existing_env,
-            em_project_to_use,
-            data.teamId
-          );
-          return patch_res;
-        } else {
-          const lone_request = await vercelEnvReq(
-            accessToken,
-            em_project_to_use,
-            current_id
-          );
-          return lone_request;
+        return patch_res;
+      } else {
+        const lone_request = await vercelEnvReq(
+          data,
+          editmode_project_id,
+          vercel_project_id
+        );
+        return lone_request;
+      }
+    });
+    const multi_res = await Promise.all(requests);
+    setIsInstalling(false);
+    if (multi_res) {
+      multi_res.forEach((json, idx) => {
+        if (json.error && json.error.message) {
+          alert(json.error.message);
+          hasError = true;
+        } else if (json.value && idx === connections.length - 1 && !hasError) {
+          router.push(router.query.next);
         }
       });
-      const multi_res = await Promise.all(requests);
-      setIsInstalling(false);
-      if (multi_res) {
-        multi_res.forEach((json, idx) => {
-          if (json.error && json.error.message) {
-            alert(json.error.message);
-            hasError = true;
-          } else if (
-            json.value &&
-            idx === vercelProjects.length - 1 &&
-            !hasError
-          ) {
-            router.push(router.query.next);
-          }
-        });
-      }
-    };
-
-    if (data.accessToken && em_project_to_use && isDeployFlow) {
-      alert(data.accessToken);
-      writeSingleEnv(data, em_project_to_use);
-    } else if (data.accessToken && em_project_to_use && !isDeployFlow) {
-      writeMultiEnv(data.accessToken, em_project_to_use, vercelProjects);
     }
   };
 
@@ -257,6 +254,7 @@ export default function CallbackPage() {
           setVercelProjects={setVercelProjects}
           hasCloned={hasCloned}
           setConnections={setConnections}
+          handleLinking={handleLinking}
         />
       )}
       {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />}

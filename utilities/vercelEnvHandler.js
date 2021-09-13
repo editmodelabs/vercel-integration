@@ -3,10 +3,10 @@ export const vercelEnvReq = async (
   em_project_to_use,
   currentProjectId
 ) => {
-  const { accessToken } = data;
+  const { accessToken, teamId } = data;
   const res = await fetch(
     `https://api.vercel.com/v8/projects/${currentProjectId}/env${
-      data.teamId ? `?teamId=${data.teamId}` : ""
+      teamId ? `?teamId=${teamId}` : ""
     }`,
     {
       method: "POST",
