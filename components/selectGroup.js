@@ -47,21 +47,23 @@ export default function SelectGroup({
           count={count}
         />
       </div>
-      <div
-        className={`flex flex-col justify-center text-gray-500 
+      {fields.length > 1 && (
+        <div
+          className={`flex flex-col justify-center text-gray-500 
         }`}
-      >
-        <TrashIcon
-          onClick={() => removeField(field.id)}
-          className={`w-5 h-5 ${count === 0 ? "mt-6" : ""} sm:hidden`}
-        />
-        <p
-          onClick={() => removeField(field.id)}
-          className="text-sm text-red-500 mt-1 self-center cursor-pointer hidden sm:flex"
         >
-          Unlink
-        </p>
-      </div>
+          <TrashIcon
+            onClick={() => removeField(field.id)}
+            className={`w-5 h-5 ${count === 0 ? "mt-6" : ""} sm:hidden`}
+          />
+          <p
+            onClick={() => removeField(field.id)}
+            className="text-sm text-red-500 mt-1 self-center cursor-pointer hidden sm:flex"
+          >
+            Unlink
+          </p>
+        </div>
+      )}
     </div>
   );
 }
