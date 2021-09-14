@@ -28,7 +28,6 @@ export default function Select({
   };
 
   const computeDisableSelectedOptions = (option) => {
-    console.log(option.id);
     if (!isEditmode) {
       if (option.id === selected.id) return false;
       const match = fields.find((field) => field.vercel.id === option.id);
@@ -54,9 +53,6 @@ export default function Select({
   }, [selected]);
 
   const current = selected;
-  const idType = isEditmode ? "identifier" : "i";
-
-  console.log(selected);
 
   return (
     <Listbox value={selected} onChange={(item) => handleSelect(item)}>
@@ -90,7 +86,7 @@ export default function Select({
               <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-sm py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none text-sm">
                 {options.map((option) => (
                   <Listbox.Option
-                    key={option[isEditmode ? "identifier" : "id"]}
+                    key={option.id}
                     disabled={computeDisableSelectedOptions(option)}
                     className={({ active }) =>
                       classNames(
@@ -105,11 +101,11 @@ export default function Select({
                       <>
                         <span
                           className={classNames(
-                            current[idType] === option[idType]
+                            current.id === option.id
                               ? "font-semibold"
                               : "font-normal",
                             "block truncate",
-                            current[idType] !== option[idType] &&
+                            current.id !== option.id &&
                               computeDisableSelectedOptions(option)
                               ? "text-gray-400"
                               : ""
@@ -118,8 +114,7 @@ export default function Select({
                           {option.name}
                         </span>
 
-                        {current?.["id" || "identifier"] ===
-                        option?.["id" || "identifer"] ? (
+                        {current.id === option.id ? (
                           <span
                             className={classNames(
                               active ? "text-white" : "text-indigo-600",

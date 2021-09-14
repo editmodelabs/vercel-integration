@@ -162,14 +162,14 @@ export default function Dashboard({
     <Layout>
       <div className="w-full max-w-2xl">
         {loaderTyper}
-        {!isDeploy && vercelProjects?.length && userEditmodeProjects?.length && (
+        {!isDeploy && vercelProjects?.length && newEmProjects?.length && (
           <div className="">
             <h2 className="mb-4 text-md text-gray-700 flex justify-center">
               Link your Vercel projects to your Editmode projects:
             </h2>
           </div>
         )}
-        {!isDeploy && vercelProjects?.length && userEditmodeProjects?.length && (
+        {!isDeploy && vercelProjects?.length && newEmProjects?.length && (
           <div>
             {fields.map((field, index) => {
               return (
@@ -185,37 +185,35 @@ export default function Dashboard({
                 />
               );
             })}
-            {!isDeploy &&
-              vercelProjects?.length &&
-              userEditmodeProjects?.length && (
-                <div className={`flex flex-row mt-5 justify-center `}>
-                  <p
-                    className={`flex flex-row ${
-                      !hasUsedAllVercelProjects ? "cursor-pointer" : ""
-                    }`}
-                    onClick={hanleAddNewField}
-                  >
-                    <span className="flex-row">
-                      {!hasUsedAllVercelProjects && (
-                        <PlusCircleIcon className="text-indigo-400 w-6 h-6" />
-                      )}
-                    </span>
+            {!isDeploy && vercelProjects?.length && newEmProjects?.length && (
+              <div className={`flex flex-row mt-5 justify-center `}>
+                <p
+                  className={`flex flex-row ${
+                    !hasUsedAllVercelProjects ? "cursor-pointer" : ""
+                  }`}
+                  onClick={hanleAddNewField}
+                >
+                  <span className="flex-row">
+                    {!hasUsedAllVercelProjects && (
+                      <PlusCircleIcon className="text-indigo-400 w-6 h-6" />
+                    )}
+                  </span>
 
-                    <span className="text-sm text-indigo-400 ml-2 mt-0.5">
-                      {vercelProjects.length === 1
-                        ? ""
-                        : hasUsedAllVercelProjects
-                        ? "No Vercel project left to link"
-                        : `Link another Vercel project (${
-                            vercelProjects.length - fields.length
-                          } left)`}
-                    </span>
-                  </p>
-                </div>
-              )}
+                  <span className="text-sm text-indigo-400 ml-2 mt-0.5">
+                    {vercelProjects.length === 1
+                      ? ""
+                      : hasUsedAllVercelProjects
+                      ? "No Vercel project left to link"
+                      : `Link another Vercel project (${
+                          vercelProjects.length - fields.length
+                        } left)`}
+                  </span>
+                </p>
+              </div>
+            )}
           </div>
         )}
-        {!isDeploy && vercelProjects?.length && userEditmodeProjects?.length && (
+        {!isDeploy && vercelProjects?.length && newEmProjects?.length && (
           <section className="py-4">
             <button
               className={`flex justify-center w-full mt-6 text-white font-medium py-3 leading-6 px-4 rounded-md hover:bg-indigo-400 transition duration-200 button ${
