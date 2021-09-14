@@ -10,7 +10,6 @@ function classNames(...classes) {
 export default function Select({
   options,
   isEditmode,
-  connections,
   fields,
   field,
   setFields,
@@ -29,11 +28,11 @@ export default function Select({
   };
 
   const computeDisableSelectedOptions = (option) => {
-    for (const key in connections) {
-      if (!isEditmode) {
-        return connections[key]["id"] === option.id;
-      }
-    }
+    if (!isEditmode) {
+      const match = fields.find((field) => field.vercel.id === option.id);
+      if (match) return true;
+      else return false;
+    } else return false;
   };
 
   const handleSelect = (item) => {
@@ -81,7 +80,7 @@ export default function Select({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-sm py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
+              <Listbox.Options className="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-sm py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none text-sm">
                 {options.map((option) => (
                   <Listbox.Option
                     key={option[isEditmode ? "identifier" : "id"]}
@@ -89,7 +88,8 @@ export default function Select({
                     className={({ active }) =>
                       classNames(
                         active ? "text-white bg-indigo-600" : "text-gray-900",
-                        "cursor-default select-none relative py-2 pl-3 pr-9"
+                        "cursor-default select-none relative py-2 pl-3 pr-9",
+                        "text-sm"
                       )
                     }
                     value={option}
@@ -99,10 +99,7 @@ export default function Select({
                         <span
                           className={classNames(
                             selected ? "font-semibold" : "font-normal",
-                            "block truncate",
-                            !selected & computeDisableSelectedOptions(option)
-                              ? "text-gray-400"
-                              : ""
+                            "block truncate"
                           )}
                         >
                           {option.name}
