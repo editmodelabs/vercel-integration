@@ -14,6 +14,7 @@ export default function Select({
   fields,
   field,
   setFields,
+  count,
 }) {
   const type = isEditmode ? "editmode" : "vercel";
   const [selected, setSelected] = useState(field[type]);
@@ -55,9 +56,13 @@ export default function Select({
     <Listbox value={selected} onChange={(item) => handleSelect(item)}>
       {({ open }) => (
         <>
-          {/* <Listbox.Label className="block text-sm font-medium text-gray-700">
-            Assigned to
-          </Listbox.Label> */}
+          <Listbox.Label
+            className={`block text-sm font-medium text-gray-700 sm:flex ${
+              count > 0 ? "hidden" : "auto"
+            }`}
+          >
+            {isEditmode ? "EDITMODE" : "VERCEL"}
+          </Listbox.Label>
           <div className="mt-1 relative">
             <Listbox.Button className="bg-white relative w-full border border-gray-300 rounded-sm shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <span className="block truncate">{selected.name}</span>

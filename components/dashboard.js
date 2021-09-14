@@ -120,7 +120,7 @@ export default function Dashboard({
         </div>
         {vercelProjects?.length && userEditmodeProjects?.length && (
           <div>
-            {fields.map((field) => {
+            {fields.map((field, index) => {
               return (
                 <SelectGroup
                   editmode_options={userEditmodeProjects}
@@ -130,6 +130,7 @@ export default function Dashboard({
                   field={field}
                   fields={fields}
                   setFields={setFields}
+                  count={index}
                 />
               );
             })}

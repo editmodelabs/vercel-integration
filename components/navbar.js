@@ -22,12 +22,12 @@ export default function NavBar() {
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
                 <img
-                  className="block lg:hidden h-8 w-auto"
+                  className="sm:block hidden h-8 w-auto"
                   src="/logo.png"
                   alt="editmode-logo"
                 />
                 <img
-                  className="hidden lg:block h-8 w-auto"
+                  className="sm:hidden lg:block h-8 w-auto"
                   src="/editmode.png"
                   alt="editmode"
                 />

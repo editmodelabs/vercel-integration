@@ -8,6 +8,7 @@ export default function EditmodeSelect({
   fields,
   setFields,
   field,
+  count,
 }) {
   return (
     <>
@@ -19,6 +20,7 @@ export default function EditmodeSelect({
         fields={fields}
         setFields={setFields}
         field={field}
+        count={count}
       />
     </>
   );

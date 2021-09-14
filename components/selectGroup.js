@@ -8,11 +8,12 @@ export default function SelectGroup({
   field,
   fields,
   setFields,
+  count,
 }) {
   const { editmode, vercel } = field;
 
   return (
-    <div className="flex flex-row justify-center w-full lg:space-x-4 sm:flex-col sm:mt-3 sm:border sm:p-3">
+    <div className="flex flex-row justify-center w-full space-x-4 sm:space-x-0 sm:flex-col sm:mt-3 sm:border sm:p-3">
       <div className="vercel w-full">
         <VercelSelect
           options={vercel_options}
@@ -21,10 +22,13 @@ export default function SelectGroup({
           fields={fields}
           setFields={setFields}
           field={field}
+          count={count}
         />
       </div>
 
-      <div className="flex flex-col justify-center sm:self-center sm:transform sm:rotate-90 sm:m-2">
+      <div
+        className={`flex flex-col justify-center sm:self-center sm:transform sm:rotate-90 sm:m-2`}
+      >
         <ArrowRightIcon className="h-5 w-5 text-gray-400" />
       </div>
 
@@ -36,16 +40,20 @@ export default function SelectGroup({
           fields={fields}
           setFields={setFields}
           field={field}
+          count={count}
         />
       </div>
-      <div className="flex flex-col justify-center text-gray-500">
+      <div
+        className={`flex flex-col justify-center text-gray-500 
+        }`}
+      >
         <TrashIcon
           onClick={() => removeField(field.id)}
-          className="w-5 h-5 sm:hidden"
+          className={`w-5 h-5 ${count === 0 ? "mt-6" : ""} sm:hidden`}
         />
         <p
           onClick={() => removeField(field.id)}
-          className="text-sm text-red-500 mt-1 self-center cursor-pointer"
+          className="text-sm text-red-500 mt-1 self-center cursor-pointer hidden sm:flex"
         >
           Unlink
         </p>
