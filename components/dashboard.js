@@ -122,7 +122,7 @@ export default function Dashboard({
                 Oops
               </p>
               <h1 className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-2xl">
-                You don't own any Editmode projects yet.
+                You don't yet own any Editmode projects to link.
               </h1>
               <p className="mt-2 text-base text-gray-500">
                 But you can easily create one by visiting the app and logging
