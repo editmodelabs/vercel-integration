@@ -28,6 +28,7 @@ export default function Select({
   };
 
   const computeDisableSelectedOptions = (option) => {
+    console.log(option.id);
     if (!isEditmode) {
       if (option.id === selected.id) return false;
       const match = fields.find((field) => field.vercel.id === option.id);
@@ -53,6 +54,9 @@ export default function Select({
   }, [selected]);
 
   const current = selected;
+  const idType = isEditmode ? "identifier" : "i";
+
+  console.log(selected);
 
   return (
     <Listbox value={selected} onChange={(item) => handleSelect(item)}>
@@ -101,11 +105,11 @@ export default function Select({
                       <>
                         <span
                           className={classNames(
-                            current?.id === option?.id
+                            current[idType] === option[idType]
                               ? "font-semibold"
                               : "font-normal",
                             "block truncate",
-                            current?.id !== option.id &&
+                            current[idType] !== option[idType] &&
                               computeDisableSelectedOptions(option)
                               ? "text-gray-400"
                               : ""
@@ -114,7 +118,8 @@ export default function Select({
                           {option.name}
                         </span>
 
-                        {current?.id === option?.id ? (
+                        {current?.["id" || "identifier"] ===
+                        option?.["id" || "identifer"] ? (
                           <span
                             className={classNames(
                               active ? "text-white" : "text-indigo-600",

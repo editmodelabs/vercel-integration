@@ -18,6 +18,7 @@ export default function Dashboard({
   hasCloned,
   handleLinking,
 }) {
+  const [newEmProjects, setNewEmProjects] = useState();
   const [fields, setFields] = useState([]);
   const hanleAddNewField = () => {
     constructField();
@@ -28,14 +29,27 @@ export default function Dashboard({
   const hasUsedAllVercelProjects =
     vercelProjects?.length - fields?.length === 0 ? true : false;
 
+  const standardizeIdenfier = (em_projects) => {
+    const standardized = em_projects.map((project) => {
+      const id = project.identifier;
+      const name = project.name;
+      return { id, name };
+    });
+
+    return standardized;
+  };
+
   useEffect(() => {
-    if (
-      !fields.length &&
-      vercelProjects?.length &&
-      userEditmodeProjects?.length
-    )
+    if (userEditmodeProjects) {
+      const new_em_projects = standardizeIdenfier(userEditmodeProjects);
+      setNewEmProjects(new_em_projects);
+    }
+  }, [userEditmodeProjects]);
+
+  useEffect(() => {
+    if (!fields.length && vercelProjects?.length && newEmProjects?.length)
       constructField();
-  }, [vercelProjects, userEditmodeProjects]);
+  }, [vercelProjects, newEmProjects]);
 
   const removeField = (id) => {
     const new_fields = fields.filter((field) => field.id !== id);
@@ -64,8 +78,8 @@ export default function Dashboard({
     const field = {
       id: uuid(),
       editmode: {
-        id: userEditmodeProjects[0].identifier,
-        name: userEditmodeProjects[0].name,
+        id: newEmProjects[0].id,
+        name: newEmProjects[0].name,
       },
       vercel: {
         id: obj.id,
@@ -160,7 +174,7 @@ export default function Dashboard({
             {fields.map((field, index) => {
               return (
                 <SelectGroup
-                  editmode_options={userEditmodeProjects}
+                  editmode_options={newEmProjects}
                   key={field.id}
                   vercel_options={vercelProjects}
                   removeField={removeField}
@@ -188,8 +202,10 @@ export default function Dashboard({
                     </span>
 
                     <span className="text-sm text-indigo-400 ml-2 mt-0.5">
-                      {hasUsedAllVercelProjects
-                        ? "All Vercel projects linked"
+                      {vercelProjects.length === 1
+                        ? ""
+                        : hasUsedAllVercelProjects
+                        ? "No Vercel project left to link"
                         : `Link another Vercel project (${
                             vercelProjects.length - fields.length
                           } left)`}
