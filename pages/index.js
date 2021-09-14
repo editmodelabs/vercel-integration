@@ -61,7 +61,7 @@ export default function CallbackPage() {
       );
       if (json.value) {
         setHasCloned(true);
-        setOpen(true);
+        reroute();
       }
       if (json.error) {
         if (json.error.message) alert(json.error.message);
@@ -258,7 +258,7 @@ export default function CallbackPage() {
           handleLinking={handleLinking}
         />
       )}
-      {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />}
+      {/* {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />} */}
     </>
   );
 }

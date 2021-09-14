@@ -109,7 +109,7 @@ export default function Dashboard({
           />
         </div>
       );
-    } else loaderTyper = "";
+    } else loaderTyper = <></>;
   }
 
   if (!isDeploy && userEditmodeProjects?.length === 0) {
@@ -171,33 +171,35 @@ export default function Dashboard({
                 />
               );
             })}
-            {vercelProjects?.length && userEditmodeProjects?.length && (
-              <div className={`flex flex-row mt-5 justify-center `}>
-                <p
-                  className={`flex flex-row ${
-                    !hasUsedAllVercelProjects ? "cursor-pointer" : ""
-                  }`}
-                  onClick={hanleAddNewField}
-                >
-                  <span className="flex-row">
-                    {!hasUsedAllVercelProjects && (
-                      <PlusCircleIcon className="text-indigo-400 w-6 h-6" />
-                    )}
-                  </span>
+            {!isDeploy &&
+              vercelProjects?.length &&
+              userEditmodeProjects?.length && (
+                <div className={`flex flex-row mt-5 justify-center `}>
+                  <p
+                    className={`flex flex-row ${
+                      !hasUsedAllVercelProjects ? "cursor-pointer" : ""
+                    }`}
+                    onClick={hanleAddNewField}
+                  >
+                    <span className="flex-row">
+                      {!hasUsedAllVercelProjects && (
+                        <PlusCircleIcon className="text-indigo-400 w-6 h-6" />
+                      )}
+                    </span>
 
-                  <span className="text-sm text-indigo-400 ml-2 mt-0.5">
-                    {hasUsedAllVercelProjects
-                      ? "All Vercel projects linked"
-                      : `Link another Vercel project (${
-                          vercelProjects.length - fields.length
-                        } left)`}
-                  </span>
-                </p>
-              </div>
-            )}
+                    <span className="text-sm text-indigo-400 ml-2 mt-0.5">
+                      {hasUsedAllVercelProjects
+                        ? "All Vercel projects linked"
+                        : `Link another Vercel project (${
+                            vercelProjects.length - fields.length
+                          } left)`}
+                    </span>
+                  </p>
+                </div>
+              )}
           </div>
         )}
-        {vercelProjects?.length && userEditmodeProjects?.length && (
+        {!isDeploy && vercelProjects?.length && userEditmodeProjects?.length && (
           <section className="py-4">
             <button
               className={`flex justify-center w-full mt-6 text-white font-medium py-3 leading-6 px-4 rounded-md hover:bg-indigo-400 transition duration-200 button ${
