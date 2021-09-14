@@ -14,7 +14,7 @@ import Modal from "components/modal";
 export default function CallbackPage() {
   const router = useRouter();
   const [data, setData] = useState({});
-  const [userEditmodeProjects, setUserEditmodeProjects] = useState();
+  const [userEditmodeProjects, setUserEditmodeProjects] = useState(undefined);
   const [vercelProjects, setVercelProjects] = useState(undefined);
   const [projectToInstall, setProjectToInstall] = useState({});
   const [isInstalling, setIsInstalling] = useState(false);
@@ -200,6 +200,7 @@ export default function CallbackPage() {
           });
           const data = await res.json();
           if (data) setUserEditmodeProjects(data);
+          else setUserEditmodeProjects([]);
           setIsFetchingEditmodeProjects(false);
         } catch (err) {
           console.log(err);

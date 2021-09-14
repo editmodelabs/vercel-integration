@@ -4,7 +4,8 @@ import Loader from "react-loader-spinner";
 import uuid from "react-uuid";
 import Cards from "./cards";
 import { useEffect, useState } from "react";
-import { ArrowDownIcon, PlusCircleIcon } from "@heroicons/react/solid";
+import { PlusCircleIcon } from "@heroicons/react/solid";
+import NoProjects from "./noProjects";
 
 export default function Dashboard({
   userEditmodeProjects,
@@ -21,6 +22,8 @@ export default function Dashboard({
   const hanleAddNewField = () => {
     constructField();
   };
+
+  const isDeploy = dashboardView === "deploy";
 
   const hasUsedAllVercelProjects =
     vercelProjects?.length - fields?.length === 0 ? true : false;
@@ -74,7 +77,7 @@ export default function Dashboard({
 
   let loaderTyper;
 
-  if (dashboardView !== "deploy") {
+  if (!isDeploy) {
     if (!userEditmodeProjects?.length || !vercelProjects?.length) {
       loaderTyper = (
         <div className="py-4 flex flex-col items-center justify-center align-center">
@@ -83,14 +86,14 @@ export default function Dashboard({
             color="#616AE9"
             height={100}
             width={100}
-            className="mt-6"
+            className="mt-8"
           />
         </div>
       );
     } else loaderTyper = "";
   }
 
-  if (dashboardView === "deploy") {
+  if (isDeploy) {
     if (!hasCloned) {
       loaderTyper = (
         <div className="py-4 flex flex-col items-center justify-center align-center">
@@ -109,16 +112,50 @@ export default function Dashboard({
     } else loaderTyper = "";
   }
 
+  if (!isDeploy && userEditmodeProjects?.length === 0) {
+    return (
+      <Layout>
+        <div className="w-full max-w-2xl">
+          <div className="py-20">
+            <div className="text-center">
+              <p className="text-sm font-semibold text-indigo-600 uppercase tracking-wide">
+                Oops
+              </p>
+              <h1 className="mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-2xl">
+                You don't own any Editmode projects yet.
+              </h1>
+              <p className="mt-2 text-base text-gray-500">
+                But you can easily create one by visiting the app and logging
+                into your account.
+              </p>
+              <div className="mt-6">
+                <a
+                  href="https://app.editmode.com"
+                  className="text-base font-medium text-indigo-600 hover:text-indigo-500"
+                  target="_blank"
+                >
+                  Go to Editmode<span aria-hidden="true"> &rarr;</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <div className="w-full max-w-2xl">
         {loaderTyper}
-        <div className="">
-          <h2 className="mb-4 text-md text-gray-700 flex justify-center">
-            Link your Vercel projects to your Editmode projects:
-          </h2>
-        </div>
-        {vercelProjects?.length && userEditmodeProjects?.length && (
+        {!isDeploy && vercelProjects?.length && userEditmodeProjects?.length && (
+          <div className="">
+            <h2 className="mb-4 text-md text-gray-700 flex justify-center">
+              Link your Vercel projects to your Editmode projects:
+            </h2>
+          </div>
+        )}
+        {!isDeploy && vercelProjects?.length && userEditmodeProjects?.length && (
           <div>
             {fields.map((field, index) => {
               return (
