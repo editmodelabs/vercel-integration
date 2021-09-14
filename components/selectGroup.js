@@ -29,7 +29,11 @@ export default function SelectGroup({
       <div
         className={`flex flex-col justify-center sm:self-center sm:transform sm:rotate-90 sm:m-2`}
       >
-        <ArrowRightIcon className="h-5 w-5 text-gray-400" />
+        <ArrowRightIcon
+          className={`h-5 w-5 text-gray-400 ${
+            count === 0 ? "mt-6" : ""
+          } sm:mt-1`}
+        />
       </div>
 
       <div className="editmode w-full">

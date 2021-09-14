@@ -59,7 +59,7 @@ export default function Select({
       {({ open }) => (
         <>
           <Listbox.Label
-            className={`block text-sm font-medium text-gray-700 sm:flex ${
+            className={`block text-sm font-medium text-gray-700 sm:flex mb-2 font-semibold ${
               count > 0 ? "hidden" : "auto"
             }`}
           >
@@ -97,7 +97,7 @@ export default function Select({
                     }
                     value={option}
                   >
-                    {({ selected, active }) => (
+                    {({ _, active }) => (
                       <>
                         <span
                           className={classNames(
