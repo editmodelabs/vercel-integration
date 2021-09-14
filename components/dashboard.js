@@ -82,10 +82,10 @@ export default function Dashboard({
       loaderTyper = (
         <div className="py-4 flex flex-col items-center justify-center align-center">
           <Loader
-            type={dashboardView !== "deploy" ? "Oval" : "TailSpin"}
+            type={"Oval"}
             color="#616AE9"
-            height={100}
-            width={100}
+            height={70}
+            width={70}
             className="mt-8"
           />
         </div>
@@ -101,7 +101,7 @@ export default function Dashboard({
             Generating a new Editmode Project for your theme...
           </div>
           <Loader
-            type={dashboardView !== "deploy" ? "Oval" : "TailSpin"}
+            type={"TailSpin"}
             color="#616AE9"
             height={70}
             width={70}

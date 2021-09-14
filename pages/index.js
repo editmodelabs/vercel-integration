@@ -242,7 +242,7 @@ export default function CallbackPage() {
         />
       )}
       {view === "auth" && <Auth setView={setView} setToken={setToken} />}
-      {view === "dash" && (
+      {view === "dash" && dashboardView && (
         <Dashboard
           userEditmodeProjects={userEditmodeProjects}
           handleInstall={handleInstall}
