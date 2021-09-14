@@ -49,10 +49,10 @@ export const checkVercelEnv = async (
   else {
     const env_variables = json.envs;
     existing_env = env_variables.find((env_variable) => {
-      env_variable.key === key;
+      return env_variable.key === key;
     });
   }
-  existing_env ? existing_env.id : "";
+  return existing_env ? existing_env.id : "";
 };
 
 export const updateVercelEnv = async (
