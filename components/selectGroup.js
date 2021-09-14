@@ -13,7 +13,7 @@ export default function SelectGroup({
   const { editmode, vercel } = field;
 
   return (
-    <div className="flex flex-row justify-center w-full space-x-4 sm:space-x-0 sm:flex-col sm:mt-3 sm:border sm:p-3">
+    <div className="flex flex-row justify-center w-full space-x-4 sm:space-x-0 sm:flex-col sm:mt-3 sm:border rounded-sm sm:p-3 p-2">
       <div className="vercel w-full">
         <VercelSelect
           options={vercel_options}
