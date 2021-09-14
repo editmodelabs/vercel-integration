@@ -134,21 +134,26 @@ export default function Dashboard({
               );
             })}
             {vercelProjects?.length && userEditmodeProjects?.length && (
-              <div
-                className={`flex flex-row mt-5 justify-center ${
-                  !hasUsedAllVercelProjects ? "cursor-pointer" : ""
-                }`}
-                onClick={hanleAddNewField}
-              >
-                {!hasUsedAllVercelProjects && (
-                  <PlusCircleIcon className="text-indigo-400 w-6 h-6" />
-                )}
-                <p className="text-sm text-indigo-400 ml-2 mt-0.5">
-                  {hasUsedAllVercelProjects
-                    ? "All Vercel projects linked"
-                    : `Link another Vercel project (${
-                        vercelProjects.length - fields.length
-                      } left)`}
+              <div className={`flex flex-row mt-5 justify-center `}>
+                <p
+                  className={`flex flex-row ${
+                    !hasUsedAllVercelProjects ? "cursor-pointer" : ""
+                  }`}
+                  onClick={hanleAddNewField}
+                >
+                  <span className="flex-row">
+                    {!hasUsedAllVercelProjects && (
+                      <PlusCircleIcon className="text-indigo-400 w-6 h-6" />
+                    )}
+                  </span>
+
+                  <span className="text-sm text-indigo-400 ml-2 mt-0.5">
+                    {hasUsedAllVercelProjects
+                      ? "All Vercel projects linked"
+                      : `Link another Vercel project (${
+                          vercelProjects.length - fields.length
+                        } left)`}
+                  </span>
                 </p>
               </div>
             )}
