@@ -12,7 +12,7 @@ export default function SelectGroup({
   const { editmode, vercel } = field;
 
   return (
-    <div className="flex flex-row justify-center w-full space-x-4 sm:flex-col">
+    <div className="flex flex-row justify-center w-full lg:space-x-4 sm:flex-col sm:mt-3 sm:border sm:p-3">
       <div className="vercel w-full">
         <VercelSelect
           options={vercel_options}
@@ -24,7 +24,7 @@ export default function SelectGroup({
         />
       </div>
 
-      <div className="flex flex-col justify-center">
+      <div className="flex flex-col justify-center sm:self-center sm:transform sm:rotate-90 sm:m-2">
         <ArrowRightIcon className="h-5 w-5 text-gray-400" />
       </div>
 
@@ -39,7 +39,16 @@ export default function SelectGroup({
         />
       </div>
       <div className="flex flex-col justify-center text-gray-500">
-        <TrashIcon onClick={() => removeField(field.id)} className="w-5 h-5" />
+        <TrashIcon
+          onClick={() => removeField(field.id)}
+          className="w-5 h-5 sm:hidden"
+        />
+        <p
+          onClick={() => removeField(field.id)}
+          className="text-sm text-red-500 mt-1 self-center cursor-pointer"
+        >
+          Unlink
+        </p>
       </div>
     </div>
   );
