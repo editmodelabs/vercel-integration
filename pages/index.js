@@ -1,15 +1,9 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Dashboard from "components/dashboard";
-import {
-  defaultOption,
-  updateVercelEnv,
-  checkVercelEnv,
-  vercelEnvReq,
-} from "../utilities";
+import { updateVercelEnv, checkVercelEnv, vercelEnvReq } from "../utilities";
 import Auth from "components/credentials";
 import Blank from "components/blank";
-import Modal from "components/modal";
 
 export default function CallbackPage() {
   const router = useRouter();
