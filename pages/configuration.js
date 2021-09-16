@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Dashboard from "components/dashboard";
 import uuid from "react-uuid";
 
-export default () => {
+const Configuration = () => {
   const router = useRouter();
   const hasConfigId = router.asPath.includes("configurationId=icfg");
   const [vercelProjects, setVercelProjects] = useState();
@@ -33,13 +33,27 @@ export default () => {
     const fieldsToUpdate = fields?.filter((field) => {
       const existingConnection = connections.find(
         (connection) =>
+          field.id === connection.id &&
           connection.vercel.id === field.vercel.id &&
           connection.editmode.id === field.editmode.id
       );
       if (existingConnection) return false;
       else return true;
     });
-    console.log(fieldsToUpdate);
+    const url = `http://localhost:5000/api/projects/new?configurationId=${configId}&userSlug=${user_slug}`;
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(fieldsToUpdate),
+      });
+      const data = await res.json();
+      if (data?.projects) setVercelProjects(data.projects);
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const constructInitialFields = (vercelProjects, editmodeProjects) => {
@@ -130,3 +144,5 @@ export default () => {
     </div>
   );
 };
+
+export default Configuration;
