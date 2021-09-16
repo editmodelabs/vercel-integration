@@ -17,6 +17,7 @@ export default function Dashboard({
   dashboardView,
   hasCloned,
   handleLinking,
+  isConfiguration,
 }) {
   const [newEmProjects, setNewEmProjects] = useState();
   const [fields, setFields] = useState([]);
@@ -158,18 +159,24 @@ export default function Dashboard({
     );
   }
 
+  let isReady;
+
+  if (isConfiguration) {
+    isReady = true;
+  } else isReady = !isDeploy && vercelProjects?.length && newEmProjects?.length;
+
   return (
     <Layout>
       <div className="w-full max-w-2xl">
         {loaderTyper}
-        {!isDeploy && vercelProjects?.length && newEmProjects?.length && (
+        {isReady && (
           <div className="">
             <h2 className="mb-4 text-md text-gray-700 flex justify-center">
               Link your Vercel projects to your Editmode projects:
             </h2>
           </div>
         )}
-        {!isDeploy && vercelProjects?.length && newEmProjects?.length && (
+        {isReady && (
           <div>
             {fields.map((field, index) => {
               return (
@@ -185,7 +192,7 @@ export default function Dashboard({
                 />
               );
             })}
-            {!isDeploy && vercelProjects?.length && newEmProjects?.length && (
+            {isReady && (
               <div className={`flex flex-row mt-5 justify-center `}>
                 <p
                   className={`flex flex-row ${
@@ -213,7 +220,7 @@ export default function Dashboard({
             )}
           </div>
         )}
-        {!isDeploy && vercelProjects?.length && newEmProjects?.length && (
+        {isReady && (
           <section className="py-4">
             <button
               className={`flex justify-center w-full mt-6 text-white font-medium py-3 leading-6 px-4 rounded-md hover:bg-indigo-400 transition duration-200 button ${
