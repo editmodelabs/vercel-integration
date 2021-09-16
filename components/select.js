@@ -14,6 +14,7 @@ export default function Select({
   field,
   setFields,
   count,
+  isConfiguration,
 }) {
   const type = isEditmode ? "editmode" : "vercel";
   const [selected, setSelected] = useState(field[type]);
@@ -52,10 +53,23 @@ export default function Select({
     setFields(new_fields);
   }, [selected]);
 
+  console.log(isConfiguration);
+
+  const selectorInteractivity = () => {
+    if (isConfiguration && !isEditmode && field.isCurrentlyLinked) {
+      return false;
+    }
+    return true;
+  };
+
   const current = selected;
 
   return (
-    <Listbox value={selected} onChange={(item) => handleSelect(item)}>
+    <Listbox
+      value={selected}
+      onChange={(item) => handleSelect(item)}
+      disabled={!selectorInteractivity() ? true : false}
+    >
       {({ open }) => (
         <>
           <Listbox.Label
@@ -66,14 +80,22 @@ export default function Select({
             {isEditmode ? "EDITMODE" : "VERCEL"}
           </Listbox.Label>
           <div className="mt-1 relative">
-            <Listbox.Button className="bg-white relative w-full border sm:border-gray-200 border-gray-300 rounded-sm shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
-              <span className="block truncate">{selected.name}</span>
-              <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                <SelectorIcon
-                  className="h-5 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
-              </span>
+            <Listbox.Button as={Fragment}>
+              <button
+                className={classNames(
+                  "bg-white relative w-full border sm:border-gray-200 border-gray-300 rounded-sm shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+                )}
+              >
+                <span className="block truncate">{selected.name}</span>
+                {selectorInteractivity() && (
+                  <span className="absolute inset-y-0 right-0 flex items-center pr-2">
+                    <SelectorIcon
+                      className="h-5 w-5 text-gray-400"
+                      aria-hidden="true"
+                    />
+                  </span>
+                )}
+              </button>
             </Listbox.Button>
 
             <Transition

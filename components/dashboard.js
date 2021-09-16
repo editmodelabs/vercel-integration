@@ -177,8 +177,10 @@ export default function Dashboard({
         {loaderTyper}
         {isReady && (
           <div className="">
-            <h2 className="mb-4 text-md text-gray-700 flex justify-center">
-              Link your Vercel projects to your Editmode projects:
+            <h2 className="mb-4 text-md text-gray-700 flex justify-center text-center">
+              {isConfiguration
+                ? "Remove/update pre-existing links or link your unlinked Vercel projects to your Editmode projects:"
+                : "Link your Vercel projects to your Editmode projects:"}
             </h2>
           </div>
         )}
@@ -195,6 +197,7 @@ export default function Dashboard({
                   fields={fields}
                   setFields={setFields}
                   count={index}
+                  isConfiguration={isConfiguration}
                 />
               );
             })}

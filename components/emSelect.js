@@ -9,6 +9,7 @@ export default function EditmodeSelect({
   setFields,
   field,
   count,
+  isConfiguration,
 }) {
   return (
     <>
@@ -21,6 +22,7 @@ export default function EditmodeSelect({
         setFields={setFields}
         field={field}
         count={count}
+        isConfiguration={isConfiguration}
       />
     </>
   );

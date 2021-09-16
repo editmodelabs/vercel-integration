@@ -9,6 +9,7 @@ export default function VercelSelect({
   setFields,
   field,
   count,
+  isConfiguration,
 }) {
   return (
     <>
@@ -20,6 +21,7 @@ export default function VercelSelect({
         setFields={setFields}
         field={field}
         count={count}
+        isConfiguration={isConfiguration}
       />
     </>
   );

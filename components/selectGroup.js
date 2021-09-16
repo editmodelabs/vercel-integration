@@ -9,6 +9,7 @@ export default function SelectGroup({
   fields,
   setFields,
   count,
+  isConfiguration,
 }) {
   const { editmode, vercel } = field;
 
@@ -23,6 +24,7 @@ export default function SelectGroup({
           setFields={setFields}
           field={field}
           count={count}
+          isConfiguration={isConfiguration}
         />
       </div>
 
@@ -45,6 +47,7 @@ export default function SelectGroup({
           setFields={setFields}
           field={field}
           count={count}
+          isConfiguration={isConfiguration}
         />
       </div>
       {fields.length > 1 && (
