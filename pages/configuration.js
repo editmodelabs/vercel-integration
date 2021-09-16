@@ -12,7 +12,9 @@ const Configuration = () => {
   const [userSlug, setUserSlug] = useState();
   const [connections, setConnections] = useState();
   const [isInstalling, setIsInstalling] = useState(false);
+  const [toDelete, setToDelete] = useState();
   const configId = hasConfigId ? router.query.configurationId : "";
+  console.log(configId);
 
   const fetchEditmodeProjects = async (token) => {
     const url = `https://api.editmode.com/projects?api_key=${token}`;
@@ -40,20 +42,23 @@ const Configuration = () => {
       if (existingConnection) return false;
       else return true;
     });
-    const url = `http://localhost:5000/api/projects/new?configurationId=${configId}&userSlug=${user_slug}`;
+    const url = `http://localhost:5000/api/projects/new?configurationId=${configId}&userSlug=${userSlug}`;
+    console.log(url);
 
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(fieldsToUpdate),
-      });
-      const data = await res.json();
-      if (data?.projects) setVercelProjects(data.projects);
-      return data;
-    } catch (err) {
-      console.log(err);
-    }
+    const reqObj = { connections: fieldsToUpdate };
+    console.log(JSON.stringify(reqObj));
+    // try {
+    //   const res = await fetch(url, {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(reqObj),
+    //   });
+    //   const data = await res.json();
+    //   if (data?.projects) setVercelProjects(data.projects);
+    //   return data;
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
   const constructInitialFields = (vercelProjects, editmodeProjects) => {
