@@ -14,7 +14,6 @@ export default () => {
   const configId = hasConfigId ? router.query.configurationId : "";
 
   console.log(connections);
-  if (vercelProjects) console.log(vercelProjects);
 
   const fetchEditmodeProjects = async (token) => {
     const url = `https://api.editmode.com/projects?api_key=${token}`;
@@ -48,6 +47,7 @@ export default () => {
               vercel: {
                 id: vercelProject.id,
                 name: vercelProject.name,
+                envId: vercelProject.env.id,
               },
             },
           ];
