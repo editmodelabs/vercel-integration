@@ -32,7 +32,10 @@ const UserCredentials = ({ setView, setToken }) => {
       setIsLoginValid(false);
     }
     const token = data.authentication_token;
-    if (isBrowser() && token) localStorage.setItem("concessio_pref_per", token);
+    if (isBrowser() && token) {
+      localStorage.setItem("concessio_pref_per", token);
+      localStorage.setItem("em_vercel_config_session_slug", data.id);
+    }
     if (token) {
       setIsLoading(false);
       setToken(token);

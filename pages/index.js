@@ -76,7 +76,7 @@ export default function CallbackPage() {
     setIsInstalling(true);
     const persistAccessToken = async () => {
       const user_slug =
-        isBrowser() && localStorage.getItem("em_config_session_slug");
+        isBrowser() && localStorage.getItem("em_vercel_config_session_slug");
       const url = "http://localhost:5000/api/integrator/";
       const req = {
         userSlug: user_slug,
