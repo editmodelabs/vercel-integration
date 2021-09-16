@@ -29,6 +29,19 @@ export default () => {
     }
   };
 
+  const saveChanges = async (fields) => {
+    const fieldsToUpdate = fields?.filter((field) => {
+      const existingConnection = connections.find(
+        (connection) =>
+          connection.vercel.id === field.vercel.id &&
+          connection.editmode.id === field.editmode.id
+      );
+      if (existingConnection) return false;
+      else return true;
+    });
+    console.log(fieldsToUpdate);
+  };
+
   const constructInitialFields = (vercelProjects, editmodeProjects) => {
     let fields = [];
     vercelProjects.forEach((vercelProject) =>
@@ -111,7 +124,7 @@ export default () => {
           editmodeProjects={editmodeProjects}
           vercelProjects={vercelProjects}
           dashboardView={null}
-          handleLinking={true}
+          saveChanges={saveChanges}
         />
       )}
     </div>

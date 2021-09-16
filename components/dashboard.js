@@ -16,6 +16,7 @@ export default function Dashboard({
   handleLinking,
   isConfiguration,
   connections,
+  saveChanges,
 }) {
   const [newEmProjects, setNewEmProjects] = useState();
   const [fields, setFields] = useState(
@@ -23,6 +24,14 @@ export default function Dashboard({
   );
   const hanleAddNewField = () => {
     constructField();
+  };
+
+  const handleClick = (fields) => {
+    if (isConfiguration) {
+      saveChanges(fields);
+    } else {
+      handleLinking(fields);
+    }
   };
 
   const isDeploy = dashboardView === "deploy";
@@ -238,7 +247,7 @@ export default function Dashboard({
                   ? `cursor-not-allowed bg-indigo-300`
                   : `bg-indigo-500`
               } `}
-              onClick={() => handleLinking(fields)}
+              onClick={() => handleClick(fields)}
               disabled={
                 (dashboardView !== "deploy" && !vercelProjects.length) ||
                 isInstalling
