@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Dashboard from "components/dashboard";
-import { updateVercelEnv, checkVercelEnv, vercelEnvReq } from "../utilities";
+import {
+  updateVercelEnv,
+  checkVercelEnv,
+  vercelEnvReq,
+  isBrowser,
+} from "../utilities";
 import Auth from "components/credentials";
 import Blank from "components/blank";
 
@@ -69,6 +74,29 @@ export default function CallbackPage() {
 
   const handleLinking = async (connections) => {
     setIsInstalling(true);
+    const persistAccessToken = async () => {
+      const user_slug =
+        isBrowser() && localStorage.getItem("em_config_session_slug");
+      const url = "http://localhost:5000/api/integrator/";
+      const req = {
+        userSlug: user_slug,
+        configurationId: router.query.configurationId,
+        token: data?.accessToken,
+      };
+
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(req),
+        });
+        const data = await res.json();
+        return data;
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     let hasError = false;
     const accessToken = data.accessToken;
     const requests = connections.map(async (connection) => {
@@ -106,6 +134,7 @@ export default function CallbackPage() {
           alert(json.error.message);
           hasError = true;
         } else if (json.value && idx === connections.length - 1 && !hasError) {
+          persistAccessToken();
           router.push(router.query.next);
         }
       });
