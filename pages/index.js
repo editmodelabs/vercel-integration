@@ -268,7 +268,7 @@ export default function CallbackPage() {
       {view === "auth" && <Auth setView={setView} setToken={setToken} />}
       {view === "dash" && dashboardView && (
         <Dashboard
-          userEditmodeProjects={userEditmodeProjects}
+          editmodeProjects={userEditmodeProjects}
           handleInstall={handleInstall}
           isFetchingEditmodeProjects={isFetchingEditmodeProjects}
           isInstalling={isInstalling}

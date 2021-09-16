@@ -8,19 +8,19 @@ import { PlusCircleIcon } from "@heroicons/react/solid";
 import NoProjects from "./noProjects";
 
 export default function Dashboard({
-  userEditmodeProjects,
-  isFetchingEditmodeProjects,
-  setProjectToInstall,
+  editmodeProjects,
   isInstalling,
-  handleInstall,
   vercelProjects,
   dashboardView,
   hasCloned,
   handleLinking,
   isConfiguration,
+  connections,
 }) {
   const [newEmProjects, setNewEmProjects] = useState();
-  const [fields, setFields] = useState([]);
+  const [fields, setFields] = useState(
+    isConfiguration && connections ? connections : []
+  );
   const hanleAddNewField = () => {
     constructField();
   };
@@ -41,11 +41,11 @@ export default function Dashboard({
   };
 
   useEffect(() => {
-    if (userEditmodeProjects) {
-      const new_em_projects = standardizeIdenfier(userEditmodeProjects);
+    if (editmodeProjects) {
+      const new_em_projects = standardizeIdenfier(editmodeProjects);
       setNewEmProjects(new_em_projects);
     }
-  }, [userEditmodeProjects]);
+  }, [editmodeProjects]);
 
   useEffect(() => {
     if (!fields.length && vercelProjects?.length && newEmProjects?.length)
@@ -93,7 +93,7 @@ export default function Dashboard({
   let loaderTyper;
 
   if (!isDeploy) {
-    if (!userEditmodeProjects?.length || !vercelProjects?.length) {
+    if (!editmodeProjects?.length || !vercelProjects?.length) {
       loaderTyper = (
         <div className="py-4 flex flex-col items-center justify-center align-center">
           <Loader
@@ -127,7 +127,7 @@ export default function Dashboard({
     } else loaderTyper = <></>;
   }
 
-  if (!isDeploy && userEditmodeProjects?.length === 0) {
+  if (!isDeploy && editmodeProjects?.length === 0) {
     return (
       <Layout>
         <div className="w-full max-w-2xl">
@@ -161,8 +161,14 @@ export default function Dashboard({
 
   let isReady;
 
+  console.log(fields);
+
   if (isConfiguration) {
-    isReady = true;
+    isReady =
+      connections.length > 0 &&
+      fields.length > 0 &&
+      vercelProjects?.length &&
+      newEmProjects?.length;
   } else isReady = !isDeploy && vercelProjects?.length && newEmProjects?.length;
 
   return (

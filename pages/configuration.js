@@ -11,9 +11,8 @@ export default () => {
   const [token, setToken] = useState();
   const [userSlug, setUserSlug] = useState();
   const [connections, setConnections] = useState();
+  const [isInstalling, setIsInstalling] = useState(false);
   const configId = hasConfigId ? router.query.configurationId : "";
-
-  console.log(connections);
 
   const fetchEditmodeProjects = async (token) => {
     const url = `https://api.editmode.com/projects?api_key=${token}`;
@@ -40,7 +39,7 @@ export default () => {
             {
               id: uuid(),
               isCurrentlyLinked: true,
-              edimode: {
+              editmode: {
                 id: editmodeProject.identifier,
                 name: editmodeProject.name,
               },
@@ -104,7 +103,17 @@ export default () => {
 
   return (
     <div>
-      <p>okay</p>
+      {connections && (
+        <Dashboard
+          connections={connections}
+          isConfiguration={true}
+          isInstalling={isInstalling}
+          editmodeProjects={editmodeProjects}
+          vercelProjects={vercelProjects}
+          dashboardView={null}
+          handleLinking={true}
+        />
+      )}
     </div>
   );
 };
