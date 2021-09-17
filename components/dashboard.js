@@ -117,6 +117,18 @@ export default function Dashboard({
 
   let loaderTyper;
 
+  let isReady;
+
+  console.log(fields);
+
+  if (isConfiguration) {
+    isReady =
+      connections?.length > 0 &&
+      fields?.length > 0 &&
+      vercelProjects?.length &&
+      newEmProjects?.length;
+  } else isReady = !isDeploy && vercelProjects?.length && newEmProjects?.length;
+
   if (!isDeploy) {
     if (!editmodeProjects?.length || !vercelProjects?.length) {
       loaderTyper = (
@@ -127,6 +139,22 @@ export default function Dashboard({
             height={70}
             width={70}
             className="mt-8"
+          />
+        </div>
+      );
+    } else loaderTyper = "";
+  }
+
+  if (isConfiguration) {
+    if (!fields?.length) {
+      loaderTyper = (
+        <div className="py-4 flex flex-col items-center justify-center align-center">
+          <Loader
+            type={"Oval"}
+            color="#616AE9"
+            height={100}
+            width={100}
+            className="mt-6"
           />
         </div>
       );
@@ -183,18 +211,6 @@ export default function Dashboard({
       </Layout>
     );
   }
-
-  let isReady;
-
-  console.log(fields);
-
-  if (isConfiguration) {
-    isReady =
-      connections.length > 0 &&
-      fields.length > 0 &&
-      vercelProjects?.length &&
-      newEmProjects?.length;
-  } else isReady = !isDeploy && vercelProjects?.length && newEmProjects?.length;
 
   return (
     <Layout>

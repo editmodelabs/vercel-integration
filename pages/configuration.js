@@ -34,11 +34,6 @@ const Configuration = () => {
     }
   };
 
-  //   useEffect(() => {
-  //     window.flash = (message, type = "success") =>
-  //       Bus.emit("flash", { message, type });
-  //   }, []);
-
   useEffect(() => {
     let timer;
     if (showMessage) {
@@ -129,7 +124,7 @@ const Configuration = () => {
           const user_slug = localStorage.getItem(
             "em_vercel_config_session_slug"
           );
-          const url = `http://localhost:5000/api/projects?configurationId=${configId}&userSlug=${user_slug}`;
+          const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects?configurationId=${configId}&userSlug=${user_slug}`;
 
           try {
             const res = await fetch(url, {
@@ -160,7 +155,7 @@ const Configuration = () => {
 
   return (
     <div>
-      {connections && (
+      {
         <Dashboard
           connections={connections}
           isConfiguration={true}
@@ -174,7 +169,7 @@ const Configuration = () => {
           showMessage={showMessage}
           isSaving={isSaving}
         />
-      )}
+      }
     </div>
   );
 };

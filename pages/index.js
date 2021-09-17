@@ -130,13 +130,13 @@ export default function CallbackPage() {
     const multi_res = await Promise.all(requests);
     setIsInstalling(false);
     if (multi_res) {
-      multi_res.forEach((json, idx) => {
+      multi_res.forEach(async (json, idx) => {
         if (json.error && json.error.message) {
           alert(json.error.message);
           hasError = true;
         } else if (json.value && idx === connections.length - 1 && !hasError) {
-          persistAccessToken();
-          router.push(router.query.next);
+          const res = await persistAccessToken();
+          if (res) router.push(router.query.next);
         }
       });
     }
@@ -211,8 +211,6 @@ export default function CallbackPage() {
     }
   }, [data]);
 
-  console.log(vercelProjects, "");
-
   useEffect(() => {
     const fetchEditmodeProjects = async (token) => {
       if (token) {
@@ -281,6 +279,7 @@ export default function CallbackPage() {
           hasCloned={hasCloned}
           setConnections={setConnections}
           handleLinking={handleLinking}
+          isConfiguration={false}
         />
       )}
       {/* {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />} */}
