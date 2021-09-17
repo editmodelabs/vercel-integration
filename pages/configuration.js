@@ -65,7 +65,7 @@ const Configuration = () => {
       if (existingConnection) return false;
       else return true;
     });
-    const url = `http://localhost:5000/api/projects/new?configurationId=${configId}&userSlug=${userSlug}`;
+    const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects/new?configurationId=${configId}&userSlug=${userSlug}`;
 
     const reqObj = { connections: fieldsToUpdate, deletions: toDelete };
     try {

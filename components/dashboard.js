@@ -258,6 +258,8 @@ export default function Dashboard({
           <section className="py-4">
             <button
               className={`flex justify-center w-full mt-6 text-white font-medium py-3 leading-6 px-4 rounded-md hover:bg-indigo-400 transition duration-200 button ${
+                isSaving ||
+                showMessage ||
                 isInstalling ||
                 (dashboardView !== "deploy" && !vercelProjects.length)
                   ? `cursor-not-allowed bg-indigo-300`
@@ -266,7 +268,9 @@ export default function Dashboard({
               onClick={() => handleClick(fields)}
               disabled={
                 (dashboardView !== "deploy" && !vercelProjects.length) ||
-                isInstalling
+                isInstalling ||
+                isSaving ||
+                showMessage
                   ? true
                   : false
               }
@@ -276,7 +280,7 @@ export default function Dashboard({
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                style={{ display: isInstalling ? "block" : "none" }}
+                style={{ display: isInstalling || isSaving ? "block" : "none" }}
               >
                 <circle
                   class="opacity-25"
