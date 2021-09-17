@@ -18,6 +18,7 @@ const Configuration = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const configId = hasConfigId ? router.query.configurationId : "";
+  const [view, setView] = useState("");
 
   const fetchEditmodeProjects = async (token) => {
     const url = `https://api.editmode.com/projects?api_key=${token}`;
@@ -111,6 +112,9 @@ const Configuration = () => {
   useEffect(() => {
     const emToken = localStorage.getItem("concessio_pref_per");
     const user = localStorage.getItem("em_vercel_config_session_slug");
+    if (!emToken || user) {
+      setView("auth");
+    } else setView("dash");
     if (emToken && user) {
       setToken(emToken);
       setUserSlug(user);

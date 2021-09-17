@@ -26,6 +26,30 @@ export default function CallbackPage() {
   const [hasCloned, setHasCloned] = useState(false);
   const [connections, setConnections] = useState();
 
+  const persistAccessToken = async () => {
+    const user_slug =
+      isBrowser() && localStorage.getItem("em_vercel_config_session_slug");
+    const url =
+      "https://editmode-vercel-configuration.herokuapp.com/api/integrator/";
+    const req = {
+      userSlug: user_slug,
+      configurationId: router.query.configurationId,
+      token: data?.accessToken,
+    };
+
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(req),
+      });
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleInstall = async () => {
     const isDeployFlow = dashboardView === "deploy";
     !isDeployFlow && setIsInstalling(true);
@@ -58,7 +82,8 @@ export default function CallbackPage() {
         em_project_to_use,
         currentProjectId
       );
-      if (json.value) {
+      const accessTokenRes = await persistAccessToken();
+      if (json.value && accessTokenRes) {
         setHasCloned(true);
         reroute();
       }
@@ -74,30 +99,6 @@ export default function CallbackPage() {
 
   const handleLinking = async (connections) => {
     setIsInstalling(true);
-    const persistAccessToken = async () => {
-      const user_slug =
-        isBrowser() && localStorage.getItem("em_vercel_config_session_slug");
-      const url =
-        "https://editmode-vercel-configuration.herokuapp.com/api/integrator/";
-      const req = {
-        userSlug: user_slug,
-        configurationId: router.query.configurationId,
-        token: data?.accessToken,
-      };
-
-      try {
-        const res = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(req),
-        });
-        const data = await res.json();
-        return data;
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     let hasError = false;
     const accessToken = data.accessToken;
     const requests = connections.map(async (connection) => {
