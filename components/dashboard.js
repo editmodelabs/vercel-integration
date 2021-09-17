@@ -21,12 +21,11 @@ export default function Dashboard({
   setToDelete,
   showMessage,
   isSaving,
-  setConfigView
+  setConfigView,
 }) {
   const [newEmProjects, setNewEmProjects] = useState();
-  const [fields, setFields] = useState(
-    isConfiguration && connections ? connections : []
-  );
+  const [fields, setFields] = useState([]);
+
   const hanleAddNewField = () => {
     constructField();
   };
@@ -62,9 +61,16 @@ export default function Dashboard({
   }, [editmodeProjects]);
 
   useEffect(() => {
-    if (!fields.length && vercelProjects?.length && newEmProjects?.length)
+    if (isConfiguration) {
+      if (vercelProjects) setFields(connections ? connections : []);
+    } else if (
+      !fields.length &&
+      vercelProjects?.length &&
+      newEmProjects?.length
+    ) {
       constructField();
-  }, [vercelProjects, newEmProjects]);
+    }
+  }, [vercelProjects, newEmProjects, connections]);
 
   const removeField = (id) => {
     let item;
@@ -84,7 +90,6 @@ export default function Dashboard({
   };
 
   const constructField = () => {
-    if (hasUsedAllVercelProjects) return;
     const findUnusedOption = () => {
       const obj = vercelProjects.find((option) =>
         fields.every((field) => field.vercel.id !== option.id)
@@ -94,13 +99,12 @@ export default function Dashboard({
 
     let obj;
 
-    if (!fields) {
+    if (!fields?.length) {
       obj = {
         id: vercelProjects[0].id,
         name: vercelProjects[0].name,
       };
-    }
-    if (fields) obj = findUnusedOption();
+    } else obj = findUnusedOption();
 
     const field = {
       id: uuid(),
@@ -119,8 +123,6 @@ export default function Dashboard({
   let loaderTyper;
 
   let isReady;
-
-  console.log(fields);
 
   if (isConfiguration) {
     isReady =
