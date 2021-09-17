@@ -21,6 +21,7 @@ export default function Dashboard({
   setToDelete,
   showMessage,
   isSaving,
+  setConfigView
 }) {
   const [newEmProjects, setNewEmProjects] = useState();
   const [fields, setFields] = useState(
@@ -213,7 +214,7 @@ export default function Dashboard({
   }
 
   return (
-    <Layout>
+    <Layout isConfiguration={isConfiguration} setConfigView={setConfigView}>
       <div className="w-full max-w-2xl">
         {loaderTyper}
         {isReady && (

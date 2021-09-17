@@ -8,7 +8,10 @@ export default function Layout(props) {
         <title>Editmode Integration</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBar />
+      <NavBar
+        isConfiguration={props.isConfiguration}
+        setConfigView={props.setConfigView}
+      />
       <div className="flex-1 flex items-center justify-center mb-64 p-8">
         {props.children}
       </div>

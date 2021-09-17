@@ -4,6 +4,7 @@ import Dashboard from "components/dashboard";
 import uuid from "react-uuid";
 import Bus from "../utilities/bus";
 import { isBrowser } from "utilities";
+import Auth from "components/credentials";
 
 const Configuration = () => {
   const router = useRouter();
@@ -17,7 +18,7 @@ const Configuration = () => {
   const [toDelete, setToDelete] = useState([]);
   const [showMessage, setShowMessage] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const configId = hasConfigId ? router.query.configurationId : "";
+  const [config, setConfig] = useState("");
   const [view, setView] = useState("");
 
   const fetchEditmodeProjects = async (token) => {
@@ -61,7 +62,7 @@ const Configuration = () => {
       if (existingConnection) return false;
       else return true;
     });
-    const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects/new?configurationId=${configId}&userSlug=${userSlug}`;
+    const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects/new?configurationId=${config}&userSlug=${userSlug}`;
 
     const reqObj = { connections: fieldsToUpdate, deletions: toDelete };
     try {
@@ -112,7 +113,7 @@ const Configuration = () => {
   useEffect(() => {
     const emToken = localStorage.getItem("concessio_pref_per");
     const user = localStorage.getItem("em_vercel_config_session_slug");
-    if (!emToken || user) {
+    if (!emToken || !user) {
       setView("auth");
     } else setView("dash");
     if (emToken && user) {
@@ -122,13 +123,14 @@ const Configuration = () => {
   }, []);
 
   useEffect(() => {
-    if ((configId, userSlug, token)) {
+    router.isReady && setConfig(router.query.configurationId);
+    if ((config, userSlug, token)) {
       const fetchAllProjects = () => {
         const fetchConfigProjects = async () => {
           const user_slug = localStorage.getItem(
             "em_vercel_config_session_slug"
           );
-          const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects?configurationId=${configId}&userSlug=${user_slug}`;
+          const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects?configurationId=${config}&userSlug=${user_slug}`;
 
           try {
             const res = await fetch(url, {
@@ -148,7 +150,7 @@ const Configuration = () => {
       };
       fetchAllProjects();
     }
-  }, [router, token, userSlug]);
+  }, [router, token, userSlug, config]);
 
   useEffect(() => {
     if (editmodeProjects && vercelProjects) {
@@ -158,8 +160,11 @@ const Configuration = () => {
   }, [editmodeProjects, vercelProjects]);
 
   return (
-    <div>
-      {
+    <>
+      {view === "auth" && (
+        <Auth setConfigView={setView} isConfiguration={true} />
+      )}
+      {view === "dash" && (
         <Dashboard
           connections={connections}
           isConfiguration={true}
@@ -172,9 +177,10 @@ const Configuration = () => {
           setToDelete={setToDelete}
           showMessage={showMessage}
           isSaving={isSaving}
+          setConfigView={setView}
         />
-      }
-    </div>
+      )}
+    </>
   );
 };
 

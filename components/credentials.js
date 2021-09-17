@@ -10,7 +10,12 @@ const initialFormState = {
   passwordConfirmation: "",
 };
 
-const UserCredentials = ({ setView, setToken }) => {
+const UserCredentials = ({
+  setView,
+  setToken,
+  setConfigView,
+  isConfiguration,
+}) => {
   const [_, updateCookie] = useCookie("concessio_pref_per");
   const [authType, setAuthType] = useState("login");
   const [credentials, setCredentials] = useState(initialFormState);
@@ -43,7 +48,8 @@ const UserCredentials = ({ setView, setToken }) => {
     if (token && isBrowser()) {
       setIsLoginValid(true);
       localStorage.setItem("em_user_email", credentials.email);
-      setView("dash");
+      !isConfiguration && setView("dash");
+      isConfiguration && setConfigView("dash");
     }
   };
 

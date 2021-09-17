@@ -2,7 +2,7 @@ import { LogoutIcon } from "@heroicons/react/outline";
 import { isBrowser } from "utilities";
 // import logo from "../public/editmode.png";
 
-export default function NavBar() {
+export default function NavBar({ isConfiguration, setConfigView }) {
   const handleSignOut = () => {
     if (isBrowser()) {
       const user = localStorage.getItem("concessio_pref_per");
@@ -10,7 +10,8 @@ export default function NavBar() {
         localStorage.removeItem("concessio_pref_per");
         localStorage.removeItem("em_user_email");
       }
-      window.close();
+      !isConfiguration && window.close();
+      isConfiguration && setConfigView("auth");
     }
   };
 
