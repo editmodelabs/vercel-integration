@@ -143,6 +143,11 @@ export default function CallbackPage() {
   };
 
   useEffect(() => {
+    if (router.isReady) {
+      if (!router.query.currentProjectId && !router.query.configurationId) {
+        router.push("https://vercel.com/integrations/editmode");
+      }
+    }
     if (router.query.currentProjectId) setDashboardView("deploy");
     else setDashboardView("add");
     const fetchAccessToken = async (code) => {
@@ -256,7 +261,7 @@ export default function CallbackPage() {
 
   return (
     <>
-      {!view && (
+      {router.isReady && router.query.configurationId && !view && (
         <Blank
           setView={setView}
           user={token}
@@ -264,24 +269,29 @@ export default function CallbackPage() {
           token={token}
         />
       )}
-      {view === "auth" && <Auth setView={setView} setToken={setToken} />}
-      {view === "dash" && dashboardView && (
-        <Dashboard
-          editmodeProjects={userEditmodeProjects}
-          handleInstall={handleInstall}
-          isFetchingEditmodeProjects={isFetchingEditmodeProjects}
-          isInstalling={isInstalling}
-          setProjectToInstall={setProjectToInstall}
-          setView={setView}
-          dashboardView={dashboardView}
-          vercelProjects={vercelProjects}
-          setVercelProjects={setVercelProjects}
-          hasCloned={hasCloned}
-          setConnections={setConnections}
-          handleLinking={handleLinking}
-          isConfiguration={false}
-        />
+      {router.isReady && router.query.configurationId && view === "auth" && (
+        <Auth setView={setView} setToken={setToken} />
       )}
+      {router.isReady &&
+        router.query.configurationId &&
+        view === "dash" &&
+        dashboardView && (
+          <Dashboard
+            editmodeProjects={userEditmodeProjects}
+            handleInstall={handleInstall}
+            isFetchingEditmodeProjects={isFetchingEditmodeProjects}
+            isInstalling={isInstalling}
+            setProjectToInstall={setProjectToInstall}
+            setView={setView}
+            dashboardView={dashboardView}
+            vercelProjects={vercelProjects}
+            setVercelProjects={setVercelProjects}
+            hasCloned={hasCloned}
+            setConnections={setConnections}
+            handleLinking={handleLinking}
+            isConfiguration={false}
+          />
+        )}
       {/* {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />} */}
     </>
   );
