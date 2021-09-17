@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Dashboard from "components/dashboard";
 import uuid from "react-uuid";
+import Bus from "../utilities/bus";
+import { isBrowser } from "utilities";
 
 const Configuration = () => {
   const router = useRouter();
@@ -12,9 +14,10 @@ const Configuration = () => {
   const [userSlug, setUserSlug] = useState();
   const [connections, setConnections] = useState();
   const [isInstalling, setIsInstalling] = useState(false);
-  const [toDelete, setToDelete] = useState();
+  const [toDelete, setToDelete] = useState([]);
+  const [showMessage, setShowMessage] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const configId = hasConfigId ? router.query.configurationId : "";
-  console.log(configId);
 
   const fetchEditmodeProjects = async (token) => {
     const url = `https://api.editmode.com/projects?api_key=${token}`;
@@ -31,8 +34,28 @@ const Configuration = () => {
     }
   };
 
+  //   useEffect(() => {
+  //     window.flash = (message, type = "success") =>
+  //       Bus.emit("flash", { message, type });
+  //   }, []);
+
+  useEffect(() => {
+    let timer;
+    if (showMessage) {
+      timer = setTimeout(() => {
+        setShowMessage(false);
+      }, 2000);
+    }
+    return () => clearTimeout(timer);
+  }, [showMessage]);
+
   const saveChanges = async (fields) => {
+    if (!fields && !toDelete) {
+      setIsSaving(false);
+      setShowMessage(true);
+    }
     const fieldsToUpdate = fields?.filter((field) => {
+      setIsSaving(true);
       const existingConnection = connections.find(
         (connection) =>
           field.id === connection.id &&
@@ -43,22 +66,24 @@ const Configuration = () => {
       else return true;
     });
     const url = `http://localhost:5000/api/projects/new?configurationId=${configId}&userSlug=${userSlug}`;
-    console.log(url);
 
-    const reqObj = { connections: fieldsToUpdate };
-    console.log(JSON.stringify(reqObj));
-    // try {
-    //   const res = await fetch(url, {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(reqObj),
-    //   });
-    //   const data = await res.json();
-    //   if (data?.projects) setVercelProjects(data.projects);
-    //   return data;
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    const reqObj = { connections: fieldsToUpdate, deletions: toDelete };
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reqObj),
+      });
+      const data = await res.json();
+      if (data) {
+        // isBrowser() && window.flash("Saved", "success");
+        setIsSaving(false);
+        setShowMessage(true);
+      }
+      return data;
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const constructInitialFields = (vercelProjects, editmodeProjects) => {
@@ -144,6 +169,10 @@ const Configuration = () => {
           vercelProjects={vercelProjects}
           dashboardView={null}
           saveChanges={saveChanges}
+          toDelete={toDelete}
+          setToDelete={setToDelete}
+          showMessage={showMessage}
+          isSaving={isSaving}
         />
       )}
     </div>

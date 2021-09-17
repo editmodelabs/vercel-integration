@@ -17,6 +17,10 @@ export default function Dashboard({
   isConfiguration,
   connections,
   saveChanges,
+  toDelete,
+  setToDelete,
+  showMessage,
+  isSaving,
 }) {
   const [newEmProjects, setNewEmProjects] = useState();
   const [fields, setFields] = useState(
@@ -62,7 +66,19 @@ export default function Dashboard({
   }, [vercelProjects, newEmProjects]);
 
   const removeField = (id) => {
+    let item;
     const new_fields = fields.filter((field) => field.id !== id);
+    if (isConfiguration) {
+      item = fields.find((field) => field.id === id);
+    }
+    if (item && item.isCurrentlyLinked && isConfiguration) {
+      if (item.vercel.envId) {
+        setToDelete([
+          ...toDelete,
+          { projectId: item.vercel.id, env: { id: item.vercel.envId } },
+        ]);
+      }
+    }
     setFields(new_fields);
   };
 
@@ -282,6 +298,10 @@ export default function Dashboard({
                   : dashboardView === "deploy"
                   ? "ADD INTEGRATION TO NEW TEMPLATE"
                   : "ADD INTEGRATION"
+                : isSaving
+                ? "SAVING CHANGES"
+                : showMessage
+                ? "CHANGES SAVED"
                 : "SAVE CHANGES"}
             </button>
           </section>
