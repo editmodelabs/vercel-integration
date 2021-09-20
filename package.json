@@ -23,6 +23,7 @@
     "react-loader-spinner": "^4.0.0",
     "react-use": "^17.2.4",
     "react-uuid": "^1.0.2",
+    "swr": "^1.0.1",
     "tailwindcss": "^2.0.2"
   }
 }
