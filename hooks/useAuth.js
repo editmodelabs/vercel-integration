@@ -1,7 +1,7 @@
 import { isBrowser } from "utilities";
 import useSWR from "swr";
 
-export const useAuth = () => {
+export default useAuth = () => {
   const userFetcher = async () => {
     const token = isBrowser() && localStorage.getItem("concessio_pref_per");
     if (token) {
@@ -18,12 +18,9 @@ export const useAuth = () => {
   };
 
   const { data, mutate, error } = useSWR("editmode_user", userFetcher);
-
-  const loading = !data && !error;
   const loggedOut = error && error.status === 401;
 
   return {
-    loading,
     loggedOut,
     user: data,
     mutate,

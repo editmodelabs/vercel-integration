@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Dashboard from "components/dashboard";
 import uuid from "react-uuid";
-import Bus from "../utilities/bus";
-import { isBrowser } from "utilities";
+import useAuth from "hooks/useAuth";
 import Auth from "components/credentials";
 
 const Configuration = () => {
   const router = useRouter();
+  const { user, loggedOut } = useAuth();
   const hasConfigId = router.asPath.includes("configurationId=icfg");
   const [vercelProjects, setVercelProjects] = useState();
   const [editmodeProjects, setEditmodeProjcts] = useState();
