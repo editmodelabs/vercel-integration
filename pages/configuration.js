@@ -145,7 +145,7 @@ const Configuration = () => {
       };
       fetchAllProjects();
     }
-  }, [router, token, config]);
+  }, [router, token, config, user]);
 
   useEffect(() => {
     if (editmodeProjects && vercelProjects) {
@@ -156,7 +156,7 @@ const Configuration = () => {
 
   return (
     <>
-      {view === "auth" && user === null && (
+      {view === "auth" && (
         <Auth
           setConfigView={setView}
           isConfiguration={true}

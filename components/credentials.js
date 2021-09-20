@@ -1,6 +1,7 @@
 import { isBrowser, useCookie } from "../utilities";
 import { useState } from "react";
 import { Formik, Form, Field } from "formik";
+import { mutate } from "swr";
 
 const initialFormState = {
   email: "",
@@ -48,6 +49,7 @@ const UserCredentials = ({
     if (token && isBrowser()) {
       setIsLoginValid(true);
       localStorage.setItem("em_user_email", credentials.email);
+      mutate();
       !isConfiguration && setView("dash");
       isConfiguration && setConfigView("dash");
     }
