@@ -1,7 +1,7 @@
 import { isBrowser } from "utilities";
 import useSWR from "swr";
 
-export default useAuth = () => {
+const useAuth = () => {
   const userFetcher = async () => {
     const token = isBrowser() && localStorage.getItem("concessio_pref_per");
     if (token) {
@@ -10,19 +10,22 @@ export default useAuth = () => {
         const res = await fetch(url);
         const data = await res.json();
         if (data?.id) return data;
-        else return null;
+        else {
+          const error = new Error("Not authorized!");
+          error.status = 403;
+          throw error;
+        }
       } catch (err) {
         console.log(err);
       }
-    } else setUser(null);
+    } else return null;
   };
 
-  const { data, mutate, error } = useSWR("editmode_user", userFetcher);
-  const loggedOut = error && error.status === 401;
-
+  const { data, mutate } = useSWR("user", userFetcher);
   return {
-    loggedOut,
     user: data,
     mutate,
   };
 };
+
+export default useAuth;

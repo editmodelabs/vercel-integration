@@ -7,12 +7,10 @@ import Auth from "components/credentials";
 
 const Configuration = () => {
   const router = useRouter();
-  const { user, loggedOut } = useAuth();
-  const hasConfigId = router.asPath.includes("configurationId=icfg");
+  const { user, mutate } = useAuth();
   const [vercelProjects, setVercelProjects] = useState();
   const [editmodeProjects, setEditmodeProjcts] = useState();
   const [token, setToken] = useState();
-  const [userSlug, setUserSlug] = useState();
   const [connections, setConnections] = useState();
   const [isInstalling, setIsInstalling] = useState(false);
   const [toDelete, setToDelete] = useState([]);
@@ -111,19 +109,17 @@ const Configuration = () => {
 
   useEffect(() => {
     const emToken = localStorage.getItem("concessio_pref_per");
-    const user = localStorage.getItem("em_vercel_config_session_slug");
-    if (!emToken || !user) {
+    if (!user) {
       setView("auth");
     } else setView("dash");
     if (emToken && user) {
       setToken(emToken);
-      setUserSlug(user);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     router.isReady && setConfig(router.query.configurationId);
-    if ((config, userSlug, token)) {
+    if ((config, user, token)) {
       const fetchAllProjects = () => {
         const fetchConfigProjects = async () => {
           const user_slug = localStorage.getItem(
@@ -149,7 +145,7 @@ const Configuration = () => {
       };
       fetchAllProjects();
     }
-  }, [router, token, userSlug, config]);
+  }, [router, token, config]);
 
   useEffect(() => {
     if (editmodeProjects && vercelProjects) {
@@ -160,7 +156,7 @@ const Configuration = () => {
 
   return (
     <>
-      {view === "auth" && (
+      {view === "auth" && user === null && (
         <Auth
           setConfigView={setView}
           isConfiguration={true}
@@ -181,6 +177,7 @@ const Configuration = () => {
           showMessage={showMessage}
           isSaving={isSaving}
           setConfigView={setView}
+          mutate={mutate}
         />
       )}
     </>

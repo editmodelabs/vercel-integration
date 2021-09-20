@@ -11,6 +11,7 @@ export default function Layout(props) {
       <NavBar
         isConfiguration={props.isConfiguration}
         setConfigView={props.setConfigView}
+        mutate={props.mutate}
       />
       <div className="flex-1 flex items-center justify-center mb-64 p-8">
         {props.children}

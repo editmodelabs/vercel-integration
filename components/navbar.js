@@ -2,13 +2,14 @@ import { LogoutIcon } from "@heroicons/react/outline";
 import { isBrowser } from "utilities";
 // import logo from "../public/editmode.png";
 
-export default function NavBar({ isConfiguration, setConfigView }) {
+export default function NavBar({ isConfiguration, setConfigView, mutate }) {
   const handleSignOut = () => {
     if (isBrowser()) {
       const user = localStorage.getItem("concessio_pref_per");
       if (user) {
         localStorage.removeItem("concessio_pref_per");
         localStorage.removeItem("em_user_email");
+        mutate();
       }
       !isConfiguration && window.close();
       isConfiguration && setConfigView("auth");
