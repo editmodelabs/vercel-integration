@@ -9,7 +9,7 @@ const useAuth = () => {
       try {
         const res = await fetch(url);
         const data = await res.json();
-        if (data?.id) return data;
+        if (data?.id) return Object.assign(data, { token });
         else {
           const error = new Error("Not authorized!");
           error.status = 403;

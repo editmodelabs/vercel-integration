@@ -12,7 +12,6 @@ const Configuration = () => {
   const [editmodeProjects, setEditmodeProjcts] = useState();
   const [token, setToken] = useState();
   const [connections, setConnections] = useState();
-  const [isInstalling, setIsInstalling] = useState(false);
   const [toDelete, setToDelete] = useState([]);
   const [showMessage, setShowMessage] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -60,7 +59,7 @@ const Configuration = () => {
       if (existingConnection) return false;
       else return true;
     });
-    const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects/new?configurationId=${config}&userSlug=${userSlug}`;
+    const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects/new?configurationId=${config}&session_token=${token}`;
 
     const reqObj = { connections: fieldsToUpdate, deletions: toDelete };
     try {
@@ -109,9 +108,9 @@ const Configuration = () => {
 
   useEffect(() => {
     const emToken = localStorage.getItem("concessio_pref_per");
-    if (!user) {
+    if (user === null) {
       setView("auth");
-    } else setView("dash");
+    } else if (user?.id) setView("dash");
     if (emToken && user) {
       setToken(emToken);
     }
@@ -122,11 +121,7 @@ const Configuration = () => {
     if ((config, user, token)) {
       const fetchAllProjects = () => {
         const fetchConfigProjects = async () => {
-          const user_slug = localStorage.getItem(
-            "em_vercel_config_session_slug"
-          );
-          const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects?configurationId=${config}&userSlug=${user_slug}`;
-
+          const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects?configurationId=${config}&session_token=${user.token}`;
           try {
             const res = await fetch(url, {
               method: "GET",
@@ -167,7 +162,6 @@ const Configuration = () => {
         <Dashboard
           connections={connections}
           isConfiguration={true}
-          isInstalling={isInstalling}
           editmodeProjects={editmodeProjects}
           vercelProjects={vercelProjects}
           dashboardView={null}

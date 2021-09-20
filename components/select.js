@@ -53,8 +53,6 @@ export default function Select({
     setFields(new_fields);
   }, [selected]);
 
-  console.log(isConfiguration);
-
   const selectorInteractivity = () => {
     if (isConfiguration && !isEditmode && field.isCurrentlyLinked) {
       return false;

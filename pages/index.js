@@ -27,12 +27,8 @@ export default function CallbackPage() {
   const [connections, setConnections] = useState();
 
   const persistAccessToken = async () => {
-    const user_slug =
-      isBrowser() && localStorage.getItem("em_vercel_config_session_slug");
-    const url =
-      "https://editmode-vercel-configuration.herokuapp.com/api/integrator/";
+    const url = `https://editmode-vercel-configuration.herokuapp.com/api/integrator?session_token=${token}`;
     const req = {
-      userSlug: user_slug,
       configurationId: router.query.configurationId,
       token: data?.accessToken,
     };
@@ -293,7 +289,6 @@ export default function CallbackPage() {
             isConfiguration={false}
           />
         )}
-      {/* {open && <Modal setOpen={setOpen} open={open} reroute={reroute} />} */}
     </>
   );
 }
