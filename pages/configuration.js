@@ -73,7 +73,6 @@ const Configuration = () => {
       });
       const data = await res.json();
       if (data) {
-        // isBrowser() && window.flash("Saved", "success");
         setIsSaving(false);
         setShowMessage(true);
       }
@@ -162,7 +161,11 @@ const Configuration = () => {
   return (
     <>
       {view === "auth" && (
-        <Auth setConfigView={setView} isConfiguration={true} />
+        <Auth
+          setConfigView={setView}
+          isConfiguration={true}
+          setToken={setToken}
+        />
       )}
       {view === "dash" && (
         <Dashboard
