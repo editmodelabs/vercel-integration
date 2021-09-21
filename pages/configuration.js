@@ -61,7 +61,7 @@ const Configuration = () => {
       if (existingConnection) return false;
       else return true;
     });
-    const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects/new?configurationId=${config}&session_token=${token}`;
+    const url = `http://localhost:5000/api/projects/new?configurationId=${config}&session_token=${token}`;
 
     const reqObj = { connections: fieldsToUpdate, deletions: toDelete };
     try {
@@ -71,6 +71,7 @@ const Configuration = () => {
         body: JSON.stringify(reqObj),
       });
       const data = await res.json();
+      console.log(data);
       if (data) {
         setIsSaving(false);
         setShowMessage(true);
@@ -123,7 +124,7 @@ const Configuration = () => {
     if ((config, user, token)) {
       const fetchAllProjects = () => {
         const fetchConfigProjects = async () => {
-          const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects?configurationId=${config}&session_token=${user.token}`;
+          const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects?configurationId=${config}&session_token=${user?.token}`;
           try {
             const res = await fetch(url, {
               method: "GET",
@@ -131,7 +132,7 @@ const Configuration = () => {
             });
             const data = await res.json();
             if (data?.projects) setVercelProjects(data.projects);
-            if (data?.errors.includes("not")) setNoConfig(true);
+            if (data?.errors?.includes("not")) setNoConfig(true);
             return data;
           } catch (err) {
             console.log(err);

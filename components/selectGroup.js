@@ -57,7 +57,9 @@ export default function SelectGroup({
         >
           <TrashIcon
             onClick={() => removeField(field.id)}
-            className={`w-5 h-5 ${count === 0 ? "mt-6" : ""} sm:hidden`}
+            className={`w-5 h-5 ${
+              count === 0 ? "mt-6" : ""
+            } sm:hidden cursor-pointer`}
           />
           <p
             onClick={() => removeField(field.id)}

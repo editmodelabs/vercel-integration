@@ -43,13 +43,13 @@ const UserCredentials = ({
       localStorage.setItem("em_vercel_config_session_slug", data.id);
     }
     if (token) {
+      mutate();
       setIsLoading(false);
       setToken(token);
     }
     if (token && isBrowser()) {
       setIsLoginValid(true);
       localStorage.setItem("em_user_email", credentials.email);
-      mutate();
       !isConfiguration && setView("dash");
       isConfiguration && setConfigView("dash");
     }
