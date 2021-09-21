@@ -186,7 +186,11 @@ export default function Dashboard({
 
   if (!isDeploy && editmodeProjects?.length === 0) {
     return (
-      <Layout>
+      <Layout
+        isConfiguration={isConfiguration}
+        setConfigView={setConfigView}
+        mutate={mutate}
+      >
         <div className="w-full max-w-2xl">
           <div className="py-20">
             <div className="text-center">

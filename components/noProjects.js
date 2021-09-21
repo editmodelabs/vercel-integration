@@ -28,7 +28,7 @@ export default function NoProjects() {
                 href="https://app.editmode.com"
                 className="text-base font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Go back home<span aria-hidden="true"> &rarr;</span>
+                Go to Editmode <span aria-hidden="true"> &rarr;</span>
               </a>
             </div>
           </div>
