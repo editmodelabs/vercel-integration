@@ -98,20 +98,26 @@ const UserCredentials = ({
                 className="mx-auto w-auto"
               />
             </a>
-            <h2 className="mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 f-f-averta font-semibold">
+            <h2
+              className={`mt-6 text-center text-3xl leading-9 font-extrabold text-gray-900 f-f-averta font-semibold ${
+                isConfiguration ? "mb-3" : ""
+              }`}
+            >
               Sign in to your account
             </h2>
-            <p className="mt-2 text-center text-sm leading-5 m-8">
-              or
-              <span
-                className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
-                style={{ cursor: "pointer" }}
-                onClick={handleAuthTypeSwitch}
-              >
-                {" "}
-                create a new account
-              </span>
-            </p>
+            {!isConfiguration && (
+              <p className="mt-2 text-center text-sm leading-5 m-8">
+                or
+                <span
+                  className="font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
+                  style={{ cursor: "pointer" }}
+                  onClick={handleAuthTypeSwitch}
+                >
+                  {" "}
+                  create a new account
+                </span>
+              </p>
+            )}
           </div>
           <div className="container mx-auto max-w-md shadow-md hover:shadow-lg transition duration-300">
             <form

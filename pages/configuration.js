@@ -61,7 +61,7 @@ const Configuration = () => {
       if (existingConnection) return false;
       else return true;
     });
-    const url = `http://localhost:5000/api/projects/new?configurationId=${config}&session_token=${token}`;
+    const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects/new?configurationId=${config}&session_token=${token}`;
 
     const reqObj = { connections: fieldsToUpdate, deletions: toDelete };
     try {
@@ -121,10 +121,10 @@ const Configuration = () => {
 
   useEffect(() => {
     router.isReady && setConfig(router.query.configurationId);
-    if ((config, user, token)) {
+    if (config && user && token) {
       const fetchAllProjects = () => {
         const fetchConfigProjects = async () => {
-          const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects?configurationId=${config}&session_token=${user?.token}`;
+          const url = `https://editmode-vercel-configuration.herokuapp.com/api/projects?configurationId=${config}&session_token=${user.token}`;
           try {
             const res = await fetch(url, {
               method: "GET",
