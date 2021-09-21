@@ -22,6 +22,7 @@ export default function CallbackPage() {
   const [dashboardView, setDashboardView] = useState("");
   const [hasCloned, setHasCloned] = useState(false);
   const [connections, setConnections] = useState();
+  const [message, setMessage] = useState(false);
 
   const persistAccessToken = async () => {
     const url = `https://editmode-vercel-configuration.herokuapp.com/api/integrator?session_token=${token}`;
@@ -129,6 +130,7 @@ export default function CallbackPage() {
           alert(json.error.message);
           hasError = true;
         } else if (json.value && idx === connections.length - 1 && !hasError) {
+          setMessage(true);
           const res = await persistAccessToken();
           if (res) router.push(router.query.next);
         }
@@ -295,6 +297,7 @@ export default function CallbackPage() {
             handleLinking={handleLinking}
             isConfiguration={false}
             mutate={mutate}
+            message={message}
           />
         )}
     </>

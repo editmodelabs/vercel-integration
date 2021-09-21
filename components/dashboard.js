@@ -23,6 +23,7 @@ export default function Dashboard({
   isSaving,
   setConfigView,
   mutate,
+  message,
 }) {
   const [newEmProjects, setNewEmProjects] = useState();
   const [fields, setFields] = useState([]);
@@ -230,11 +231,18 @@ export default function Dashboard({
         {loaderTyper}
         {isReady && (
           <div className="">
-            <h2 className="mb-4 text-md text-gray-700 flex justify-center text-center">
+            <h2 className="mb-4 text-lg text-gray-700 flex justify-center text-center font-bold uppercase">
               {isConfiguration
-                ? "Remove/update pre-existing links or link your unlinked Vercel projects to your Editmode projects:"
-                : "Link your Vercel projects to your Editmode projects:"}
+                ? "Remove/update pre-existing links or link new Vercel projects to your Editmode projects"
+                : "Link your Vercel projects to your Editmode projects"}
             </h2>
+          </div>
+        )}
+
+        {!isConfiguration && (
+          <div className="text-sm mt-2 mb-2 text-gray-700">
+            * This will store the id of the Editmode project in the
+            NEXT_PUBLIC_PROJECT_ID environment variable of the Vercel project
           </div>
         )}
         {isReady && (
@@ -287,6 +295,7 @@ export default function Dashboard({
             <button
               className={`flex justify-center w-full mt-6 text-white font-medium py-3 leading-6 px-4 rounded-md hover:bg-indigo-400 transition duration-200 button ${
                 isSaving ||
+                message ||
                 showMessage ||
                 isInstalling ||
                 (dashboardView !== "deploy" && !vercelProjects.length)
@@ -298,6 +307,7 @@ export default function Dashboard({
                 (dashboardView !== "deploy" && !vercelProjects.length) ||
                 isInstalling ||
                 isSaving ||
+                message ||
                 showMessage
                   ? true
                   : false
@@ -329,6 +339,8 @@ export default function Dashboard({
                   ? "ADDING INTEGRATION"
                   : dashboardView === "deploy"
                   ? "ADD INTEGRATION TO NEW TEMPLATE"
+                  : message
+                  ? "INTEGRATION ADDED!"
                   : "ADD INTEGRATION"
                 : isSaving
                 ? "SAVING CHANGES"
