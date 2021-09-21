@@ -239,7 +239,7 @@ export default function Dashboard({
           </div>
         )}
 
-        {!isConfiguration && (
+        {!isConfiguration && isReady && (
           <div className="text-sm mt-2 mb-2 text-gray-700">
             * This will store the id of the Editmode project in the
             NEXT_PUBLIC_PROJECT_ID environment variable of the Vercel project
