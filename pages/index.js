@@ -277,7 +277,6 @@ export default function CallbackPage() {
         <Auth setView={setView} setToken={setToken} />
       )}
       {router.isReady &&
-        user &&
         router.query.configurationId &&
         view === "dash" &&
         dashboardView && (
