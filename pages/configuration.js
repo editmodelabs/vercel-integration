@@ -4,6 +4,7 @@ import Dashboard from "components/dashboard";
 import uuid from "react-uuid";
 import useAuth from "hooks/useAuth";
 import Auth from "components/credentials";
+import NoConfiguration from "components/noConfiguration";
 
 const Configuration = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const Configuration = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [config, setConfig] = useState("");
   const [view, setView] = useState("");
+  const [noConfig, setNoConfig] = useState(false);
 
   const fetchEditmodeProjects = async (token) => {
     const url = `https://api.editmode.com/projects?api_key=${token}`;
@@ -129,6 +131,7 @@ const Configuration = () => {
             });
             const data = await res.json();
             if (data?.projects) setVercelProjects(data.projects);
+            if (data?.errors.includes("not")) setNoConfig(true);
             return data;
           } catch (err) {
             console.log(err);
@@ -151,14 +154,14 @@ const Configuration = () => {
 
   return (
     <>
-      {view === "auth" && (
+      {view === "auth" && !noConfig && (
         <Auth
           setConfigView={setView}
           isConfiguration={true}
           setToken={setToken}
         />
       )}
-      {view === "dash" && (
+      {view === "dash" && !noConfig && (
         <Dashboard
           connections={connections}
           isConfiguration={true}
@@ -174,6 +177,7 @@ const Configuration = () => {
           mutate={mutate}
         />
       )}
+      {noConfig && <NoConfiguration />}
     </>
   );
 };

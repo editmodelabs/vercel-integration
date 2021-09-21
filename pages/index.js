@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Dashboard from "components/dashboard";
-import {
-  updateVercelEnv,
-  checkVercelEnv,
-  vercelEnvReq,
-  isBrowser,
-} from "../utilities";
+import { updateVercelEnv, checkVercelEnv, vercelEnvReq } from "../utilities";
 import Auth from "components/credentials";
 import Blank from "components/blank";
+import useAuth from "hooks/useAuth";
 
 export default function CallbackPage() {
   const router = useRouter();
+  const { user, mutate } = useAuth();
   const [data, setData] = useState({});
   const [userEditmodeProjects, setUserEditmodeProjects] = useState(undefined);
   const [vercelProjects, setVercelProjects] = useState(undefined);
@@ -140,6 +137,16 @@ export default function CallbackPage() {
   };
 
   useEffect(() => {
+    const emToken = localStorage.getItem("concessio_pref_per");
+    if (user === null) {
+      setView("auth");
+    } else if (user?.id) setView("dash");
+    if (emToken && user) {
+      setToken(user.token);
+    }
+  }, [user]);
+
+  useEffect(() => {
     if (router.isReady) {
       if (!router.query.currentProjectId && !router.query.configurationId) {
         router.push("https://vercel.com/integrations/editmode");
@@ -258,14 +265,14 @@ export default function CallbackPage() {
 
   return (
     <>
-      {router.isReady && router.query.configurationId && !view && (
+      {/* {router.isReady && router.query.configurationId && !view && (
         <Blank
           setView={setView}
           user={token}
           setToken={setToken}
           token={token}
         />
-      )}
+      )} */}
       {router.isReady && router.query.configurationId && view === "auth" && (
         <Auth setView={setView} setToken={setToken} />
       )}
@@ -287,6 +294,7 @@ export default function CallbackPage() {
             setConnections={setConnections}
             handleLinking={handleLinking}
             isConfiguration={false}
+            mutate={mutate}
           />
         )}
     </>
