@@ -5,7 +5,7 @@ export default function Layout(props) {
   return (
     <div className="flex flex-col max-h-screen">
       <Head>
-        <title>Editmode Integration</title>
+        <title>Editmode Vercel Integration</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavBar
