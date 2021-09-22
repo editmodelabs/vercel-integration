@@ -29,6 +29,7 @@ export default function CallbackPage() {
     const req = {
       configurationId: router.query.configurationId,
       token: data?.accessToken,
+      teamId: data?.teamId,
     };
 
     try {
@@ -77,6 +78,7 @@ export default function CallbackPage() {
         currentProjectId
       );
       const accessTokenRes = await persistAccessToken();
+      alert(JSON.stringify(accessTokenRes));
       if (json.value && accessTokenRes) {
         setHasCloned(true);
         reroute();
@@ -158,10 +160,10 @@ export default function CallbackPage() {
     else setDashboardView("add");
     const fetchAccessToken = async (code) => {
       const details = {
-        client_id: "oac_tgUyWFM6PEvxEkJZCLShaoWI",
-        client_secret: "7vuPPxcqZ1AGNNK89EigX7TG",
+        client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
+        client_secret: "9d72agydqs5x5YHX3wTNP8Iv",
         code: code,
-        redirect_uri: "https://vercel-integration-seven.vercel.app",
+        redirect_uri: "http://localhost8000",
       };
       var formBody = [];
       for (var property in details) {
