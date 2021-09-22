@@ -198,7 +198,7 @@ export default function CallbackPage() {
     const fetchVercelProjects = async (accessToken, teamId) => {
       if (accessToken) {
         const res = await fetch(
-          `https://api.vercel.com/v8/projects?decrypt${
+          `https://api.vercel.com/v8/projects${
             teamId ? `?teamId=${teamId}` : ""
           }`,
           {
