@@ -162,7 +162,7 @@ export default function CallbackPage() {
         client_id: "oac_tgUyWFM6PEvxEkJZCLShaoWI",
         client_secret: "7vuPPxcqZ1AGNNK89EigX7TG",
         code: code,
-        redirect_uri: "https://vercel-integration-seven.vercel.app",
+        redirect_uri: "https://editmode-integration.vercel.app",
       };
       var formBody = [];
       for (var property in details) {
