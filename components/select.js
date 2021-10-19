@@ -41,6 +41,9 @@ export default function Select({
     setSelected(item);
   };
 
+  const truncate = (str, limit) =>
+    str.length > limit ? str.substr(0, limit - 1) + "..." : str;
+
   useDidMountEffect(() => {
     const type = isEditmode ? "editmode" : "vercel";
     const updated_field = { ...field, [type]: selected };
@@ -84,7 +87,9 @@ export default function Select({
                   "bg-white relative w-full border sm:border-gray-200 border-gray-300 rounded-sm shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
                 )}
               >
-                <span className="block truncate">{selected.name}</span>
+                <span className="block truncate">
+                  {truncate(selected.name, 30)}
+                </span>
                 {selectorInteractivity() && (
                   <span className="absolute inset-y-0 right-0 flex items-center pr-2">
                     <SelectorIcon

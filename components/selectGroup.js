@@ -15,7 +15,7 @@ export default function SelectGroup({
 
   return (
     <div className="flex flex-row justify-center w-full space-x-4 sm:space-x-0 sm:flex-col sm:mt-3 sm:border rounded-sm sm:p-3 p-2">
-      <div className="vercel w-full">
+      <div className="vercel w-full ">
         <VercelSelect
           options={vercel_options}
           removeField={removeField}
@@ -38,7 +38,7 @@ export default function SelectGroup({
         />
       </div>
 
-      <div className="editmode w-full">
+      <div className="editmode w-full ">
         <EditmodeSelect
           options={editmode_options}
           removeField={removeField}

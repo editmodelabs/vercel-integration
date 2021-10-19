@@ -159,10 +159,10 @@ export default function CallbackPage() {
     else setDashboardView("add");
     const fetchAccessToken = async (code) => {
       const details = {
-        client_id: "oac_tgUyWFM6PEvxEkJZCLShaoWI",
-        client_secret: "7vuPPxcqZ1AGNNK89EigX7TG",
+        client_id: "oac_KxaKzLl1KakFnclDJURDmQtI",
+        client_secret: "9d72agydqs5x5YHX3wTNP8Iv",
         code: code,
-        redirect_uri: "https://editmode-integration.vercel.app",
+        redirect_uri: "http://localhost:8000",
       };
       var formBody = [];
       for (var property in details) {
