@@ -165,7 +165,7 @@ const UserCredentials = ({
                   </label>
                   <input
                     type="text"
-                    className="border bg-gray-100 py-2 px-4 w-96 outline-none focus:ring-2 focus:ring-indigo-400 rounded"
+                    className="border bg-gray-100 py-2 px-4 w-full outline-none focus:ring-2 focus:ring-indigo-400 rounded"
                     placeholder="you@example.com"
                     name="email"
                     value={credentials.email}
@@ -181,7 +181,7 @@ const UserCredentials = ({
                   </label>
                   <input
                     type="password"
-                    className="border bg-gray-100 py-2 px-4 w-96 outline-none focus:ring-2 focus:ring-indigo-400 rounded"
+                    className="border bg-gray-100 py-2 px-4 w-full outline-none focus:ring-2 focus:ring-indigo-400 rounded"
                     placeholder=""
                     name="password"
                     value={credentials.password}
@@ -328,7 +328,7 @@ const UserCredentials = ({
                       </label>
                       <input
                         type="text"
-                        className="border bg-gray-100 py-2 px-4 w-96 outline-none focus:ring-2 focus:ring-indigo-400 rounded"
+                        className="border bg-gray-100 py-2 px-4 w-full outline-none focus:ring-2 focus:ring-indigo-400 rounded"
                         placeholder="John"
                         name="firstName"
                         value={values.firstName}
@@ -344,7 +344,7 @@ const UserCredentials = ({
                       </label>
                       <input
                         type="text"
-                        className="border bg-gray-100 py-2 px-4 w-96 outline-none focus:ring-2 focus:ring-indigo-400 rounded"
+                        className="border bg-gray-100 py-2 px-4 w-full outline-none focus:ring-2 focus:ring-indigo-400 rounded"
                         placeholder="Doe"
                         name="lastName"
                         value={values.lastName}
@@ -360,7 +360,7 @@ const UserCredentials = ({
                       </label>
                       <input
                         type="text"
-                        className={`border bg-gray-100 py-2 px-4 w-96 outline-none focus:ring-1  rounded ${
+                        className={`border bg-gray-100 py-2 px-4 w-full outline-none focus:ring-1  rounded ${
                           errors.email && touched.email
                             ? "border-red-400 focus:ring-red-500"
                             : "focus:ring-indigo-400"
@@ -389,7 +389,7 @@ const UserCredentials = ({
                       </label>
                       <input
                         type="password"
-                        className={`border bg-gray-100 py-2 px-4 w-96 outline-none focus:ring-1 rounded ${
+                        className={`border bg-gray-100 py-2 px-4 w-full outline-none focus:ring-1 rounded ${
                           errors.password && touched.password
                             ? "border-red-400 focus:ring-red-500"
                             : "focus:ring-indigo-400"
@@ -418,7 +418,7 @@ const UserCredentials = ({
                       </label>
                       <input
                         type="password"
-                        className={`border bg-gray-100 py-2 px-4 w-96 outline-none focus:ring-1 rounded ${
+                        className={`border bg-gray-100 py-2 px-4 w-full outline-none focus:ring-1 rounded ${
                           errors.passwordConfirmation &&
                           touched.passwordConfirmation
                             ? "border-red-400 focus:ring-red-500"

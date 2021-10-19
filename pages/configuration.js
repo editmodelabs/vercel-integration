@@ -110,14 +110,19 @@ const Configuration = () => {
   };
 
   useEffect(() => {
+    if (router.isReady) {
+      if (!router?.asPath?.includes("?configurationId=")) {
+        router?.push("https://vercel.com/integrations/editmode");
+      }
+    }
     const emToken = localStorage.getItem("concessio_pref_per");
-    if (user === null) {
+    if (router.isReady && user === null) {
       setView("auth");
-    } else if (user?.id) setView("dash");
+    } else if (router.isReady && user?.id) setView("dash");
     if (emToken && user) {
       setToken(emToken);
     }
-  }, [user]);
+  }, [user, router]);
 
   useEffect(() => {
     router.isReady && setConfig(router.query.configurationId);
@@ -155,29 +160,33 @@ const Configuration = () => {
 
   return (
     <>
-      {view === "auth" && !noConfig && (
-        <Auth
-          setConfigView={setView}
-          isConfiguration={true}
-          setToken={setToken}
-        />
-      )}
-      {view === "dash" && !noConfig && (
-        <Dashboard
-          connections={connections}
-          isConfiguration={true}
-          editmodeProjects={editmodeProjects}
-          vercelProjects={vercelProjects}
-          dashboardView={null}
-          saveChanges={saveChanges}
-          toDelete={toDelete}
-          setToDelete={setToDelete}
-          showMessage={showMessage}
-          isSaving={isSaving}
-          setConfigView={setView}
-          mutate={mutate}
-        />
-      )}
+      {view === "auth" &&
+        router?.asPath?.includes("?configurationId=") &&
+        !noConfig && (
+          <Auth
+            setConfigView={setView}
+            isConfiguration={true}
+            setToken={setToken}
+          />
+        )}
+      {view === "dash" &&
+        !noConfig &&
+        router?.asPath?.includes("?configurationId=") && (
+          <Dashboard
+            connections={connections}
+            isConfiguration={true}
+            editmodeProjects={editmodeProjects}
+            vercelProjects={vercelProjects}
+            dashboardView={null}
+            saveChanges={saveChanges}
+            toDelete={toDelete}
+            setToDelete={setToDelete}
+            showMessage={showMessage}
+            isSaving={isSaving}
+            setConfigView={setView}
+            mutate={mutate}
+          />
+        )}
       {noConfig && <NoConfiguration />}
     </>
   );
