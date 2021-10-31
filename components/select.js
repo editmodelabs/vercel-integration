@@ -73,14 +73,14 @@ export default function Select({
     >
       {({ open }) => (
         <>
-          <Listbox.Label
+          {/* <Listbox.Label
             className={`block text-sm font-medium text-gray-700 sm:flex mb-2 font-semibold ${
               count > 0 ? "hidden" : "auto"
             }`}
           >
             {isEditmode ? "EDITMODE" : "VERCEL"}
-          </Listbox.Label>
-          <div className="mt-1 relative">
+          </Listbox.Label> */}
+          <div className="relative w-full">
             <Listbox.Button as={Fragment}>
               <button
                 className={classNames(
@@ -88,7 +88,7 @@ export default function Select({
                 )}
               >
                 <span className="block truncate">
-                  {truncate(selected.name, 30)}
+                  {truncate(selected.name, 25)}
                 </span>
                 {selectorInteractivity() && (
                   <span className="absolute inset-y-0 right-0 flex items-center pr-2">
