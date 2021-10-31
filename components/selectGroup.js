@@ -16,7 +16,7 @@ export default function SelectGroup({
   return (
     <>
       {count < 1 && (
-        <div className="grid grid-cols-2 px-2 mt-5">
+        <div className="grid grid-cols-2 px-2 mt-5 sm:hidden">
           <div className=" text-sm font-medium text-gray-700 mb-1 font-semibold">
             VERCEL
           </div>
@@ -27,6 +27,9 @@ export default function SelectGroup({
       )}
       <div className="flex flex-row justify-center w-full space-x-4 sm:space-x-0 sm:flex-col sm:mt-3 sm:border rounded-sm sm:p-3 p-2">
         <div className="vercel w-full ">
+          <div className="hidden text-sm font-medium text-gray-700 mb-2 font-semibold sm:flex">
+            VERCEL
+          </div>
           <VercelSelect
             options={vercel_options}
             removeField={removeField}
@@ -46,6 +49,9 @@ export default function SelectGroup({
         </div>
 
         <div className="editmode w-full ">
+          <div className="hidden text-sm font-medium text-gray-700 mb-2 font-semibold sm:flex">
+            EDITMODE
+          </div>
           <EditmodeSelect
             options={editmode_options}
             removeField={removeField}
