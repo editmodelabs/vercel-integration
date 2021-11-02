@@ -13,6 +13,10 @@ export default function SelectGroup({
 }) {
   const { editmode, vercel } = field;
 
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
+
   return (
     <>
       {count < 1 && (
@@ -20,7 +24,12 @@ export default function SelectGroup({
           <div className=" text-sm font-medium text-gray-700 mb-1 font-semibold">
             VERCEL
           </div>
-          <div className=" text-sm font-medium text-gray-700 mb-1 font-semibold justify-self-start ml-2">
+          <div
+            className={classNames(
+              `text-sm font-medium text-gray-700 mb-1 font-semibold justify-self-start ml-2`,
+              fields.length === 1 && `ml-6 pl-0.5`
+            )}
+          >
             EDITMODE
           </div>
         </div>
